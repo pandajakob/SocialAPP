@@ -1,29 +1,34 @@
-import { Pressable, ScrollView, Text } from "react-native";
-import "../../global.css";
+import React from "react";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import ChatItem from "../../components/ChatItem";
+import { MOCK_CHATS } from "../../constants/MockData"; // Move your mock data here!
 
-export default function Chats() {
-  const mockChats = [
-    { id: 1, name: "Alice", lastMessage: "Hey, how are you?" },
-    { id: 2, name: "Bob", lastMessage: "Let's catch up tomorrow." },
-    { id: 3, name: "Charlie", lastMessage: "Got the files. Thanks!" },
-  ];
+export default function ChatsScreen() {
+  const handleChatPress = (id: number) => {
+    console.log(`Navigating to chat ID: ${id}`);
+    // router.push(`/chat/${id}`) will go here later
+  };
 
   return (
-    <ScrollView className="flex-1 bg-gray-100 px-6 pt-24">
-      <Text className="text-3xl font-bold text-gray-800 mb-6">Chats</Text>
+    <View className="flex-1 bg-white pt-16">
+      {/* Header */}
+      <View className="px-6 flex-row justify-between items-center mb-4">
+        <Text className="text-2xl font-bold tracking-tight text-black">Messages</Text>
+        <TouchableOpacity>
+          <Ionicons name="create-outline" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
 
-      {mockChats.map((chat) => (
-        <Pressable
-          key={chat.id}
-          className="bg-white rounded-2xl p-4 mb-4 shadow-md"
-          onPress={() => console.log(`Tapped chat with ${chat.name}`)}
-        >
-          <Text className="text-lg font-semibold text-gray-800">
-            {chat.name}
-          </Text>
-          <Text className="text-gray-500 mt-1">{chat.lastMessage}</Text>
-        </Pressable>
-      ))}
-    </ScrollView>
+      {/* List */}
+      <FlatList
+        data={MOCK_CHATS}
+        keyExtractor={(item) => item.chatId.toString()}
+        renderItem={({ item }) => (
+          <ChatItem chat={item} onPress={handleChatPress} />
+        )}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }

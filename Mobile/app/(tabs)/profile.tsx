@@ -2,7 +2,7 @@ import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import "../../global.css";
 import { mockProfile as MOCK_PROFILE } from "@/constants/MockData";
-export default function Profile() {
+export default function ProfileScreen() {
 
   return (
     <ScrollView className="flex-1 bg-white">

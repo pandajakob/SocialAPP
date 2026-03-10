@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ok: true,
         json: async () => ({
           token: "",
-          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User", age: 25, interests: ["music", "hiking"], role: "user", phoneNumber: "+4512345678" },
+          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User", age: 25, interests: ["music", "hiking"], role: 'user', phoneNumber: "+4512345678" },
         }),
       };
 
@@ -83,10 +83,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: data.user.email,
           firstName: data.user.firstName,
           lastName: data.user.lastName,
-          age: 25,
-          interests: ["music", "hiking"],
+          age: data.user.age,
+          interests: data.user.interests,
           phoneNumber: data.user.phoneNumber,
-          role: "user",
+          role: data.user.role === "admin" ? "admin" : "user",
         };
         setUser(user);
         return true;

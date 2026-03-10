@@ -2,9 +2,11 @@
 
 import { AuthContextType, User } from "@/types/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -13,7 +15,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAuthenticated = !!token && !!user;
 
-  async function save(key: string, value: string)  {
+  async function save(key: string, value: string) {
     await SecureStore.setItemAsync(key, value);
   }
 
@@ -22,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!result) {
       throw new Error(`No values stored under key: ${key}`);
     }
-    return result
+    return result;
   }
 
   useEffect(() => {
@@ -47,18 +49,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      console.log("logging in")
+      console.log("logging in");
       /*
       const response = await fetch("YOUR_API_ENDPOINT/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
       */
-      const response = { ok: true, json: async () => ({ token: "", user: { id: 0, username: "test", email: "test@mail.com" } } )};
+      const response = {
+        ok: true,
+        json: async () => ({
+          token: "",
+          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User" },
+        }),
+      };
 
       if (response.ok) {
         const data = await response.json();
@@ -69,18 +77,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ]);
 
         setToken(data.token);
-        const usr: User = { id: data.user.id, username: data.user.username, email: data.user.email, role: "user" };
+        const usr: User = {
+          id: data.user.id,
+          email: data.user.email,
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          role: "user",
+        };
         setUser(usr);
         return true;
       }
       return false;
-      
     } catch {
       return false;
     } finally {
       setLoading(false);
     }
-      
   };
 
   const logout = async () => {

@@ -2,6 +2,12 @@ export interface User {
   id: number;
   firstName: string;
   lastName: string;
+  age: number;
+  interests: string[];
+  phoneNumber: string;
+  profilePhoto?: {
+    url: string;
+  };
   email: string;
   role: 'admin' | 'user';
 }
@@ -11,6 +17,7 @@ export interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }

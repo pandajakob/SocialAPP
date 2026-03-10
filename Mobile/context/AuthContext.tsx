@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ok: true,
         json: async () => ({
           token: "",
-          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User" },
+          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User", age: 25, interests: ["music", "hiking"], role: "user", phoneNumber: "+4512345678" },
         }),
       };
 
@@ -77,14 +77,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ]);
 
         setToken(data.token);
-        const usr: User = {
+
+        const user: User = {
           id: data.user.id,
           email: data.user.email,
           firstName: data.user.firstName,
           lastName: data.user.lastName,
+          age: 25,
+          interests: ["music", "hiking"],
+          phoneNumber: data.user.phoneNumber,
           role: "user",
         };
-        setUser(usr);
+        setUser(user);
         return true;
       }
       return false;
@@ -104,9 +108,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const register = async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      /*
+      const response = await fetch("YOUR_API_ENDPOINT/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      */
+      const response = { ok: true };
+
+      return response.ok;
+    } catch {
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, loading, login, logout }}
+      value={{ user, token, isAuthenticated, loading, login, logout, register }}
     >
       {children}
     </AuthContext.Provider>

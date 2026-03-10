@@ -2,7 +2,7 @@
 
 import { AuthContextType, User } from "@/types/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
-
+import * as SecureStore from 'expo-secure-store';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -13,7 +13,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAuthenticated = !!token && !!user;
 
-  // Load stored session on app start
+  async function save(key: string, value: string)  {
+    await SecureStore.setItemAsync(key, value);
+  }
+
+  async function getValueFor(key: string): Promise<string> {
+    let result = await SecureStore.getItemAsync(key);
+    if (!result) {
+      throw new Error(`No values stored under key: ${key}`);
+    }
+    return result
+  }
+
   useEffect(() => {
     loadStoredAuth();
   }, []);
@@ -21,17 +32,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loadStoredAuth = async () => {
     try {
       const [storedToken, storedUser] = await Promise.all([
-        "token: token", // Replace with AsyncStorage.getItem("authToken"),
-        "user: user", // Replace with AsyncStorage.getItem("userData"),
-        // AsyncStorage.getItem("authToken"),
-        // AsyncStorage.getItem("userData"),
+        getValueFor("authToken"),
+        getValueFor("userData"),
       ]);
 
       if (storedToken && storedUser) {
-        setTimeout(()=>{},2000) // Simulate loading delay
-        //setToken(storedToken);
-        //setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
       }
+    } catch (error) {
+      console.log("Error loading stored auth:", error);
     } finally {
       setLoading(false);
     }
@@ -40,32 +50,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      let b=0
-      for (let i = 0; i < 100000000; i++) {
-      } // Simulate network delay
-      return true
+      console.log("logging in")
       /*
-      // Replace with your API
       const response = await fetch("YOUR_API_ENDPOINT/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+      */
+      const response = { ok: true, json: async () => ({ token: "", user: { id: 0, username: "test", email: "test@mail.com" } } )};
 
       if (response.ok) {
         const data = await response.json();
 
         await Promise.all([
-          // AsyncStorage.setItem("authToken", data.token),
-          // AsyncStorage.setItem("userData", JSON.stringify(data.user)),
+          save("authToken", data.token),
+          save("userData", JSON.stringify(data.user)),
         ]);
 
         setToken(data.token);
-        setUser(data.user);
+        const usr: User = { id: data.user.id, username: data.user.username, email: data.user.email, role: "user" };
+        setUser(usr);
         return true;
       }
       return false;
-      */
+      
     } catch {
       return false;
     } finally {

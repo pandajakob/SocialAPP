@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: backend
+
+#  security:
+#    user:
+#      name: ${SPRING_SECURITY_USER_NAME}
+#      password: ${SPRING_SECURITY_USER_PASSWORD}
+
+  datasource:
+    url: jdbc:${DATABASE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      maximum-pool-size: 4
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+# Sætter en global base path for hele applikationen
+server:
+  servlet:
+    context-path: /api
+

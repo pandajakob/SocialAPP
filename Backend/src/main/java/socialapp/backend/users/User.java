@@ -1,38 +1,49 @@
 package socialapp.backend.users;
 
+import jakarta.persistence.*;
 import java.util.List;
 
-public class UserDTO {
+@Entity
+@Table(name = "users")
+public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private Integer age;
+
+    @ElementCollection
+    @CollectionTable(name = "user_interests", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "interest")
     private List<String> interests;
+
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
-    private ProfilePhotoDTO profilePhoto;
+
+    @Column(name = "profile_photo_url")
+    private String profilePhotoUrl;
+
+    @Column(nullable = false, unique = true)
     private String email;
-    private User.Role role;
 
-    public static class ProfilePhotoDTO {
-        private String url;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
-        public ProfilePhotoDTO() {}
-
-        public ProfilePhotoDTO(String url) {
-            this.url = url;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
+    public enum Role {
+        ADMIN,
+        USER
     }
 
-    public UserDTO() {}
+    public User() {}
 
     public Long getId() {
         return id;
@@ -82,12 +93,12 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public ProfilePhotoDTO getProfilePhoto() {
-        return profilePhoto;
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
     }
 
-    public void setProfilePhoto(ProfilePhotoDTO profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
     public String getEmail() {
@@ -98,11 +109,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public User.Role getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(User.Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

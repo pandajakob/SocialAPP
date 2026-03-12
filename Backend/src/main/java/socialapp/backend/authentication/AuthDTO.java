@@ -1,5 +1,6 @@
 package socialapp.backend.authentication;
 
+import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 import socialapp.backend.utils.domain_primitives.Email;
 import socialapp.backend.utils.domain_primitives.Password;
@@ -14,7 +15,7 @@ public class AuthDTO {
     private String firstName;
     private String lastName;
     private Integer age;
-    private List<String> interests;
+    private List<Category> interests;
     private String phoneNumber;
     private Photo profilePhoto;
     private Email email;
@@ -57,11 +58,11 @@ public class AuthDTO {
         this.age = age;
     }
 
-    public List<String> getInterests() {
+    public List<Category> getInterests() {
         return interests;
     }
 
-    public void setInterests(List<String> interests) {
+    public void setInterests(List<Category> interests) {
         this.interests = interests;
     }
 
@@ -73,19 +74,19 @@ public class AuthDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public ProfilePhotoDTO getProfilePhoto() {
+    public Photo getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(ProfilePhotoDTO profilePhoto) {
+    public void setProfilePhoto(Photo profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 

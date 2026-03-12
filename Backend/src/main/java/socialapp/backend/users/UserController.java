@@ -9,11 +9,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
-public class user_controller {
+public class UserController {
 
-    private final user_service userService;
+    private final UserService userService;
 
-    public user_controller(user_service userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

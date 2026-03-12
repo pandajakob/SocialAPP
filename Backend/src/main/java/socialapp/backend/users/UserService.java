@@ -8,11 +8,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class user_service {
+public class UserService {
 
-    private final user_repository userRepository;
+    private final UserRepository userRepository;
 
-    public user_service(user_repository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

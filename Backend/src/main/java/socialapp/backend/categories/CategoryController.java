@@ -1,14 +1,14 @@
 package socialapp.backend.categories;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("category")
+@RestController
+@RequestMapping("/categories")
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -18,4 +18,23 @@ public class CategoryController {
     List<Category> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
+    @GetMapping("/{name}")
+    Category getCategoryByName(@PathVariable String name) {
+        return categoryService.getCategoryByName(name);
+    }
+
+    @GetMapping("/main/")
+    List<Category> getAllMainCategories() {
+        return categoryService.getAllMainCategories();
+    }
+
+    @GetMapping("/sub/{name}")
+    List<Category> getAllSubCategories(@PathVariable String name) {
+        return categoryService.getAllSubCategories(name);
+    }
+
+
+
+
 }

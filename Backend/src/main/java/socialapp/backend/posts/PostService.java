@@ -1,4 +1,4 @@
 package socialapp.backend.posts;
 
-public class post_controller {
+public class PostService {
 }

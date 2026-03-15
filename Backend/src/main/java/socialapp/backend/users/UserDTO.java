@@ -1,5 +1,8 @@
 package socialapp.backend.users;
 
+import socialapp.backend.categories.Category;
+import socialapp.backend.categories.CategoryService;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +12,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private Integer age;
-    private List<String> interests;
+    private List<Category> interests;
     private String phoneNumber;
     private ProfilePhotoDTO profilePhoto;
     private String email;
@@ -68,11 +71,11 @@ public class UserDTO {
     }
 
     public List<String> getInterests() {
-        return interests;
+        return interests.stream().map((c)-> c.getName()).toList();
     }
 
     public void setInterests(List<String> interests) {
-        this.interests = interests;
+        this.interests = interests.stream().map(new CategoryService()::getCategoryByName).toList();
     }
 
     public String getPhoneNumber() {

@@ -19,7 +19,7 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
-    private Integer age;
+    private int age;
 
     @ElementCollection
     @CollectionTable(name = "user_interests", joinColumns = @JoinColumn(name = "user_id"))
@@ -70,11 +70,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

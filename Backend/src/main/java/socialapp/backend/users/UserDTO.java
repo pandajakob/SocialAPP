@@ -1,7 +1,6 @@
 package socialapp.backend.users;
 
 import socialapp.backend.categories.Category;
-import socialapp.backend.categories.CategoryService;
 
 import java.util.List;
 import java.util.UUID;

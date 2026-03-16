@@ -1,60 +1,49 @@
 BEGIN;
-
-CREATE TABLE IF NOT EXISTS categories (
-id SERIAL PRIMARY KEY,
-name TEXT NOT NULL UNIQUE,
-parent_id INT REFERENCES categories(id) ON DELETE SET NULL
-);
-
--- Root categories
 INSERT INTO categories (name) VALUES
-('Sports'),
-('Music'),
-('Gaming'),
-('Outdoor'),
-('Creativity'),
-('Food'),
-('Tech'),
-('Social')
-ON CONFLICT (name) DO NOTHING;
+    ('sports'),
+    ('music'),
+    ('gaming'),
+    ('outdoor'),
+    ('creativity'),
+    ('food'),
+    ('tech'),
+    ('social');
 
--- Subcategories (use SELECT to resolve parent by name)
-INSERT INTO categories (name, parent_id) VALUES
- ('Football',        (SELECT id FROM categories WHERE name = 'Sports')),
- ('Basketball',      (SELECT id FROM categories WHERE name = 'Sports')),
- ('Tennis',          (SELECT id FROM categories WHERE name = 'Sports')),
- ('Running',         (SELECT id FROM categories WHERE name = 'Sports')),
- ('Cycling',         (SELECT id FROM categories WHERE name = 'Sports')),
+INSERT INTO categories (name, parent_category_id) VALUES
+     ('Football',        (SELECT id FROM categories WHERE name = 'sports')),
+     ('Basketball',      (SELECT id FROM categories WHERE name = 'sports')),
+     ('Tennis',          (SELECT id FROM categories WHERE name = 'sports')),
+     ('Running',         (SELECT id FROM categories WHERE name = 'sports')),
+     ('Cycling',         (SELECT id FROM categories WHERE name = 'sports')),
 
- ('Playing',         (SELECT id FROM categories WHERE name = 'Music')),
- ('Singing',         (SELECT id FROM categories WHERE name = 'Music')),
- ('Concerts',        (SELECT id FROM categories WHERE name = 'Music')),
+     ('Playing',         (SELECT id FROM categories WHERE name = 'music')),
+     ('Singing',         (SELECT id FROM categories WHERE name = 'music')),
+     ('Concerts',        (SELECT id FROM categories WHERE name = 'music')),
 
- ('Video Games',     (SELECT id FROM categories WHERE name = 'Gaming')),
- ('Board Games',     (SELECT id FROM categories WHERE name = 'Gaming')),
- ('Tabletop RPG',    (SELECT id FROM categories WHERE name = 'Gaming')),
+     ('Video Games',     (SELECT id FROM categories WHERE name = 'gaming')),
+     ('Board Games',     (SELECT id FROM categories WHERE name = 'gaming')),
+     ('Tabletop RPG',    (SELECT id FROM categories WHERE name = 'gaming')),
 
- ('Hiking',          (SELECT id FROM categories WHERE name = 'Outdoor')),
- ('Camping',         (SELECT id FROM categories WHERE name = 'Outdoor')),
- ('Fishing',         (SELECT id FROM categories WHERE name = 'Outdoor')),
+     ('Hiking',          (SELECT id FROM categories WHERE name = 'outdoor')),
+     ('Camping',         (SELECT id FROM categories WHERE name = 'outdoor')),
+     ('Fishing',         (SELECT id FROM categories WHERE name = 'outdoor')),
 
- ('Drawing',         (SELECT id FROM categories WHERE name = 'Creativity')),
- ('Painting',        (SELECT id FROM categories WHERE name = 'Creativity')),
- ('Photography',     (SELECT id FROM categories WHERE name = 'Creativity')),
- ('DIY & Crafts',    (SELECT id FROM categories WHERE name = 'Creativity')),
+     ('Drawing',         (SELECT id FROM categories WHERE name = 'creativity')),
+     ('Painting',        (SELECT id FROM categories WHERE name = 'creativity')),
+     ('Photography',     (SELECT id FROM categories WHERE name = 'creativity')),
+     ('DIY & Crafts',    (SELECT id FROM categories WHERE name = 'creativity')),
 
- ('Cooking',         (SELECT id FROM categories WHERE name = 'Food')),
- ('Baking',          (SELECT id FROM categories WHERE name = 'Food')),
- ('Coffee & Cafés',  (SELECT id FROM categories WHERE name = 'Food')),
+     ('Cooking',         (SELECT id FROM categories WHERE name = 'food')),
+     ('Baking',          (SELECT id FROM categories WHERE name = 'food')),
+     ('Coffee & Cafés',  (SELECT id FROM categories WHERE name = 'food')),
 
- ('Programming',     (SELECT id FROM categories WHERE name = 'Tech')),
- ('Robotics',        (SELECT id FROM categories WHERE name = 'Tech')),
- ('Game Development',(SELECT id FROM categories WHERE name = 'Tech')),
+     ('Programming',     (SELECT id FROM categories WHERE name = 'tech')),
+     ('Robotics',        (SELECT id FROM categories WHERE name = 'tech')),
+     ('Game Development',(SELECT id FROM categories WHERE name = 'tech')),
 
- ('Language Exchange',(SELECT id FROM categories WHERE name = 'Social')),
- ('Volunteering',     (SELECT id FROM categories WHERE name = 'Social')),
- ('Networking',       (SELECT id FROM categories WHERE name = 'Social')),
- ('Book Clubs',       (SELECT id FROM categories WHERE name = 'Social'))
-ON CONFLICT (name) DO NOTHING;
+     ('Language Exchange',(SELECT id FROM categories WHERE name = 'social')),
+     ('Volunteering',     (SELECT id FROM categories WHERE name = 'social')),
+     ('Networking',       (SELECT id FROM categories WHERE name = 'social')),
+     ('Book Clubs',       (SELECT id FROM categories WHERE name = 'social'));
 
 COMMIT;

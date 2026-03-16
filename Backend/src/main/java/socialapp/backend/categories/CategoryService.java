@@ -1,46 +1,23 @@
 package socialapp.backend.categories;
 
-import org.springframework.stereotype.Service;
+import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 
-@Service
-public class CategoryService {
+public interface CategoryService {
 
-    private CategoryRepository categoryRepository;
+    public List<Category> getAllCategories();
 
-    private Map<Long, Category> categoryMap = new HashMap<>();
+    public Category getCategoryByName(String name);
 
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-        this.loadCategories();
-    }
+    List<Category> getAllMainCategories();
 
-    private void loadCategories() {
-        categoryRepository.findAll().forEach(c -> categoryMap.put(c.getId(),c));
-    }
+    Category getCategoryById(Long id);
 
-    public List<Category> getAllCategories() {
-        return categoryMap.values().stream().toList();
-    }
+    List<Category> getAllSubCategoriesByName(String name);
 
-    public Category getCategoryByName(String name) {
-        for (Category c : categoryMap.values()) {
-            if (c.getName().equalsIgnoreCase(name)) {
-                return c;
-            }
-        }
-        throw new InputMismatchException("Category with name " + name + " does not exist");
-    }
 
-    List<Category> getAllMainCategories() {
-        return categoryMap.values().stream().filter(c-> c.getParentCategoryId() == null).toList();
-    }
-
-    List<Category> getAllSubCategoriesByName(String name) {
-        return categoryMap.values().stream().filter(c->{
-            Long parentId = c.getParentCategoryId();
-            return categoryMap.get(parentId).getName().equalsIgnoreCase(name);
-        }).toList();
-    }
 }

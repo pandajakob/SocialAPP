@@ -1,4 +1,4 @@
 package socialapp.backend.posts;
 
-public interface PostService {
+public class PostServiceImpl {
 }

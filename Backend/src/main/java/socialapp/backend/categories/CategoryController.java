@@ -31,7 +31,7 @@ public class CategoryController {
 
     @GetMapping("/sub/{name}")
     List<Category> getAllSubCategories(@PathVariable String name) {
-        return categoryService.getAllSubCategories(name);
+        return categoryService.getAllSubCategoriesByName(name);
     }
 
 

@@ -2,43 +2,41 @@ package socialapp.backend.categories;
 
 import jakarta.persistence.*;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "categories")
 public class Category {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     private  String name;
-
-    @ManyToOne
+    
     @JoinColumn(name = "parent_category_id")
-    private Category parentCategory;
+    private Long parentCategoryId;
 
-    public Category(String name, Category parentCategory) {
+    public Category(String name, Long parentCategoryId) {
         this.name = name;
-        this.parentCategory = parentCategory;
+        this.parentCategoryId = parentCategoryId;
     }
 
-    public Category() {
+    public Category() { }
 
+    public void setParentCategoryId(Long parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
     }
 
-    public void setParentCategory(Category parentCategory) {
-        this.parentCategory = parentCategory;
+    public void setId(long id) {
+        this.id = id;
     }
+
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
@@ -46,7 +44,7 @@ public class Category {
         return name;
     }
 
-    public Category getParentCategory() {
-        return parentCategory;
+    public Long getParentCategoryId() {
+        return parentCategoryId;
     }
 }

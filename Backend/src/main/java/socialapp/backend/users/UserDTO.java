@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserDTO {
-
     private UUID id;
     private String firstName;
     private String lastName;
@@ -74,8 +73,8 @@ public class UserDTO {
         return interests.stream().map((c)-> c.getName()).toList();
     }
 
-    public void setInterests(List<String> interests) {
-        this.interests = interests.stream().map(new CategoryService()::getCategoryByName).toList();
+    public void setInterests(List<Category> categories) {
+        this.interests = categories;
     }
 
     public String getPhoneNumber() {

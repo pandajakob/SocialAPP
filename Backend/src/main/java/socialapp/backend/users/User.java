@@ -1,6 +1,8 @@
 package socialapp.backend.users;
 
 import jakarta.persistence.*;
+import socialapp.backend.categories.Category;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -19,12 +21,14 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
-    private int age;
+    private Integer age;
 
-    @ElementCollection
-    @CollectionTable(name = "user_interests", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "interest")
-    private List<String> interests;
+    @ManyToMany
+    @JoinTable(
+            name = "user_interests",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> interests;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
@@ -70,19 +74,19 @@ public class User {
         this.lastName = lastName;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public List<String> getInterests() {
+    public List<Category> getInterests() {
         return interests;
     }
 
-    public void setInterests(List<String> interests) {
+    public void setInterests(List<Category> interests) {
         this.interests = interests;
     }
 

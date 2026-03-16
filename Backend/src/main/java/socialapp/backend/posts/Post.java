@@ -1,6 +1,7 @@
 package socialapp.backend.posts;
 
 import jakarta.persistence.*;
+import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 
 import java.util.Date;
@@ -27,7 +28,12 @@ public class Post {
 
     private String description;
 
-    private List<String> categories;
+    @ManyToMany
+    @JoinTable(
+            name = "post_categories",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
     private int ageFrom;
 
@@ -50,9 +56,13 @@ public class Post {
     public void setAgeTo(int ageTo) {
         this.ageTo = ageTo;
     }
-
-    public void setCategories(List<String> categories) {
+    
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
     }
 
     public void setDescription(String description) {
@@ -91,9 +101,6 @@ public class Post {
         return ageTo;
     }
 
-    public List<String> getCategories() {
-        return categories;
-    }
 
     public String getPhotoUrl() {
         return photoUrl;

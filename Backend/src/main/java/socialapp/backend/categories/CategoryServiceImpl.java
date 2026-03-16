@@ -6,7 +6,7 @@ import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
 import java.util.*;
 
 @Service
-public class CategoryServiceImpl implements  CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
 

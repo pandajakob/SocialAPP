@@ -2,9 +2,9 @@ package socialapp.backend.authentication;
 
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
-import socialapp.backend.utils.domain_primitives.Email;
-import socialapp.backend.utils.domain_primitives.Password;
-import socialapp.backend.utils.domain_primitives.Photo;
+import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.shared.domain_primitives.Password;
+import socialapp.backend.shared.domain_primitives.PhotoURL;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class AuthDTO {
     private Integer age;
     private List<Category> interests;
     private String phoneNumber;
-    private Photo profilePhoto;
+    private PhotoURL profilePhotoURL;
     private Email email;
     private User.Role role;
 
@@ -74,12 +74,12 @@ public class AuthDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public Photo getProfilePhoto() {
-        return profilePhoto;
+    public PhotoURL getProfilePhoto() {
+        return profilePhotoURL;
     }
 
-    public void setProfilePhoto(Photo profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setProfilePhoto(PhotoURL profilePhotoURL) {
+        this.profilePhotoURL = profilePhotoURL;
     }
 
     public Email getEmail() {

@@ -2,6 +2,8 @@ package socialapp.backend.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.shared.domain_primitives.PhoneNumber;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -9,11 +11,11 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(Email email);
 
-    Optional<User> findByPhoneNumber(String phoneNumber);
+    Optional<User> findByPhoneNumber(PhoneNumber phoneNumber);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmail(Email email);
 
-    boolean existsByPhoneNumber(String phoneNumber);
+    boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 }

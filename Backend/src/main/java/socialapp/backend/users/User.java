@@ -1,13 +1,22 @@
 package socialapp.backend.users;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import socialapp.backend.categories.Category;
+import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.shared.domain_primitives.Password;
+import socialapp.backend.shared.domain_primitives.PhoneNumber;
+import socialapp.backend.shared.domain_primitives.PhotoURL;
+import socialapp.backend.shared.domain_primitives.converters.StringConverter;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -31,13 +40,21 @@ public class User {
     private List<Category> interests;
 
     @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
+    @Convert(converter = StringConverter.class)
+    private PhoneNumber phoneNumber;
 
     @Column(name = "profile_photo_url")
-    private String profilePhotoUrl;
+    @Convert(converter = StringConverter.class)
+    private PhotoURL profilePhotoUrl;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    @Convert(converter = StringConverter.class)
+    private Email email;
+
+    @Column(nullable = false)
+    @Convert(converter = StringConverter.class)
+    private Password password;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -48,77 +65,4 @@ public class User {
         USER
     }
 
-    public User() {}
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public List<Category> getInterests() {
-        return interests;
-    }
-
-    public void setInterests(List<Category> interests) {
-        this.interests = interests;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getProfilePhotoUrl() {
-        return profilePhotoUrl;
-    }
-
-    public void setProfilePhotoUrl(String profilePhotoUrl) {
-        this.profilePhotoUrl = profilePhotoUrl;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

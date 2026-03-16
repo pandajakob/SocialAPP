@@ -44,8 +44,6 @@ public class CategoryController {
         return categoryService.getAllSubCategoriesByName(name);
     }
 
-    // Adding exception handlers for NoSuchCustomerExistsException
-    // and NoSuchElementException.
     @ExceptionHandler(value = NoSuchCategoryExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchCustomerExistsException(NoSuchCategoryExistsException ex) {

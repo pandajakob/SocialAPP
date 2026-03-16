@@ -3,11 +3,14 @@ package socialapp.backend.users;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
 import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
+import socialapp.backend.users.exceptions.EmailAlreadyRegisteredException;
 import socialapp.backend.users.exceptions.ErrorResponse;
 import socialapp.backend.users.exceptions.NoSuchUserExistsException;
 import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.users.exceptions.PhoneNumberAlreadyRegisteredException;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,10 +58,23 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @ExceptionHandler(value = EmailAlreadyRegisteredException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public socialapp.backend.users.exceptions.ErrorResponse handleEmailAlreadyRegisteredException(EmailAlreadyRegisteredException ex) {
+        return new socialapp.backend.users.exceptions.ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(value = PhoneNumberAlreadyRegisteredException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public socialapp.backend.users.exceptions.ErrorResponse handlePhoneNumberAlreadyRegisteredException(PhoneNumberAlreadyRegisteredException ex) {
+        return new socialapp.backend.users.exceptions.ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    }
+
     @ExceptionHandler(value = NoSuchUserExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public @ResponseBody ErrorResponse handleException(NoSuchUserExistsException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    public socialapp.backend.users.exceptions.ErrorResponse handleNoSuchUserExistsException(NoSuchUserExistsException ex) {
+        return new socialapp.backend.users.exceptions.ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
 }

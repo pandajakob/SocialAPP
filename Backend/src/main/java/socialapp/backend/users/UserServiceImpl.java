@@ -7,6 +7,9 @@ import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
+import socialapp.backend.users.exceptions.EmailAlreadyRegisteredException;
+import socialapp.backend.users.exceptions.NoSuchUserExistsException;
+import socialapp.backend.users.exceptions.PhoneNumberAlreadyRegisteredException;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,13 +32,13 @@ public class UserServiceImpl implements UserService {
 
     public StandardUserResponseDTO getUserById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new NoSuchUserExistsException("User not found with id: " + id));
         return convertToDTO(user);
     }
 
     public StandardUserResponseDTO getUserByEmail(Email email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new NoSuchUserExistsException("User not found with email: " + email));
         return convertToDTO(user);
     }
 
@@ -44,10 +47,11 @@ public class UserServiceImpl implements UserService {
         PhotoURL profilePhotoUrl = new PhotoURL(userDetails.profilePhotoUrl());
 
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already registered: " + userDetails.email());
+            throw new EmailAlreadyRegisteredException("Email already registered: " + userDetails.email());
         }
+
         if (userRepository.existsByPhoneNumber(new PhoneNumber(userDetails.phoneNumber()))) {
-            throw new RuntimeException("Phone number already registered: " + userDetails.phoneNumber());
+            throw new PhoneNumberAlreadyRegisteredException("Phone number already registered: " + userDetails.phoneNumber());
         }
 
         User user = new User();
@@ -114,17 +118,14 @@ public class UserServiceImpl implements UserService {
     }
 
     private StandardUserResponseDTO convertToDTO(User user) {
-        StandardUserResponseDTO dto = new StandardUserResponseDTO(
+        return new StandardUserResponseDTO(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail().getValue(),
                 user.getAge(),
                 user.getInterests(),
-                user.getPhoneNumber().getValue(),
-                user.getProfilePhotoUrl()
+                user.getPhoneNumber().getValue()
         );
-
-        return dto;
     }
 }

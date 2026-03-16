@@ -2,13 +2,15 @@ package socialapp.backend.users;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import socialapp.backend.categories.Category;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
 import socialapp.backend.shared.domain_primitives.PhoneNumber;
 import socialapp.backend.shared.domain_primitives.PhotoURL;
-import socialapp.backend.shared.domain_primitives.converters.StringConverter;
+import socialapp.backend.shared.domain_primitives.converters.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User {
 
@@ -40,21 +44,20 @@ public class User {
     private List<Category> interests;
 
     @Column(name = "phone_number", nullable = false, unique = true)
-    @Convert(converter = StringConverter.class)
+    @Convert(converter = PhoneNumberConverter.class)
     private PhoneNumber phoneNumber;
 
     @Column(name = "profile_photo_url")
-    @Convert(converter = StringConverter.class)
+    @Convert(converter = PhotoUrlConverter.class)
     private PhotoURL profilePhotoUrl;
 
     @Column(nullable = false, unique = true)
-    @Convert(converter = StringConverter.class)
+    @Convert(converter = EmailConverter.class)
     private Email email;
 
     @Column(nullable = false)
-    @Convert(converter = StringConverter.class)
+    @Convert(converter = PasswordConverter.class)
     private Password password;
-
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

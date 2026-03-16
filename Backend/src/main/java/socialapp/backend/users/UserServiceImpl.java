@@ -2,6 +2,7 @@ package socialapp.backend.users;
 
 import org.springframework.stereotype.Service;
 import socialapp.backend.shared.domain_primitives.PhoneNumber;
+import socialapp.backend.shared.domain_primitives.PhotoURL;
 import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.shared.domain_primitives.Email;
@@ -39,7 +40,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public StandardUserResponseDTO createUser(CreateUserRequestDTO userDetails) {
-        if (userRepository.existsByEmail(userDetails.email())) {
+        Email email = new Email(userDetails.email());
+        PhotoURL profilePhotoUrl = new PhotoURL(userDetails.profilePhotoUrl());
+
+        if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered: " + userDetails.email());
         }
         if (userRepository.existsByPhoneNumber(new PhoneNumber(userDetails.phoneNumber()))) {
@@ -48,11 +52,11 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setAge(userDetails.age());
-        user.setEmail(userDetails.email());
+        user.setEmail(email);
         user.setPhoneNumber(new PhoneNumber(userDetails.phoneNumber()));
         user.setFirstName(userDetails.firstName());
         user.setLastName(userDetails.lastName());
-        user.setProfilePhotoUrl(userDetails.profilePhotoUrl());
+        user.setProfilePhotoUrl(profilePhotoUrl);
         user.setPassword(new Password(userDetails.password()));
         user.setRole(User.Role.USER);
 

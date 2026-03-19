@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found with id: " + id);
+            throw new NoSuchUserExistsException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
     }

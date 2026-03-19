@@ -6,6 +6,6 @@ import socialapp.backend.shared.domain_primitives.Email;
 import java.util.List;
 import java.util.UUID;
 
-public record CreateUserRequestDTO(UUID id, String firstName, String lastName, String password, String email, Integer age,
+public record CreateUserRequestDTO(String firstName, String lastName, String password, String email, Integer age,
                                    List<Category> interests, String phoneNumber, String profilePhotoUrl) { }
 

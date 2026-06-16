@@ -1,4 +1,6 @@
 package socialapp.backend.posts.DTO;
 
-public record LocationDTO() {
-}
+public record LocationDTO(
+    Double longitude,
+    Double latitude
+){}

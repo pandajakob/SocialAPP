@@ -1,14 +1,10 @@
 services:
   postgres:
-    image: postgres:15.4-alpine
+    image: postgis/postgis:16-3.5
+    platform: linux/amd64
     environment:
       POSTGRES_DB: devdb
       POSTGRES_USER: jakob
       POSTGRES_PASSWORD: jakob
     ports:
       - "${DB_HOST_PORT}:5432"
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#
-#volumes:
-#  postgres_data:

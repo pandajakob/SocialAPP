@@ -99,11 +99,6 @@ class UserControllerTest {
     }
 
     @Test
-    void createUserThrowsExceptionWhenUserDoesNotExist() {
-
-    }
-
-    @Test
     void createUserReturnsUserDTO() {
         UUID uuid = UUID.randomUUID();
         CreateUserRequestDTO requestDTO = new CreateUserRequestDTO("firstname", "lastname", "password", "email", 10, List.of(new Category("music", null)), "12345678", "http://thisisurl");

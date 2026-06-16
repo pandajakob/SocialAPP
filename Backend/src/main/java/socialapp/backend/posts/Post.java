@@ -1,6 +1,8 @@
 package socialapp.backend.posts;
 
 import jakarta.persistence.*;
+
+import org.locationtech.jts.geom.Point;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 
@@ -17,12 +19,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Date date;
+    private Date date = new Date();
 
-    private String location;
-
-    @OneToOne
-    private User user;
+    @Column(columnDefinition = "geometry(Point,4326)")
+    private Point location;
 
     private String title;
 
@@ -41,7 +41,7 @@ public class Post {
 
     private String photoUrl;
 
-    public void setLocation(String location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
 
@@ -77,7 +77,7 @@ public class Post {
         this.title = title;
     }
 
-    public String getLocation() {
+    public Point getLocation() {
         return location;
     }
 
@@ -104,14 +104,6 @@ public class Post {
 
     public String getPhotoUrl() {
         return photoUrl;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public void setId(UUID id) {

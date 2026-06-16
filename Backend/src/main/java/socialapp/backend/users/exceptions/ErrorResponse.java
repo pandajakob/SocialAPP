@@ -11,7 +11,6 @@ public class ErrorResponse {
         this.statusCode = statusCode;
     }
 
-
     public void setMessage(String message) {
         this.message = message;
     }

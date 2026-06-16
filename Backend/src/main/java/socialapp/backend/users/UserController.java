@@ -61,14 +61,14 @@ public class UserController {
 
     @ExceptionHandler(value = EmailAlreadyRegisteredException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public socialapp.backend.users.exceptions.ErrorResponse handleEmailAlreadyRegisteredException(EmailAlreadyRegisteredException ex) {
-        return new socialapp.backend.users.exceptions.ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    public ErrorResponse handleEmailAlreadyRegisteredException(EmailAlreadyRegisteredException ex) {
+        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
 
     @ExceptionHandler(value = PhoneNumberAlreadyRegisteredException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public socialapp.backend.users.exceptions.ErrorResponse handlePhoneNumberAlreadyRegisteredException(PhoneNumberAlreadyRegisteredException ex) {
-        return new socialapp.backend.users.exceptions.ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    public ErrorResponse handlePhoneNumberAlreadyRegisteredException(PhoneNumberAlreadyRegisteredException ex) {
+        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
 
     @ExceptionHandler(value = NoSuchUserExistsException.class)

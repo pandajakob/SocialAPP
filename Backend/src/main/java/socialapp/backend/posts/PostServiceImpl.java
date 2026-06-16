@@ -1,30 +1,30 @@
 package socialapp.backend.posts;
 
-import jdk.jshell.spi.ExecutionControl;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Location;
 import org.locationtech.jts.geom.Point;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import socialapp.backend.posts.DTO.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
+import socialapp.backend.posts.exceptions.PostNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class PostService {
+public class PostServiceImpl implements PostService {
 
     PostRepository postRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
     public PostResponseDTO createPost(PostCreateDTO postCreateDTO) {
-
-
         Post post = new Post();
         post.setCategories(postCreateDTO.categories());
         post.setTitle(postCreateDTO.title());
@@ -34,9 +34,17 @@ public class PostService {
         post.setDescription(postCreateDTO.description());
         post.setLocation(extractLocationPoint(postCreateDTO.location()));
 
-        postRepository.save(post);
+        Post newPost = postRepository.save(post);
 
-        return convertPostResponseDTO(post);
+        return convertPostResponseDTO(newPost);
+    }
+
+    @Override
+    public void deletePost(UUID id) {
+        if (!postRepository.existsById(id)) {
+            throw new PostNotFoundException(id);
+        }
+        postRepository.deleteById(id);
     }
 
     public List<PostResponseDTO> getAllPosts() {
@@ -47,6 +55,7 @@ public class PostService {
             postResponseDTOS.add(convertPostResponseDTO(post));
         }
         return postResponseDTOS;
+
     }
 
     private PostResponseDTO convertPostResponseDTO(Post post) {

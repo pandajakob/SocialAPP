@@ -3,12 +3,11 @@ package socialapp.backend.posts;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import socialapp.backend.posts.DTO.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
+import socialapp.backend.posts.DTO.PostsWithinMetersDTO;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
 
 import java.util.ArrayList;
@@ -47,6 +46,28 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(id);
     }
 
+    @Override
+    public PostResponseDTO getPostById(UUID id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        return convertPostResponseDTO(post);
+    }
+
+    @Override
+    public List<PostResponseDTO> getAllPostsWithinMeters(PostsWithinMetersDTO postsWithinMetersDTO) {
+
+        List<Post> posts = postRepository.getAllPostsWithinMeters(
+                postsWithinMetersDTO.location().longitude(),
+                postsWithinMetersDTO.location().latitude(),
+                postsWithinMetersDTO.meters());
+        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
+
+        for (Post post : posts) {
+            postResponseDTOS.add(convertPostResponseDTO(post));
+        }
+        return postResponseDTOS;
+    }
+
+
     public List<PostResponseDTO> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
@@ -58,6 +79,17 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    public List<PostResponseDTO> getNearest(LocationDTO locationDTO) {
+        List<Post> posts = postRepository.findNearest(locationDTO.latitude(),locationDTO.longitude());
+        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
+
+        for (Post post : posts) {
+            postResponseDTOS.add(convertPostResponseDTO(post));
+        }
+        return postResponseDTOS;
+
+    }
+    
     private PostResponseDTO convertPostResponseDTO(Post post) {
         return new PostResponseDTO(
                 post.getId(),

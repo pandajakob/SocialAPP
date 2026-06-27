@@ -1,4 +1,4 @@
-package socialapp.backend.users.exceptions;
+package socialapp.backend.authentication.exceptions;
 
 public class EmailAlreadyRegisteredException extends RuntimeException {
     private String message;

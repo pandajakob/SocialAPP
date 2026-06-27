@@ -8,10 +8,7 @@ import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.DTO.PostsWithinMetersDTO;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
-import socialapp.backend.users.exceptions.EmailAlreadyRegisteredException;
-import socialapp.backend.users.exceptions.ErrorResponse;
-import socialapp.backend.users.exceptions.NoSuchUserExistsException;
-import socialapp.backend.users.exceptions.PhoneNumberAlreadyRegisteredException;
+import socialapp.backend.authentication.exceptions.ErrorResponse;
 
 import java.util.List;
 import java.util.UUID;

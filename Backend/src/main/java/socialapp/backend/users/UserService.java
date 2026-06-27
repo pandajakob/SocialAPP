@@ -22,4 +22,5 @@ public interface UserService {
     StandardUserResponseDTO updateUser(UUID id, User updatedUser);
 
     void deleteUser(UUID id);
+
 }

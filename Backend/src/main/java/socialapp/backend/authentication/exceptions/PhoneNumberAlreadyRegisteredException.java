@@ -1,4 +1,4 @@
-package socialapp.backend.users.exceptions;
+package socialapp.backend.authentication.exceptions;
 
 public class PhoneNumberAlreadyRegisteredException extends RuntimeException {
     private String message;

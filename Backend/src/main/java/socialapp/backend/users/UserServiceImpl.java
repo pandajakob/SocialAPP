@@ -7,9 +7,9 @@ import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
-import socialapp.backend.users.exceptions.EmailAlreadyRegisteredException;
-import socialapp.backend.users.exceptions.NoSuchUserExistsException;
-import socialapp.backend.users.exceptions.PhoneNumberAlreadyRegisteredException;
+import socialapp.backend.authentication.exceptions.EmailAlreadyRegisteredException;
+import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
+import socialapp.backend.authentication.exceptions.PhoneNumberAlreadyRegisteredException;
 
 import java.util.List;
 import java.util.UUID;
@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
+
 
     private StandardUserResponseDTO convertToDTO(User user) {
         return new StandardUserResponseDTO(

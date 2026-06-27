@@ -109,5 +109,5 @@ INSERT INTO categories (name, parent_category_id) VALUES
                                                       ('Volunteering',     (SELECT id FROM categories WHERE name = 'social')),
                                                       ('Networking',       (SELECT id FROM categories WHERE name = 'social')),
                                                       ('Book Clubs',       (SELECT id FROM categories WHERE name = 'social'));
-
+insert into users (id, first_name, last_name, age, phone_number, profile_photo_url, email, password, role) VALUES ('a58873b2-5677-49d1-ad73-446b7831ea9c', 'Jakob', 'Michaelsen', 21, '88888888', 'https://imagestore.com', 'jakob@test.com','$2a$12$6x2DLTLyNAt/bUgJ.xCEBubdefn0/HJ44si6yV.ahFm2BjyfNt/iy', 'ADMIN');
 COMMIT;

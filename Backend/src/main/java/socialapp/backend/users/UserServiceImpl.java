@@ -1,6 +1,9 @@
 package socialapp.backend.users;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import socialapp.backend.authentication.AuthService;
+import socialapp.backend.security.JWTService;
 import socialapp.backend.shared.domain_primitives.PhoneNumber;
 import socialapp.backend.shared.domain_primitives.PhotoURL;
 import socialapp.backend.users.DTO.CreateUserRequestDTO;
@@ -19,9 +22,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final JWTService jwtService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, JWTService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     public List<StandardUserResponseDTO> getAllUsers() {
@@ -115,6 +120,16 @@ public class UserServiceImpl implements UserService {
             throw new NoSuchUserExistsException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public StandardUserResponseDTO getUserFromToken(Authentication authentication) {
+        Email email = new Email(authentication.getName());
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new NoSuchUserExistsException("Cannot find user with email: " + email.getValue()));
+
+        return convertToDTO(user);
     }
 
 

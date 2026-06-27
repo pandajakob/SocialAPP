@@ -1,5 +1,6 @@
 package socialapp.backend.users;
 
+import org.springframework.security.core.Authentication;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
 import socialapp.backend.shared.domain_primitives.PhoneNumber;
@@ -22,5 +23,6 @@ public interface UserService {
     StandardUserResponseDTO updateUser(UUID id, User updatedUser);
 
     void deleteUser(UUID id);
+    StandardUserResponseDTO getUserFromToken(Authentication authentication);
 
 }

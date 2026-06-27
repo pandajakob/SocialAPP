@@ -47,7 +47,7 @@ public class AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDetails.email());
 
-        String token = jwtService.generateToken(userDetails.getUsername(), userDetails.getUsername(), userDetails.getPassword());
+        String token = jwtService.generateToken(userDetails);
 
         ResponseCookie cookie = ResponseCookie.from("auth", token)
                 .httpOnly(true)
@@ -74,12 +74,11 @@ public class AuthService {
         user.setEmail(new Email(registerDTO.email()));
         user.setFirstName(registerDTO.firstName());
         user.setLastName(registerDTO.lastName());
-        user.setInterests(registerDTO.interests());
+
         user.setAge(registerDTO.age());
         user.setRole(registerDTO.role());
         user.setPassword(password);
         user.setPhoneNumber(new PhoneNumber(registerDTO.phoneNumber()));
-        user.setProfilePhotoUrl(new PhotoURL(registerDTO.profilePhotoURL()));
 
         try {
             userRepository.save(user);

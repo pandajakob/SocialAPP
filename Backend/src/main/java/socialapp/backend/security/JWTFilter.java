@@ -28,7 +28,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("THIS IS REQUEST: " + request.getRequestURI());
 
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             filterChain.doFilter(request, response);
@@ -55,7 +54,6 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         } else {
             userEmail = jwtService.extractUserName(token);
-            System.out.println("USERNAME===" + userEmail);
         }
 
         if (userEmail == null || userEmail.isBlank()) {

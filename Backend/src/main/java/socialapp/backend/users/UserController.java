@@ -2,6 +2,7 @@ package socialapp.backend.users;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
@@ -51,6 +52,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<StandardUserResponseDTO> getUserFromToken(Authentication authentication) {
+        StandardUserResponseDTO user = userService.getUserFromToken(authentication);
+        return ResponseEntity.ok(user);
     }
 
 

@@ -12,9 +12,7 @@ public record RegisterDTO(
     String firstName,
     String lastName,
     Integer age,
-    List<Category> interests,
     String phoneNumber,
-    String profilePhotoURL,
     String email,
     String password,
     User.Role role

@@ -162,4 +162,12 @@ public class User implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public List<Post> getSavedPosts() {
+        return savedPosts;
+    }
+
+    public void setSavedPosts(List<Post> savedPosts) {
+        this.savedPosts = savedPosts;
+    }
 }

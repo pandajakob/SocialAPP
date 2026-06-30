@@ -2,17 +2,10 @@ package socialapp.backend.users;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import socialapp.backend.authentication.AuthService;
 import socialapp.backend.security.JWTService;
-import socialapp.backend.shared.domain_primitives.PhoneNumber;
-import socialapp.backend.shared.domain_primitives.PhotoURL;
-import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.shared.domain_primitives.Email;
-import socialapp.backend.shared.domain_primitives.Password;
-import socialapp.backend.authentication.exceptions.EmailAlreadyRegisteredException;
 import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
-import socialapp.backend.authentication.exceptions.PhoneNumberAlreadyRegisteredException;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,33 +38,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with email: " + email));
         return convertToDTO(user);
-    }
-
-    public StandardUserResponseDTO createUser(CreateUserRequestDTO userDetails) {
-        Email email = new Email(userDetails.email());
-        PhotoURL profilePhotoUrl = new PhotoURL(userDetails.profilePhotoUrl());
-
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyRegisteredException("Email already registered: " + userDetails.email());
-        }
-
-        if (userRepository.existsByPhoneNumber(new PhoneNumber(userDetails.phoneNumber()))) {
-            throw new PhoneNumberAlreadyRegisteredException("Phone number already registered: " + userDetails.phoneNumber());
-        }
-
-        User user = new User();
-        user.setAge(userDetails.age());
-        user.setEmail(email);
-        user.setPhoneNumber(new PhoneNumber(userDetails.phoneNumber()));
-        user.setFirstName(userDetails.firstName());
-        user.setLastName(userDetails.lastName());
-        user.setProfilePhotoUrl(profilePhotoUrl);
-        user.setPassword(new Password(userDetails.password()));
-        user.setRole(User.Role.USER);
-
-        User savedUser = userRepository.save(user);
-
-        return convertToDTO(savedUser);
     }
 
     public StandardUserResponseDTO updateUser(UUID id, User updatedUser) {
@@ -125,13 +91,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public StandardUserResponseDTO getUserFromToken(Authentication authentication) {
         Email email = new Email(authentication.getName());
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new NoSuchUserExistsException("Cannot find user with email: " + email.getValue()));
-
-        return convertToDTO(user);
+        return this.getUserByEmail(email);
     }
-
 
     private StandardUserResponseDTO convertToDTO(User user) {
         return new StandardUserResponseDTO(

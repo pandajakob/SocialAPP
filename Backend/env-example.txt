@@ -1,0 +1,9 @@
+POSTGRES_DB=devdb;
+POSTGRES_USER=jakob;
+POSTGRES_PASSWORD=jakob;
+DB_HOST_PORT=5432;
+DATABASE_URL=postgresql://localhost:5432/devdb;
+ADMIN_EMAIL=admin@admin.com;
+ADMIN_PASSWORD=admin@admin.com;
+JWT_NAME=token;
+ALLOWED_ORIGINS=localhost:3000, https://someurl.com

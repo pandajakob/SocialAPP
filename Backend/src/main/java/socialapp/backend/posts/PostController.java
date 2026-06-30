@@ -2,6 +2,7 @@ package socialapp.backend.posts;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import socialapp.backend.posts.DTO.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
@@ -22,6 +23,13 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping
+    ResponseEntity<PostResponseDTO> getOwnPosts(Authentication authentication) {
+        // PostResponseDTO response = postService.getPostById();
+        // return ResponseEntity.ok().body(response);
+        throw new RuntimeException("Not Implemented");
+    }
+
     @PostMapping
     ResponseEntity<PostResponseDTO> createPost(@RequestBody PostCreateDTO postCreateDTO) {
         try {
@@ -30,12 +38,6 @@ public class PostController {
         }  catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    @GetMapping
-    ResponseEntity<List<PostResponseDTO>> getAllPosts() {
-        List<PostResponseDTO> response = postService.getAllPosts();
-        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/withinMeters")
@@ -50,19 +52,10 @@ public class PostController {
         return ResponseEntity.ok().body(response);
     }
 
-
-
-
     @GetMapping("/{id}")
     ResponseEntity<PostResponseDTO> getPostById(@PathVariable UUID id) {
         PostResponseDTO response = postService.getPostById(id);
         return ResponseEntity.ok().body(response);
-    }
-
-    @DeleteMapping("/{id}")
-    ResponseEntity deletePosts(@PathVariable UUID id) {
-        postService.deletePost(id);
-        return ResponseEntity.ok("successfully deleted post with id: " + id);
     }
 
     @ExceptionHandler(value = PostNotFoundException.class)

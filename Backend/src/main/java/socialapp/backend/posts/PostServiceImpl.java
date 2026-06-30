@@ -3,12 +3,14 @@ package socialapp.backend.posts;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import socialapp.backend.posts.DTO.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.DTO.PostsWithinMetersDTO;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
+import socialapp.backend.shared.domain_primitives.Email;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,13 @@ public class PostServiceImpl implements PostService {
         return postResponseDTOS;
     }
 
+    @Override
+    public List<PostResponseDTO> getOwnPosts(Authentication authentication) {
+        Email email = new Email(authentication.getName());
+        List<Post> posts = postRepository.findAllByUserEmail(email);
+        return posts.stream().map(this::convertPostResponseDTO).toList();
+    }
+
 
     public List<PostResponseDTO> getAllPosts() {
         List<Post> posts = postRepository.findAll();
@@ -95,6 +104,9 @@ public class PostServiceImpl implements PostService {
                 post.getId(),
                 post.getDate(),
                 post.getTitle(),
+                post.getCreatedBy().getFirstName(),
+                post.getCreatedBy().getLastName(),
+                post.getCreatedBy().getId().toString(),
                 post.getDescription(),
                 new LocationDTO(post.getLocation().getX(), post.getLocation().getY()),
                 post.getCategories(),

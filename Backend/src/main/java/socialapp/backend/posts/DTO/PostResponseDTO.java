@@ -9,6 +9,9 @@ import java.util.UUID;
 public record PostResponseDTO(
         UUID id,
         Date date,
+        String userFirstName,
+        String userLastName,
+        String userId,
         String title,
         String Description,
         LocationDTO location,

@@ -1,5 +1,6 @@
 package socialapp.backend.authentication;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import socialapp.backend.config.Configuration;
 import socialapp.backend.security.CustomUserDetailsService;
 import socialapp.backend.security.JWTService;
 import socialapp.backend.shared.domain_primitives.Email;
@@ -28,6 +30,9 @@ public class AuthService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
+    @Autowired
+    Configuration configuration;
+
 
     public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JWTService jwtService) {
         this.userRepository = userRepository;
@@ -37,6 +42,7 @@ public class AuthService {
     }
 
     public ResponseCookie login(LoginDTO loginDetails) {
+        System.out.println(configuration.getAdminEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDetails.email(),
@@ -76,7 +82,6 @@ public class AuthService {
         user.setLastName(registerDTO.lastName());
 
         user.setAge(registerDTO.age());
-        user.setRole(registerDTO.role());
         user.setPassword(password);
         user.setPhoneNumber(new PhoneNumber(registerDTO.phoneNumber()));
 

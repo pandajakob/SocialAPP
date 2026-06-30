@@ -13,3 +13,6 @@
 
 ## Compile
 mvn clean compile
+
+## Environment variables:
+All environment variables can be seen in the env-example.txt

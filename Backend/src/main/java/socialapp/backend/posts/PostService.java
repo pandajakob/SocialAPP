@@ -1,5 +1,6 @@
 package socialapp.backend.posts;
 
+import org.springframework.security.core.Authentication;
 import socialapp.backend.posts.DTO.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
@@ -11,7 +12,7 @@ import java.util.UUID;
 public interface PostService {
     List<PostResponseDTO> getAllPostsWithinMeters(PostsWithinMetersDTO postsWithinMetersDTO);
 
-    List<PostResponseDTO> getAllPosts();
+    List<PostResponseDTO> getOwnPosts(Authentication authentication);
 
     PostResponseDTO createPost(PostCreateDTO postCreateDTO);
 

@@ -23,12 +23,12 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
-  security:
-    user:
-      name: admin
-      password: admin
-
-# Sætter en global base path for hele applikationen
 server:
   servlet:
     context-path: /api
+
+security:
+  allowedOrigins: ${ALLOWED_ORIGINS}
+  JWTName: ${JWT_NAME}
+  adminEmail: ${ADMIN_EMAIL}
+  adminPassword: ${ADMIN_PASSWORD}

@@ -14,7 +14,6 @@ public record RegisterDTO(
     Integer age,
     String phoneNumber,
     String email,
-    String password,
-    User.Role role
+    String password
 )
 {}

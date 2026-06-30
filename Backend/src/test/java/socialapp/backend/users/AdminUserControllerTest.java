@@ -7,11 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import socialapp.backend.categories.Category;
-import socialapp.backend.users.DTO.CreateUserRequestDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
-import socialapp.backend.authentication.exceptions.EmailAlreadyRegisteredException;
 import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
-import socialapp.backend.authentication.exceptions.PhoneNumberAlreadyRegisteredException;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,17 +20,17 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class AdminUserControllerTest {
 
     @Mock
     UserServiceImpl userService;
 
     @InjectMocks
-    UserController userController;
+    AdminUserController userController;
 
     @BeforeEach
     void setUp() {
-        userController = new UserController(userService);
+        userController = new AdminUserController(userService);
     }
 
     @Test
@@ -54,20 +51,6 @@ class UserControllerTest {
         assertEquals(200, userController.getUserByEmail(email).getStatusCode().value());
     }
 
-    @Test
-    void assertHandleNoSuchUserExceptionReturnsStatuscode404() {
-        assertEquals(404, userController.handleNoSuchUserExistsException(new NoSuchUserExistsException()).getStatusCode());
-    }
-
-    @Test
-    void assertHandleEmailAlreadyRegisteredExceptionStatuscode409() {
-        assertEquals(409, userController.handleEmailAlreadyRegisteredException(new EmailAlreadyRegisteredException()).getStatusCode());
-    }
-
-    @Test
-    void assertHandlePhoneNumberAlreadyRegisteredExceptionStatuscode409() {
-        assertEquals(409, userController.handlePhoneNumberAlreadyRegisteredException(new PhoneNumberAlreadyRegisteredException()).getStatusCode());
-    }
 
     @Test
     void findByIdReturnsUserDTO() {
@@ -98,16 +81,6 @@ class UserControllerTest {
         assertThrows(NoSuchUserExistsException.class, () -> userController.deleteUser(uuid));
     }
 
-    @Test
-    void createUserReturnsUserDTO() {
-        UUID uuid = UUID.randomUUID();
-        CreateUserRequestDTO requestDTO = new CreateUserRequestDTO("firstname", "lastname", "password", "email", 10, List.of(new Category("music", null)), "12345678", "http://thisisurl");
-        StandardUserResponseDTO responseDTO = new StandardUserResponseDTO(uuid,"firstname", "lastname", "email", 10, List.of(new Category("music", null)), "12345678");
 
-        when(userService.createUser(requestDTO)).thenReturn(responseDTO);
-
-        assertEquals(201, userController.createUser(requestDTO).getStatusCode().value());
-        assertEquals(responseDTO, userController.createUser(requestDTO).getBody());
-    }
 
 }

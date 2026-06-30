@@ -19,6 +19,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @ManyToOne
+    @JoinTable(
+            name = "created_by",
+            joinColumns = @JoinColumn(name = "user_id"))
+    private User createdBy;
+
     private Date date = new Date();
 
     @Column(columnDefinition = "geometry(Point,4326)")
@@ -40,6 +46,14 @@ public class Post {
     private int ageTo;
 
     private String photoUrl;
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
 
     public void setLocation(Point location) {
         this.location = location;

@@ -3,8 +3,8 @@ services:
     image: postgis/postgis:16-3.5
     platform: linux/amd64
     environment:
-      POSTGRES_DB: devdb
-      POSTGRES_USER: jakob
-      POSTGRES_PASSWORD: jakob
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "${DB_HOST_PORT}:5432"

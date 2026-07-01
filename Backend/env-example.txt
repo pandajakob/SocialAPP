@@ -7,3 +7,4 @@ ADMIN_EMAIL=admin@admin.com;
 ADMIN_PASSWORD=admin@admin.com;
 JWT_NAME=token;
 ALLOWED_ORIGINS=localhost:3000, https://someurl.com
+TOKEN_VALIDITY_SECONDS=3600

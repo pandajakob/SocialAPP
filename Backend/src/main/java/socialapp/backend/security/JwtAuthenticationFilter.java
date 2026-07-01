@@ -1,45 +1,42 @@
 package socialapp.backend.security;
-
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+import socialapp.backend.config.Configuration;
 import java.io.IOException;
 
 @Component
-public class JWTFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JWTService jwtService;
+    private final JwtAuthenticationService jwtAuthenticationService;
+    private final Configuration configuration;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    ApplicationContext applicationContext;
+    public JwtAuthenticationFilter(JwtAuthenticationService jwtAuthenticationService, UserDetailsService userDetailsService, Configuration configuration) {
+        this.jwtAuthenticationService = jwtAuthenticationService;
+        this.userDetailsService = userDetailsService;
+        this.configuration = configuration;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String token = null;
-        jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+        String userEmail;
+        Cookie[] cookies = request.getCookies();
 
         if (cookies != null) {
-            for (jakarta.servlet.http.Cookie cookie : cookies) {
-                if ("auth".equals(cookie.getName())) {
+            for (Cookie cookie : cookies) {
+                if (configuration.getJWTName().equals(cookie.getName())) {
                     token = cookie.getValue();
                     break;
                 }
@@ -47,14 +44,11 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
 
-        String userEmail;
-
         if (token == null || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
-        } else {
-            userEmail = jwtService.extractUserName(token);
         }
+        userEmail = jwtAuthenticationService.extractUserName(token);
 
         if (userEmail == null || userEmail.isBlank()) {
             filterChain.doFilter(request, response);
@@ -63,12 +57,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = applicationContext.getBean(UserDetailsService.class)
-                    .loadUserByUsername(userEmail);
-            if (jwtService.validateToken(token, userDetails)){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+            if (jwtAuthenticationService.validateToken(token, userDetails)){
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetails(request));
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

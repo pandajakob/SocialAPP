@@ -24,6 +24,17 @@ public class Configuration {
 
     private String JWTName = "auth";
 
+    private long tokenValiditySeconds = 3600;
+
+
+    public long getTokenValiditySeconds() {
+        return tokenValiditySeconds;
+    }
+
+    public void setTokenValiditySeconds(long tokenValiditySeconds) {
+        this.tokenValiditySeconds = tokenValiditySeconds;
+    }
+
     public void setJWTName(String JWTName) {
         this.JWTName = JWTName;
     }

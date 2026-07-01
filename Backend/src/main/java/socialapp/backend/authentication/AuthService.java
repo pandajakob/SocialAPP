@@ -1,6 +1,5 @@
 package socialapp.backend.authentication;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,11 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import socialapp.backend.config.Configuration;
 import socialapp.backend.security.CustomUserDetailsService;
-import socialapp.backend.security.JWTService;
+import socialapp.backend.security.JwtAuthenticationService;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
 import socialapp.backend.shared.domain_primitives.PhoneNumber;
-import socialapp.backend.shared.domain_primitives.PhotoURL;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.users.User;
 import socialapp.backend.users.UserRepository;
@@ -24,21 +22,17 @@ import socialapp.backend.authentication.exceptions.UserAlreadyRegisteredExceptio
 public class AuthService {
     private final CustomUserDetailsService userDetailsService;
     private final UserRepository userRepository;
-    private final JWTService jwtService;
-
+    private final JwtAuthenticationService jwtAuthenticationService;
     private final AuthenticationManager authenticationManager;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+    private final Configuration configuration;
 
-    @Autowired
-    Configuration configuration;
-
-
-    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JWTService jwtService) {
+    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, Configuration configuration) {
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
+        this.configuration = configuration;
         this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
+        this.jwtAuthenticationService = jwtAuthenticationService;
     }
 
     public ResponseCookie login(LoginDTO loginDetails) {
@@ -50,26 +44,16 @@ public class AuthService {
                 )
         );
 
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDetails.email());
-
-        String token = jwtService.generateToken(userDetails);
-
-        ResponseCookie cookie = ResponseCookie.from("auth", token)
+        String token = jwtAuthenticationService.generateToken(userDetails);
+        ResponseCookie cookie = ResponseCookie.from(configuration.getJWTName(), token)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(daysToSeconds(30))
+                .maxAge(configuration.getTokenValiditySeconds())
                 .sameSite("None")
                 .build();
-
-
         return cookie;
-    }
-
-    private int daysToSeconds(int days) {
-        return days/24*60*60;
-
     }
 
     public StandardUserResponseDTO register(RegisterDTO registerDTO) {

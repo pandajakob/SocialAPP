@@ -7,20 +7,20 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.config.Configuration;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.function.Function;
 
 @Service
-public class JWTService {
+public class JwtAuthenticationService {
 
+    private final Configuration configuration;
     private String secretkey = "";
 
-    public JWTService() {
+    public JwtAuthenticationService(Configuration configuration) {
 
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
@@ -29,6 +29,7 @@ public class JWTService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+        this.configuration = configuration;
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -42,7 +43,7 @@ public class JWTService {
                 .add(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30 *10000))
+                .expiration(new Date(System.currentTimeMillis() + configuration.getTokenValiditySeconds()*1000))
                 .and()
                 .signWith(getKey())
                 .compact();

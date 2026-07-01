@@ -1,9 +1,7 @@
 package socialapp.backend.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.shared.domain_primitives.Password;
@@ -17,10 +15,10 @@ public class AdminInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
-    @Autowired
-    Configuration configuration;
+    private final Configuration configuration;
 
-    public AdminInitializer(UserRepository userRepository) {
+    public AdminInitializer(UserRepository userRepository, Configuration configuration) {
+        this.configuration = configuration;
         this.userRepository = userRepository;
     }
 

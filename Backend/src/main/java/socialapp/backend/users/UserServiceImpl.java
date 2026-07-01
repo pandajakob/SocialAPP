@@ -2,7 +2,7 @@ package socialapp.backend.users;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import socialapp.backend.security.JWTService;
+import socialapp.backend.security.JwtAuthenticationService;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.shared.domain_primitives.Email;
 import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final JWTService jwtService;
+    private final JwtAuthenticationService jwtAuthenticationService;
 
-    public UserServiceImpl(UserRepository userRepository, JWTService jwtService) {
+    public UserServiceImpl(UserRepository userRepository, JwtAuthenticationService jwtAuthenticationService) {
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
+        this.jwtAuthenticationService = jwtAuthenticationService;
     }
 
     public List<StandardUserResponseDTO> getAllUsers() {

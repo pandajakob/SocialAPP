@@ -43,11 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-
         if (token == null || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
+
         userEmail = jwtAuthenticationService.extractUserName(token);
 
         if (userEmail == null || userEmail.isBlank()) {

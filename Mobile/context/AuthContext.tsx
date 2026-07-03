@@ -1,6 +1,6 @@
 // src/context/AuthContext.tsx
 
-import { AuthContextType, User } from "@/types/auth";
+import { AuthContextType } from "@/types/AuthContextType";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 
@@ -9,11 +9,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = !!token && !!user;
+  const isAuthenticated = !!token 
 
   async function save(key: string, value: string) {
     await SecureStore.setItemAsync(key, value);
@@ -33,17 +32,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadStoredAuth = async () => {
     try {
-      const [storedToken, storedUser] = await Promise.all([
+      const [storedToken] = await Promise.all([
         getValueFor("authToken"),
-        getValueFor("userData"),
       ]);
 
-      if (storedToken && storedUser) {
+      if (storedToken) {
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
       }
     } catch (error) {
-      console.log("Error loading stored auth:", error);
+      console.log("Error loading or no stored token:", error);
     } finally {
       setLoading(false);
     }
@@ -53,46 +50,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       console.log("logging in");
-      /*
-      const response = await fetch("localhost:8080/auth/login", {
+
+      const response = await fetch("http://192.168.8.223:8080/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      */
-      const response = {
-        ok: true,
-        json: async () => ({
-          token: "",
-          user: { id: 0, email: "test@mail.com", firstName: "Test", lastName: "User", age: 25, interests: ["music", "hiking"], role: 'user', phoneNumber: "+4512345678" },
-        }),
-      };
 
       if (response.ok) {
-        const data = await response.json();
+        const tokenObject: String | null = response.headers.get("set-cookie");
 
-        await Promise.all([
-          save("authToken", data.token),
-          save("userData", JSON.stringify(data.user)),
-        ]);
+        if (tokenObject == null) {
+          console.log("Error getting token");
+          return false;
+        }
 
-        setToken(data.token);
+        const tokenFields = tokenObject.split(",");
+        const tokenWithPrefix = tokenFields[0].split(";")[0];
+        const jwt = tokenWithPrefix.split("=")[1];
 
-        const user: User = {
-          id: data.user.id,
-          email: data.user.email,
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          age: data.user.age,
-          interests: data.user.interests,
-          phoneNumber: data.user.phoneNumber,
-          role: data.user.role === "admin" ? "admin" : "user",
-        };
-        setUser(user);
+        console.log(jwt);
+
+        await Promise.all([save("authToken", jwt)]);
+
+        setToken(jwt);
         return true;
       }
       return false;
-    } catch {
+    } catch (error: any) {
+      console.log(error);
       return false;
     } finally {
       setLoading(false);
@@ -105,7 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       //AsyncStorage.removeItem("userData"),
     ]);
     setToken(null);
-    setUser(null);
   };
 
   const register = async (email: string, password: string) => {
@@ -126,17 +111,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }
+  };
+
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, loading, login, logout, register }}
+      value={{ token, isAuthenticated, loading, login, logout, register }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
-
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used inside AuthProvider");

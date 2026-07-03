@@ -48,7 +48,6 @@ public class Configuration {
     }
 
     public List<String> getAllowedOrigins() {
-        System.out.println("Allowed Origins: " + this.allowedOrigins);
         return allowedOrigins;
     }
 

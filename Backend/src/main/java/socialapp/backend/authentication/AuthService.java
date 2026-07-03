@@ -36,7 +36,6 @@ public class AuthService {
     }
 
     public ResponseCookie login(LoginDTO loginDetails) {
-        System.out.println(configuration.getAdminEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDetails.email(),
@@ -56,6 +55,18 @@ public class AuthService {
         return cookie;
     }
 
+    public ResponseCookie logout() {
+        ResponseCookie cookie = ResponseCookie.from(configuration.getJWTName(), "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(configuration.getTokenValiditySeconds())
+                .sameSite("None")
+                .build();
+        return cookie;
+
+    }
+
     public StandardUserResponseDTO register(RegisterDTO registerDTO) {
         User user = new User();
 
@@ -68,7 +79,7 @@ public class AuthService {
         user.setAge(registerDTO.age());
         user.setPassword(password);
         user.setPhoneNumber(new PhoneNumber(registerDTO.phoneNumber()));
-
+        user.setRole(User.Role.USER);
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {

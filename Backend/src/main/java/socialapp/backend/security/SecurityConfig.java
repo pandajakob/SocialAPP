@@ -67,8 +67,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(configuration.getAllowedOrigins());
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        System.out.println("actual: " + configuration.getAllowedOrigins());
-        System.out.println("config: " + config.getAllowedOriginPatterns());
+
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

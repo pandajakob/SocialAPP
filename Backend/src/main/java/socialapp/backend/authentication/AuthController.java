@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import socialapp.backend.authentication.exceptions.*;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -24,7 +26,21 @@ public class AuthController {
         ResponseCookie cookie = authService.login(loginDetails);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("Login successful");
+                .body(Map.of("message", "Login successful"));
+    }
+
+
+    @GetMapping("/logout")
+    ResponseEntity<?> logout() {
+        try {
+            ResponseCookie cookie = authService.logout();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(Map.of("message", "logout successful"));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
     }
     @PostMapping("/register")
@@ -56,5 +72,12 @@ public class AuthController {
     public ErrorResponse handleNoSuchUserExistsException(NoSuchUserExistsException ex) {
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoRuntimeException(RuntimeException ex) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    }
+
 
 }

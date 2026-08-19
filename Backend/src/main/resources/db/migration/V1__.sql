@@ -6,6 +6,18 @@ CREATE TABLE categories
     CONSTRAINT pk_categories PRIMARY KEY (id)
 );
 
+CREATE TABLE location
+(
+    id                UUID NOT NULL,
+    coordinates       GEOMETRY(Point, 4326) NOT NULL,
+    country           VARCHAR(255),
+    country_code      VARCHAR(255),
+    city              VARCHAR(255),
+    postal_code       VARCHAR(255),
+    formatted_address VARCHAR(255),
+    CONSTRAINT pk_location PRIMARY KEY (id)
+);
+
 CREATE TABLE post_categories
 (
     category_id BIGINT NOT NULL,
@@ -14,15 +26,22 @@ CREATE TABLE post_categories
 
 CREATE TABLE posts
 (
-    id          UUID    NOT NULL,
+    id          UUID         NOT NULL,
+    user_id     UUID         NOT NULL,
     date        TIMESTAMP WITHOUT TIME ZONE,
-    location    GEOMETRY(Point, 4326),
-    title       VARCHAR(255),
+    location_id UUID         NOT NULL,
+    title       VARCHAR(255) NOT NULL,
     description VARCHAR(255),
-    age_from    INTEGER NOT NULL,
-    age_to      INTEGER NOT NULL,
+    age_from    INTEGER      NOT NULL,
+    age_to      INTEGER      NOT NULL,
     photo_url   VARCHAR(255),
     CONSTRAINT pk_posts PRIMARY KEY (id)
+);
+
+CREATE TABLE saved_posts
+(
+    post_id UUID NOT NULL,
+    user_id UUID NOT NULL
 );
 
 CREATE TABLE user_interests
@@ -51,17 +70,32 @@ ALTER TABLE users
 ALTER TABLE users
     ADD CONSTRAINT uc_users_phone_number UNIQUE (phone_number);
 
+ALTER TABLE posts
+    ADD CONSTRAINT FK_POSTS_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
+
+ALTER TABLE posts
+    ADD CONSTRAINT FK_POSTS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
 ALTER TABLE post_categories
     ADD CONSTRAINT fk_poscat_on_category FOREIGN KEY (category_id) REFERENCES categories (id);
 
 ALTER TABLE post_categories
     ADD CONSTRAINT fk_poscat_on_post FOREIGN KEY (post_id) REFERENCES posts (id);
 
+ALTER TABLE saved_posts
+    ADD CONSTRAINT fk_savpos_on_post FOREIGN KEY (post_id) REFERENCES posts (id);
+
+ALTER TABLE saved_posts
+    ADD CONSTRAINT fk_savpos_on_user FOREIGN KEY (user_id) REFERENCES users (id);
+
 ALTER TABLE user_interests
     ADD CONSTRAINT fk_useint_on_category FOREIGN KEY (category_id) REFERENCES categories (id);
 
 ALTER TABLE user_interests
     ADD CONSTRAINT fk_useint_on_user FOREIGN KEY (user_id) REFERENCES users (id);
+
+DROP TABLE spatial_ref_sys CASCADE;
+
 
 BEGIN;
 INSERT INTO categories (name) VALUES

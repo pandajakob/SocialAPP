@@ -8,9 +8,7 @@ import { UserContextType } from "@/types/UserContextType";
 import { API_BASE } from "@/constants/api";
 
 
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined,
-);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | undefined>(undefined);

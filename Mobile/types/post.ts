@@ -1,19 +1,28 @@
-export interface Photo {
-  url: string;
-}
+
 
 export interface Category {
+  id: number;
   name: string;
+  parentCategoryId: number
+
+}
+
+export interface Location {
+  latitude: number;
+  longitude: number;
+  country: string;
+  city: string;
+  formattedAddress: string;
 }
 
 export interface Post {
   postId: number;
   title: string;
   description: string;
-  location: string;
+  location: Location;
   date: string;
   ageFrom: number;
   ageTo: number;
   categories: Category[];
-  photo: Photo;
+  photoUrl: string;
 }

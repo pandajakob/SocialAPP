@@ -1,5 +1,6 @@
 package socialapp.backend.posts.DTO;
 
+import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.categories.Category;
 
 import java.util.Date;

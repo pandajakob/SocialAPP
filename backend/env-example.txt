@@ -8,3 +8,4 @@ export ADMIN_PASSWORD=admin@admin.com
 export JWT_NAME=token
 export ALLOWED_ORIGINS=localhost:3000
 export TOKEN_VALIDITY_SECONDS=3600
+export GOOGLE_MAPS_API_KEY=xxxxxx

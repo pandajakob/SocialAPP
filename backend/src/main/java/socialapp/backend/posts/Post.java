@@ -2,7 +2,7 @@ package socialapp.backend.posts;
 
 import jakarta.persistence.*;
 
-import org.locationtech.jts.geom.Point;
+import socialapp.backend.Location.Location;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 
@@ -28,9 +28,14 @@ public class Post {
 
     private Date date = new Date();
 
-    @Column(columnDefinition = "geometry(Point,4326)")
-    private Point location;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(
+            name = "location_id",
+            nullable = false
+    )
+    private Location location;
 
+    @Column(nullable = false)
     private String title;
 
     private String description;
@@ -40,6 +45,7 @@ public class Post {
             name = "post_categories",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @Column(nullable = false)
     private List<Category> categories;
 
     private int ageFrom;
@@ -56,7 +62,7 @@ public class Post {
         return createdBy;
     }
 
-    public void setLocation(Point location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -92,7 +98,7 @@ public class Post {
         this.title = title;
     }
 
-    public Point getLocation() {
+    public Location getLocation() {
         return location;
     }
 

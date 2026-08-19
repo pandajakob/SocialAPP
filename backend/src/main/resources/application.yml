@@ -32,3 +32,5 @@ security:
   JWTName: ${JWT_NAME}
   adminEmail: ${ADMIN_EMAIL}
   adminPassword: ${ADMIN_PASSWORD}
+  googleMapsApiKey: ${GOOGLE_MAPS_API_KEY}
+

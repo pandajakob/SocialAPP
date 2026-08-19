@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import socialapp.backend.posts.DTO.LocationDTO;
+import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.DTO.PostsWithinMetersDTO;

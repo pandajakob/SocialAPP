@@ -24,6 +24,9 @@ public class Configuration {
 
     private String JWTName = "auth";
 
+    @NotBlank
+    private String googleMapsApiKey;
+
     private long tokenValiditySeconds = 3600;
 
 
@@ -65,5 +68,13 @@ public class Configuration {
 
     public void setAllowedOrigins(List<String> allowedOrigins) {
         this.allowedOrigins = allowedOrigins;
+    }
+
+    public void setGoogleMapsApiKey(String googleMapsApiKey) {
+        this.googleMapsApiKey = googleMapsApiKey;
+    }
+
+    public String getGoogleMapsApiKey() {
+        return googleMapsApiKey;
     }
 }

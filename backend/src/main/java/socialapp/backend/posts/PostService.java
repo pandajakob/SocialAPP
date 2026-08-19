@@ -1,7 +1,7 @@
 package socialapp.backend.posts;
 
 import org.springframework.security.core.Authentication;
-import socialapp.backend.posts.DTO.LocationDTO;
+import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.DTO.PostsWithinMetersDTO;

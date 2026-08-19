@@ -8,9 +8,7 @@ import { Post } from "@/types/post";
 import { PostContextType } from "@/types/PostContextType";
 
 
-export const PostContext = createContext<PostContextType | undefined>(
-  undefined,
-);
+export const PostContext = createContext<PostContextType | undefined>(undefined);
 
 export function PostProvider({ children }: { children: React.ReactNode }) {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
@@ -24,26 +22,39 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
 
     setLoading(true);
 
+
     try {
       console.log(API_BASE + "/api/posts")
       const response = await fetch(`${API_BASE}/api/posts`, {
         method: "GET",
+
         headers: {
           "Content-Type": "application/json",
           Cookie: `token=${token}`,
         },
       });
-      console.log("response", response)
+      
+
 
       if (!response.ok) {
-        throw new Error("Error getting posts");
+        throw new Error("Failed to get userPosts: " + response.status + " " + response.statusText);
       }
 
       const data = await response.json();
 
-      console.log("data", data)
+      const responsePosts: Post[] = data.map((p: any) => ({
+        postId: p.postId,
+        title: p.title,
+        description: p.description,
+        location: p.location,
+        date: p.date,
+        ageFrom: p.ageFrom,
+        ageTo: p.ageTo,
+        categories: p.categories ?? [],
+        photoUrl: p.photoUrl ?? "",
+      }));
       
-      return data;
+      return responsePosts;
     } catch (error: any) {
       throw new Error(error?.message ?? "Unknown user fetch error");
     } finally {
@@ -66,6 +77,8 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
         const fetchedPosts = await getUserPosts();
         if (isMounted) {
           setUserPosts(fetchedPosts);
+
+          console.log("posts", fetchedPosts)
         }
       } catch (error) {
         console.log("Error loading user data:", error);

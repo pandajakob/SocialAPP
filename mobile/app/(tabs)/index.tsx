@@ -8,7 +8,6 @@ import CategoryFilter from '@/components/CategoryFilter';
 
 export default function ExploreScreen() {
  
-
   const [posts, setPosts] = useState<Post[]>(MOCK_POSTS); // Use the Model in your state
 
   return (

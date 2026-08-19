@@ -10,8 +10,14 @@ export const MOCK_POSTS: Post[] = [
     date: "2026-03-12",
     ageFrom: 18,
     ageTo: 35,
-    categories: [{ name: "Sports" }],
-    photo: { url: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400" }
+    categories: [
+      {
+        id: 0,
+        name: "Sports",
+        parentCategoryId: 0
+      }
+    ],
+    photoUrl: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400"
   },
   {
     postId: 2,
@@ -21,15 +27,26 @@ export const MOCK_POSTS: Post[] = [
     date: "2026-03-15",
     ageFrom: 20,
     ageTo: 99,
-    categories: [{ name: "Social" }, { name: "Gaming" }],
-    photo: { url: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400" }
+    categories: [
+      {
+        id: 0,
+        name: "Social",
+        parentCategoryId: 0
+      },
+      {
+        id: 1,
+        name: "Gaming",
+        parentCategoryId: 0
+      }
+    ],
+    photoUrl: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400"
   }
 ];
 
 export const MOCK_CHATS: Chat[] = [
   {
     chatId: 1,
-    post: MOCK_POSTS[0], // Linked to Saturday Basketball
+    post: MOCK_POSTS[0],
     lastMessage: "See you at the court! 🏀",
     time: "2m",
     participants: [
@@ -37,13 +54,15 @@ export const MOCK_CHATS: Chat[] = [
         userId: 101,
         firstName: "Alice",
         lastName: "Jensen",
-        profilePhoto: { url: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400" }
+        profilePhoto: {
+          url: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400"
+        }
       }
     ]
   },
   {
     chatId: 2,
-    post: MOCK_POSTS[1], // Linked to Board Game Meetup
+    post: MOCK_POSTS[1],
     lastMessage: "I'll bring the extra ball.",
     time: "1h",
     participants: [
@@ -51,17 +70,21 @@ export const MOCK_CHATS: Chat[] = [
         userId: 102,
         firstName: "Bob",
         lastName: "Builder",
-        profilePhoto: { url: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400" }
+        profilePhoto: {
+          url: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400"
+        }
       }
     ]
-  },
+  }
 ];
 
 export const mockProfile = {
-    firstname: "John",
-    lastname: "Doe",
-    phone: "+45 12 35 81 32",
-    email: "john@doe.dk",
-    profilePhoto: { url: "https://i.pravatar.cc/114" },
-    interests: ["Sports", "Gaming", "Music"]
-  };
+  firstname: "John",
+  lastname: "Doe",
+  phone: "+45 12 35 81 32",
+  email: "john@doe.dk",
+  profilePhoto: {
+    url: "https://i.pravatar.cc/114"
+  },
+  interests: ["Sports", "Gaming", "Music"]
+};

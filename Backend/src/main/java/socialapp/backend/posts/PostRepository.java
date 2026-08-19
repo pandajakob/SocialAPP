@@ -38,12 +38,8 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query(value = """
     SELECT *
     FROM posts p
-    ORDER BY ST_Distance(
-        p.location,
-        ST_SetSRID(
-            ST_MakePoint(:longitude, :latitude), 4326)::geography
-        )
+    WHERE user_id = :userId
     """, nativeQuery = true)
-    List<Post> findAllByUserEmail(Email email);
+    List<Post> findAllByUserId(UUID userId);
 
 }

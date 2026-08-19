@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "my-social-app",
-    "slug": "my-social-app",
+    "slug": "socialapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.pandajakobsteam.socialapp"
     },
     "web": {
       "output": "static",
@@ -45,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "42fd737d-8513-4e68-acc8-d72279c18764"
+      }
+    },
+    "owner": "pandajakobs-team"
   }
 }

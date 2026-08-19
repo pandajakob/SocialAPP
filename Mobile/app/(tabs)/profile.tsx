@@ -1,33 +1,19 @@
 import { Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import "../../global.css";
-import { User } from "@/types/user";
 import { useUser } from "@/context/UserContext";
-import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-
+import { usePost } from "@/context/PostContext";
 
 export default function ProfileScreen() {
+  const { user, loading } = useUser();
+  const { userPosts } = usePost();
 
-  const { getMe } = useUser()
-  const [user, setUser] = useState<User>()
-  const { token, loading: authLoading } = useAuth();
-
-  useEffect(() => {
-    if (!authLoading && token) {
-       getMe()
-        .then((u) => setUser(u))
-        .catch(e=> {console.log("error getting user", e)})
-    }
-}, [authLoading, token]);
-  
-
-  if (user == undefined) {
+  if (loading || !user) {
     return (
-        <View className="flex-1 items-center justify-center bg-white">
-          <ActivityIndicator size="large" color="#000000" />
-        </View>
-    )
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#000000" />
+      </View>
+    );
   }
 
   return (

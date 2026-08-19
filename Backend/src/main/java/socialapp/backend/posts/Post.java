@@ -20,9 +20,10 @@ public class Post {
     private UUID id;
 
     @ManyToOne
-    @JoinTable(
-            name = "created_by",
-            joinColumns = @JoinColumn(name = "user_id"))
+    @JoinColumn(
+            name = "user_id",
+            nullable = false
+    )
     private User createdBy;
 
     private Date date = new Date();

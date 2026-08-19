@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -20,7 +20,15 @@ export default function AuthScreen() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     
 
-  const { login, loading } = useAuth();
+  const { login, loading, isAuthenticated } = useAuth();
+
+
+  useEffect(()=>{
+    if (isAuthenticated) {
+            router.dismiss();
+    }
+  }, [isAuthenticated])
+
 
   if (loading) {
     return (
@@ -29,6 +37,9 @@ export default function AuthScreen() {
       </View>
     );
   }
+
+
+
   
   const handleLogin = async () => {
     console.log("Attempting login with:", { email, password });

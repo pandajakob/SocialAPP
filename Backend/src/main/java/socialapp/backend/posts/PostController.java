@@ -24,10 +24,9 @@ public class PostController {
     }
 
     @GetMapping
-    ResponseEntity<PostResponseDTO> getOwnPosts(Authentication authentication) {
-        // PostResponseDTO response = postService.getPostById();
-        // return ResponseEntity.ok().body(response);
-        throw new RuntimeException("Not Implemented");
+    ResponseEntity<List<PostResponseDTO>> getOwnPosts(Authentication authentication) {
+        List<PostResponseDTO> response = postService.getOwnPosts(authentication);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping

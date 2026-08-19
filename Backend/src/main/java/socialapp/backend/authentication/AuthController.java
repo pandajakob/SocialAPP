@@ -21,6 +21,12 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @GetMapping
+    ResponseEntity<?> isAuthenticated() {
+        return ResponseEntity.ok()
+                .body(Map.of("message", "User is authenticated"));
+    }
+
     @PostMapping("/login")
     ResponseEntity<?> login(@RequestBody LoginDTO loginDetails) {
         ResponseCookie cookie = authService.login(loginDetails);

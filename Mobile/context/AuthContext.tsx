@@ -3,6 +3,7 @@
 import { AuthContextType } from "@/types/AuthContextType";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import { API_BASE } from "@/constants/api";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined,
@@ -37,7 +38,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ]);
 
       if (storedToken) {
-        setToken(storedToken);
+        const response = await fetch(`${API_BASE}/api/auth`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `token=${storedToken}`,
+          },
+      });
+        if (response.ok) {
+          setToken(storedToken);
+        }
+        
       }
     } catch (error) {
       console.log("Error loading or no stored token:", error);
@@ -51,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       console.log("logging in");
 
-      const response = await fetch("http://192.168.8.223:8080/api/auth/login", {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

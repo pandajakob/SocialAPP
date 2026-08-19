@@ -16,7 +16,7 @@ export interface Location {
 }
 
 export interface Post {
-  postId: number;
+  postId: string;
   title: string;
   description: string;
   location: Location;

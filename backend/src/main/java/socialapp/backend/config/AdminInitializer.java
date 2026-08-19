@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import socialapp.backend.Location.LocationService;
+import socialapp.backend.categories.Category;
+import socialapp.backend.categories.CategoryRepository;
 import socialapp.backend.posts.Post;
 import socialapp.backend.posts.PostRepository;
 import socialapp.backend.shared.domain_primitives.Email;
@@ -19,7 +21,7 @@ import java.util.List;
 
 @Component
 public class AdminInitializer implements CommandLineRunner {
-
+    private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LocationService locationService;
@@ -27,7 +29,8 @@ public class AdminInitializer implements CommandLineRunner {
 
     private final Configuration configuration;
 
-    public AdminInitializer(UserRepository userRepository, PostRepository postRepository, LocationService locationService, Configuration configuration) {
+    public AdminInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, Configuration configuration) {
+        this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
         this.locationService = locationService;
         this.configuration = configuration;
@@ -59,11 +62,14 @@ public class AdminInitializer implements CommandLineRunner {
 
     }
     private void addPostForUser(User user, String title) {
+        List<Category> categories = categoryRepository.findAll();
         Post post = new Post();
         post.setTitle(title);
         post.setDescription("This is a description...");
         post.setAgeFrom(18);
         post.setAgeTo(45);
+        post.setCategories(categories.subList(0,2));
+
         post.setLocation(locationService.createLocation(55.67594, 12.56553));
         post.setCreatedBy(user);
         postRepository.save(post);

@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput } from 'react-native';
+import { View, Text, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PostCard from '../../components/PostCard';
-import { Post } from '../../types/post';
-import { MOCK_POSTS } from '@/constants/MockData';
 import CategoryFilter from '@/components/CategoryFilter';
+import { usePost } from '@/context/PostContext';
+
 
 export default function ExploreScreen() {
- 
-  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS); // Use the Model in your state
+
+const { feed, loading } = usePost();
+
+  if (loading || !feed) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#000000" />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-gray-50 px-4 pt-14">
@@ -20,13 +27,19 @@ export default function ExploreScreen() {
         <TextInput placeholder="Search..." className="flex-1 ml-3" />
       </View>
       <CategoryFilter />
+
+      {feed ?
       <FlatList
-        data={posts}
-        renderItem={({ item }) => <PostCard post={item} />} // Pass data to the child
-        keyExtractor={(item) => item.postId.toString()}
+        data={feed}
+        renderItem={({ item }) => <PostCard  key={item.postId} post={item} />} // Pass data to the child
+        keyExtractor={(item) => item.postId}
         contentContainerStyle={{ paddingBottom: 100 }}
-      />
-    </View>
+      /> : 
+
+      <Text className="text-3xl font-bold mb-4">Error loading feed</Text>
+      }
+
+      </View>
   );
 }
 

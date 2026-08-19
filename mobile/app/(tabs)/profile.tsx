@@ -17,7 +17,7 @@ export default function ProfileScreen() {
       </View>
     );
   }
-  console.log(userPosts)
+
   return (
     <ScrollView className="flex-1 bg-white">
       {/* Header / Avatar Section */}

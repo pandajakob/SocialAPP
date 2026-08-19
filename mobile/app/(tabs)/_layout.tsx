@@ -22,6 +22,11 @@ export default function TabLayout() {
         <Label>Map</Label>
         <Icon src={<VectorIcon family={Ionicons} name="map" />} />
       </NativeTabs.Trigger>
+      
+      <NativeTabs.Trigger name="createPostTabRedirect">
+        <Label>New post</Label>
+        <Icon src={<VectorIcon family={Ionicons} name="add-circle" />} />
+      </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="chats">
         <Label>Chats</Label>

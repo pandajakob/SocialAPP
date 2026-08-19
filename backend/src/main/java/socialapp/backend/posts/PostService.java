@@ -14,7 +14,7 @@ public interface PostService {
 
     List<PostResponseDTO> getOwnPosts(Authentication authentication);
 
-    PostResponseDTO createPost(PostCreateDTO postCreateDTO);
+    PostResponseDTO createPost(PostCreateDTO postCreateDTO,Authentication authentication);
 
     void deletePost(UUID id);
 

@@ -35,9 +35,11 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    public PostResponseDTO createPost(PostCreateDTO postCreateDTO) {
+    public PostResponseDTO createPost(PostCreateDTO postCreateDTO,  Authentication authentication) {
         Post post = new Post();
+        User user = userRepository.findByEmail(new Email(authentication.getName())).get();
         post.setCategories(postCreateDTO.categories());
+        post.setCreatedBy(user);
         post.setTitle(postCreateDTO.title());
         post.setAgeFrom(postCreateDTO.ageFrom());
         post.setAgeTo(postCreateDTO.ageTo());
@@ -99,7 +101,6 @@ public class PostServiceImpl implements PostService {
             postResponseDTOS.add(convertPostResponseDTO(post));
         }
         return postResponseDTOS;
-
     }
 
     public List<PostResponseDTO> getNearest(LocationDTO locationDTO) {
@@ -109,7 +110,6 @@ public class PostServiceImpl implements PostService {
             postResponseDTOS.add(convertPostResponseDTO(post));
         }
         return postResponseDTOS;
-
     }
     
     private PostResponseDTO convertPostResponseDTO(Post post) {

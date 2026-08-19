@@ -29,10 +29,16 @@ public class PostController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/feed")
+    ResponseEntity<List<PostResponseDTO>> getFeed() {
+        List<PostResponseDTO> response = postService.getAllPosts();
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping
-    ResponseEntity<PostResponseDTO> createPost(@RequestBody PostCreateDTO postCreateDTO) {
+    ResponseEntity<PostResponseDTO> createPost(@RequestBody PostCreateDTO postCreateDTO,  Authentication authentication) {
         try {
-            PostResponseDTO response = postService.createPost(postCreateDTO);
+            PostResponseDTO response = postService.createPost(postCreateDTO, authentication);
             return ResponseEntity.ok().body(response);
         }  catch (Exception e) {
             return ResponseEntity.badRequest().build();

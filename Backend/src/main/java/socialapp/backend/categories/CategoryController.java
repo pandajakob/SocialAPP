@@ -34,7 +34,7 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    @GetMapping("/main/")
+    @GetMapping("/main")
     List<Category> getAllMainCategories() {
         return categoryService.getAllMainCategories();
     }

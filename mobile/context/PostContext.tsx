@@ -43,7 +43,7 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       const responsePosts: Post[] = data.map((p: any) => ({
-        postId: String(p.postId),
+        id: p.id,
         title: p.title,
         description: p.description,
         location: p.location,

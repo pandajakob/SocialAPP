@@ -1,6 +1,9 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Post } from '../types/post'; // Import your model
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+
+import { Post } from "../types/post";
+import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 
 interface PostCardProps {
   post: Post;
@@ -9,8 +12,14 @@ interface PostCardProps {
 export default function PostCard({ post }: PostCardProps) {
   const hasPhoto = !!post.photoUrl;
 
+  const openPost = () => {
+    router.push(`/post/${post.postId}`);
+  };
+
   return (
     <TouchableOpacity
+      onPress={openPost}
+      activeOpacity={0.8}
       className={
         hasPhoto
           ? "bg-white rounded-3xl mb-5 overflow-hidden border border-gray-100 shadow-sm"
@@ -22,25 +31,36 @@ export default function PostCard({ post }: PostCardProps) {
       )}
 
       <View className={hasPhoto ? "p-4" : "px-4 py-3"}>
-        <View className={hasPhoto ? "flex-row mb-2" : "flex-row mb-1"}>
-          {post.categories.map((cat, i) => (
-            <View key={i} className="bg-blue-100 px-2 py-1 rounded-md mr-2">
-              <Text className="text-blue-600 text-xs font-bold uppercase">
-                {cat.name}
-              </Text>
-            </View>
-          ))}
-        </View>
+        <View className="flex-row mb-2">
+        {post.categories.map((cat) => (
+          <View
+            key={cat.id}
+            className="flex-row items-center bg-white border border-gray-100 px-3 py-1.5 rounded-full mr-2"
+          >
+            <Text className="mr-1.5 text-sm">
+              {CATEGORY_EMOJIS[cat.name.toLowerCase()] ?? "📌"}
+            </Text>
+
+            <Text className="text-gray-700 text-xs font-semibold">
+              {cat.name}
+            </Text>
+          </View>
+        ))}
+      </View>
 
         <Text className="text-xl font-bold text-gray-900 mb-1">
           {post.title}
         </Text>
 
         <Text
-          className={hasPhoto ? "text-gray-500 text-sm mb-3" : "text-gray-500 text-sm mb-2"}
+          className={
+            hasPhoto
+              ? "text-gray-500 text-sm mb-3"
+              : "text-gray-500 text-sm mb-2"
+          }
           numberOfLines={hasPhoto ? 2 : 1}
         >
-          {post.description ?? "no description"}
+          {post.description ?? "No description"}
         </Text>
 
         <View
@@ -56,6 +76,7 @@ export default function PostCard({ post }: PostCardProps) {
               {post.location.city}
             </Text>
           </View>
+
           <Text className="text-gray-500 text-xs">
             Ages: {post.ageFrom}-{post.ageTo}
           </Text>

@@ -1,19 +1,5 @@
-
-
-export interface Category {
-  id: number;
-  name: string;
-  parentCategoryId: number
-
-}
-
-export interface Location {
-  latitude: number;
-  longitude: number;
-  country: string;
-  city: string;
-  formattedAddress: string;
-}
+import { Category } from "./category";
+import { Location } from "./location";
 
 export interface Post {
   postId: string;

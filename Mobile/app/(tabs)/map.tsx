@@ -3,16 +3,13 @@ import { View, ActivityIndicator } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { router } from "expo-router";
 import { usePost } from "@/context/PostContext";
+import LoadingView from "@/components/LoadingView";
 
 export default function MapScreen() {
   const { feed, loading } = usePost();
 
   if (loading || !feed) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#000000" />
-      </View>
-    );
+    return LoadingView()
   }
 
   return (

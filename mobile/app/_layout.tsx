@@ -11,6 +11,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/context/AuthContext";
 import { UserProvider } from "@/context/UserContext";
 import { PostProvider } from "@/context/PostContext";
+import { CategoryProvider } from "@/context/CategoryContext";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -23,9 +24,10 @@ export default function RootLayout() {
     <AuthProvider>
       <UserProvider>
         <PostProvider>
+          <CategoryProvider>
           <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
             <Stack>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="createPost"
@@ -35,6 +37,7 @@ export default function RootLayout() {
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>
+          </CategoryProvider>
       </PostProvider>
     </UserProvider>
     </AuthProvider>

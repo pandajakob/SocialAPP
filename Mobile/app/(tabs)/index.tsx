@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import PostCard from '../../components/PostCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import { usePost } from '@/context/PostContext';
+import LoadingView from '@/components/LoadingView';
 
 
 export default function ExploreScreen() {
@@ -10,11 +11,7 @@ export default function ExploreScreen() {
 const { feed, loading } = usePost();
 
   if (loading || !feed) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#000000" />
-      </View>
-    );
+    return LoadingView()
   }
 
   return (

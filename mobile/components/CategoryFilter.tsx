@@ -1,16 +1,16 @@
-import React from 'react';
-import { ScrollView, TouchableOpacity, Text, View } from 'react-native';
+import React from "react";
+import { ScrollView, TouchableOpacity, Text, View } from "react-native";
+import { useCategory } from "@/context/CategoryContext";
 
-// Standardized categories matching your UML 'Category' entity
-const CATEGORIES = [
-  { id: 1, name: 'Sports', emoji: '🏀' },
-  { id: 2, name: 'Gaming', emoji: '🎮' },
-  { id: 3, name: 'Social', emoji: '🍻' },
-  { id: 4, name: 'Creative', emoji: '🎨' },
-  { id: 5, name: 'Music', emoji: '🎸' },
-];
+import LoadingView from "./LoadingView";
+import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 
 export default function CategoryFilter() {
+  const { mainCategories, loading } = useCategory();
+
+  if (loading) {
+    return   LoadingView()
+  }
   return (
     <View className="mb-6">
       <ScrollView
@@ -18,15 +18,18 @@ export default function CategoryFilter() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 4 }}
       >
-        {CATEGORIES.map((cat) => (
+        {mainCategories.map((category) => (
           <TouchableOpacity
-            key={cat.id}
-            onPress={() => console.log(`Filtered by ${cat.name}`)}
+            key={category.id}
+            onPress={() => console.log(`Filtered by ${category.name}`)}
             className="flex-row items-center bg-white border border-gray-100 px-4 py-2 rounded-full mr-3 active:bg-blue-50"
           >
-            <Text className="mr-2 text-base">{cat.emoji}</Text>
+            <Text className="mr-2 text-base">
+              {CATEGORY_EMOJIS[category.name.toLowerCase()] ?? "📌"}
+            </Text>
+
             <Text className="text-sm font-semibold text-gray-700">
-              {cat.name}
+              {category.name}
             </Text>
           </TouchableOpacity>
         ))}

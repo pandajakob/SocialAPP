@@ -22,8 +22,6 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
     }
 
     setLoading(true);
-
-
     try {
       const response = await fetch(`${API_BASE}/api/posts`, {
         method: "GET",
@@ -33,28 +31,15 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
           Cookie: `token=${token}`,
         },
       });
-      
-
-
+    
       if (!response.ok) {
         throw new Error("Failed to get userPosts: " + response.status + " " + response.statusText);
       }
 
       const data = await response.json();
 
-      const responsePosts: Post[] = data.map((p: any) => ({
-        id: p.id,
-        title: p.title,
-        description: p.description,
-        location: p.location,
-        date: p.date,
-        ageFrom: p.ageFrom,
-        ageTo: p.ageTo,
-        categories: p.categories ?? [],
-        photoUrl: p.photoUrl ?? "",
-      }));
+      return data as Post[];
       
-      return responsePosts;
     } catch (error: any) {
       throw new Error(error?.message ?? "Unknown user fetch error");
     } finally {
@@ -77,26 +62,13 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
         },
       });
   
-
       if (!response.ok) {
         throw new Error("Failed to get feed: " + response.status + " " + response.statusText);
       }
 
       const data = await response.json();
+      return data as Post[]
 
-      const responsePosts: Post[] = data.map((p: any) => ({
-        postId: String(p.postId),
-        title: p.title,
-        description: p.description,
-        location: p.location,
-        date: p.date,
-        ageFrom: p.ageFrom,
-        ageTo: p.ageTo,
-        categories: p.categories ?? [],
-        photoUrl: p.photoUrl ?? "",
-      }));
-      
-      return responsePosts;
     } catch (error: any) {
       throw new Error(error?.message ?? "Unknown user fetch error");
     } finally {
@@ -105,50 +77,43 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
   };
 
   const createPost = async (post: Omit<Post, "postId" | "date">): Promise<Post> => {
-  if (!token) {
-    throw new Error("No auth token available");
-  }
-
-  try {
-    const response = await fetch(`${API_BASE}/api/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `token=${token}`,
-      },
-      body: JSON.stringify(post),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      throw new Error(
-        `Failed to create post: ${response.status} ${errorText}`
-      );
+    setLoading(true)
+    if (!token) {
+      throw new Error("No auth token available");
     }
 
-    const data = await response.json();
+    try {
+      const response = await fetch(`${API_BASE}/api/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `token=${token}`,
+        },
+        body: JSON.stringify(post),
+      });
 
-    const createdPost: Post = {
-      postId: String(data.postId),
-      title: data.title,
-      description: data.description,
-      location: data.location,
-      date: data.date,
-      ageFrom: data.ageFrom,
-      ageTo: data.ageTo,
-      categories: data.categories ?? [],
-      photoUrl: data.photoUrl ?? "",
-    };
+      if (!response.ok) {
+        const errorText = await response.text();
 
-    // Keep local state up to date immediately
-    setUserPosts((current) => [createdPost, ...current]);
-    setFeed((current) => [createdPost, ...current]);
+        throw new Error(
+          `Failed to create post: ${response.status} ${errorText}`
+        );
+      }
 
-    return createdPost;
-  } catch (error: any) {
-    throw new Error(error?.message ?? "Unknown create post error");
-  }
+      const data = await response.json();
+
+      const createdPost = data as Post
+      
+      // Keep local state up to date immediately
+      setUserPosts((current) => [createdPost, ...current]);
+      setFeed((current) => [createdPost, ...current]);
+
+      return createdPost;
+    } catch (error: any) {
+      throw new Error(error?.message ?? "Unknown create post error");
+    } finally {
+      setLoading(false)
+    }
   };
   
   useEffect(() => {

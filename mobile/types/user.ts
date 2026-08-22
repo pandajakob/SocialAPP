@@ -1,14 +1,13 @@
+import { Category } from "./category";
 import { Post } from "./post";
 
 export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  age: number;
-  interests: string[];
-  phoneNumber: string;
-  profilePhoto?: {
-    url: string;
-  };
   email: string;
+  firstName: string;
+  id: string;
+  interests: Category[];
+  age: number;
+  lastName: string;
+  phoneNumber: string;
+  photoUrl: string;
 }

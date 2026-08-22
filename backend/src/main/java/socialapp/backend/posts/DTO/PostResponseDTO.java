@@ -2,6 +2,7 @@ package socialapp.backend.posts.DTO;
 
 import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.categories.Category;
+import socialapp.backend.users.DTO.StandardUserResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +13,7 @@ public record PostResponseDTO(
         Date date,
         String userFirstName,
         String userLastName,
-        String userId,
+        StandardUserResponseDTO user,
         String title,
         String Description,
         LocationDTO location,

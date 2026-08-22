@@ -10,22 +10,16 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import MapView, { Marker, MapPressEvent } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-
 import { usePost } from "@/context/PostContext";
+import { useCategory } from "@/context/CategoryContext";
 
-const categories = [
-  { id: 1, name: "Sports", parentCategoryId: null },
-  { id: 2, name: "Food", parentCategoryId: null },
-  { id: 3, name: "Music", parentCategoryId: null },
-  { id: 4, name: "Gaming", parentCategoryId: null },
-  { id: 5, name: "Travel", parentCategoryId: null },
-  { id: 6, name: "Events", parentCategoryId: null },
-];
+const MAX_TITLE_LENGTH = 100;
 
 export default function CreatePostScreen() {
   const { createPost } = usePost();
+  const { categories } = useCategory();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -80,12 +74,23 @@ export default function CreatePostScreen() {
   };
 
   const handleCreatePost = async () => {
-    if (!title.trim()) {
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+
+    if (!trimmedTitle) {
       Alert.alert("Missing title", "Please enter a title.");
       return;
     }
 
-    if (!description.trim()) {
+    if (trimmedTitle.length > MAX_TITLE_LENGTH) {
+      Alert.alert(
+        "Title too long",
+        `Your title can be up to ${MAX_TITLE_LENGTH} characters.`
+      );
+      return;
+    }
+
+    if (!trimmedDescription) {
       Alert.alert("Missing description", "Please enter a description.");
       return;
     }
@@ -104,18 +109,15 @@ export default function CreatePostScreen() {
       setSubmitting(true);
 
       const post = {
-        title: title.trim(),
-        description: description.trim(),
-
+        title: trimmedTitle,
+        description: trimmedDescription,
         location: {
           latitude: selectedLocation.latitude,
           longitude: selectedLocation.longitude,
         },
-
         categories: categories.filter((category) =>
           selectedCategories.includes(category.id)
         ),
-
         ageFrom: Number(ageFrom),
         ageTo: Number(ageTo),
         photoURL: photoURL.trim(),
@@ -124,7 +126,7 @@ export default function CreatePostScreen() {
       await createPost(post);
 
       router.back();
-      router.push("/profile")
+      router.push("/profile");
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Could not create post.");
@@ -149,9 +151,21 @@ export default function CreatePostScreen() {
         </View>
 
         {/* Title */}
-        <Text className="text-sm font-semibold text-gray-700 mb-2">
-          Title
-        </Text>
+        <View className="flex-row items-center justify-between mb-2">
+          <Text className="text-sm font-semibold text-gray-700">
+            Title
+          </Text>
+
+          <Text
+            className={`text-xs ${
+              title.length >= MAX_TITLE_LENGTH
+                ? "text-red-500"
+                : "text-gray-400"
+            }`}
+          >
+            {title.length}/{MAX_TITLE_LENGTH}
+          </Text>
+        </View>
 
         <View className="bg-white rounded-2xl px-4 py-3 mb-5 border border-gray-200">
           <TextInput
@@ -159,6 +173,7 @@ export default function CreatePostScreen() {
             onChangeText={setTitle}
             placeholder="Give your post a title"
             placeholderTextColor="#9CA3AF"
+            maxLength={MAX_TITLE_LENGTH}
             className="text-base"
           />
         </View>
@@ -249,7 +264,7 @@ export default function CreatePostScreen() {
         </View>
 
         <View className="bg-white rounded-2xl overflow-hidden mb-5 border border-gray-200">
-         <MapView
+          <MapView
             style={{ width: "100%", height: 300 }}
             initialRegion={{
               latitude: 55.6761,
@@ -258,7 +273,6 @@ export default function CreatePostScreen() {
               longitudeDelta: 0.05,
             }}
             showsUserLocation={true}
-
             onPress={(event) => {
               setSelectedLocation(event.nativeEvent.coordinate);
             }}

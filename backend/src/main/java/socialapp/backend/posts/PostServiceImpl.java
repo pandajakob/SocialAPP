@@ -14,6 +14,7 @@ import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.DTO.PostsWithinMetersDTO;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
 import socialapp.backend.shared.domain_primitives.Email;
+import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.users.User;
 import socialapp.backend.users.UserRepository;
 
@@ -121,12 +122,22 @@ public class PostServiceImpl implements PostService {
                 location.getCity(),
                 location.getFormattedAddress());
 
+        User user = post.getCreatedBy();
+        StandardUserResponseDTO userResponseDTO = new StandardUserResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail().getValue(),
+                user.getAge(),
+                user.getInterests(),
+                user.getPhoneNumber().getValue()
+        );
         return new PostResponseDTO(
                 post.getId(),
                 post.getDate(),
                 post.getCreatedBy().getFirstName(),
                 post.getCreatedBy().getLastName(),
-                post.getCreatedBy().getId().toString(),
+                userResponseDTO,
                 post.getTitle(),
                 post.getDescription(),
                 locationDTO,

@@ -39,18 +39,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
       const data = await response.json();
       
-      const response_user: User = {
-        id: data.id,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        age: data.age,
-        interests: data.interests,
-        phoneNumber: data.phoneNumber,
-      };
-
-      setUser(response_user);
-      return response_user;
+      return data as User
     } catch (error: any) {
       throw new Error(error?.message ?? "Unknown user fetch error");
     } finally {

@@ -54,13 +54,8 @@ export function CategoryProvider({
             );
         }
         const data =  await response.json()
-        const categoriesResponse: Category[] = data.map((cat: any) => ({
-                id: cat.id,
-                name: cat.name,
-                parentCategoryId: cat.parentCategoryId
-              }));
-    
-      return categoriesResponse;
+
+      return data as Category[];
    } catch (error: any) {
       throw new Error(error?.message ?? "Unknown main category fetch error");
     } finally {
@@ -103,29 +98,37 @@ export function CategoryProvider({
     return response.json();
   };
 
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        setLoading(true);
 
-        const [allCategories, mainCategories] = await Promise.all([
-          await getAllCategories(),
-          await getAllMainCategories(),
-        ]);
 
-        setCategories(allCategories);
+    useEffect(() => {
+      let isMounted = true;
 
-        setMainCategories(mainCategories);
-      } catch (error) {
-        console.error("Error loading categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const loadCategories = async () => {
+        if (!token) {
+          if (isMounted) {
+            setLoading(false);
+          }
+          return;
+        }
 
-    loadCategories();
-  }, []);
+        try {
+            const allCategories = await getAllCategories();
+            const mainCategories = await getAllMainCategories();
+          if (isMounted) {
+            setMainCategories(mainCategories)
+            setCategories(allCategories);
+          }
+        } catch (error) {
+          console.log("Error loading user data:", error);
+        } finally {
+          setLoading(false)
+        }};
 
+      loadCategories();
+      return () => {
+        isMounted = false;
+      };
+  }, [token]);
   return (
     <CategoryContext.Provider
       value={{

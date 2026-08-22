@@ -9,7 +9,7 @@ export default function MapScreen() {
   const { feed, loading } = usePost();
 
   if (loading || !feed) {
-    return LoadingView()
+    return LoadingView
   }
 
   return (

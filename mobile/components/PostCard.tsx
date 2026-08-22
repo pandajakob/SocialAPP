@@ -11,6 +11,8 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
   const hasPhoto = !!post.photoUrl;
+  const visibleCategories = post.categories.slice(0, 2);
+  const hasMoreCategories = post.categories.length > 3;
 
   const openPost = () => {
     router.push(`/post/${post.postId}`);
@@ -19,67 +21,88 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <TouchableOpacity
       onPress={openPost}
-      activeOpacity={0.8}
-      className={
-        hasPhoto
-          ? "bg-white rounded-3xl mb-5 overflow-hidden border border-gray-100 shadow-sm"
-          : "bg-white rounded-3xl mb-3 overflow-hidden border border-gray-100 shadow-sm"
-      }
+      activeOpacity={0.85}
+      className="bg-white rounded-3xl mb-4 overflow-hidden border border-gray-100 shadow-sm"
     >
       {hasPhoto && (
-        <Image source={{ uri: post.photoUrl }} className="w-full h-48" />
+        <Image
+          source={{ uri: post.photoUrl }}
+          className="w-full h-48"
+          resizeMode="cover"
+        />
       )}
 
-      <View className={hasPhoto ? "p-4" : "px-4 py-3"}>
-        <View className="flex-row mb-2">
-        {post.categories.map((cat) => (
-          <View
-            key={cat.id}
-            className="flex-row items-center bg-white border border-gray-100 px-3 py-1.5 rounded-full mr-2"
-          >
-            <Text className="mr-1.5 text-sm">
-              {CATEGORY_EMOJIS[cat.name.toLowerCase()] ?? "📌"}
-            </Text>
+      <View className="p-4">
+        {/* Header */}
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center flex-1">
+            <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center">
+              <Ionicons name="person-outline" size={19} color="#6B7280" />
+            </View>
 
-            <Text className="text-gray-700 text-xs font-semibold">
-              {cat.name}
-            </Text>
+            <View className="ml-2.5">
+              <Text className="text-gray-900 text-sm font-semibold">
+                {post.user.firstName}, {post.user.age}
+              </Text>
+
+              <View className="flex-row items-center mt-0.5">
+                <Ionicons name="location-outline" size={12} color="#9CA3AF" />
+                <Text className="text-gray-400 text-xs ml-1">
+                  {post.location.city}
+                </Text>
+              </View>
+            </View>
           </View>
-        ))}
-      </View>
 
+          {/* Categories */}
+          <View className="flex-row items-center justify-end ml-3 flex-shrink">
+            {visibleCategories.map((category) => (
+              <View
+                key={category.id}
+                className="flex-row items-center bg-gray-50 px-2.5 py-2 rounded-full ml-1.5"
+              >
+                <Text className="text-sm">
+                  {CATEGORY_EMOJIS[category.name.toLowerCase()] ?? "📌"}
+                </Text>
+
+                <Text
+                  className="text-gray-600 text-xs font-semibold ml-1"
+                  numberOfLines={1}
+                >
+                  {category.name}
+                </Text>
+              </View>
+            ))}
+
+            {hasMoreCategories && (
+              <View className="bg-gray-100 px-2.5 py-2 rounded-full ml-1.5">
+                <Text className="text-gray-500 text-xs font-semibold">
+                  +{post.categories.length - 3}
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* Content */}
         <Text className="text-xl font-bold text-gray-900 mb-1">
           {post.title}
         </Text>
 
         <Text
-          className={
-            hasPhoto
-              ? "text-gray-500 text-sm mb-3"
-              : "text-gray-500 text-sm mb-2"
-          }
-          numberOfLines={hasPhoto ? 2 : 1}
+          className="text-gray-500 text-sm leading-5 mb-4"
+          numberOfLines={hasPhoto ? 2 : 3}
         >
           {post.description ?? "No description"}
         </Text>
 
-        <View
-          className={
-            hasPhoto
-              ? "flex-row items-center justify-between border-t border-gray-50 pt-3"
-              : "flex-row items-center justify-between border-t border-gray-50 pt-2"
-          }
-        >
-          <View className="flex-row items-center">
-            <Ionicons name="location-outline" size={16} color="#6B7280" />
-            <Text className="text-gray-500 text-xs ml-1">
-              {post.location.city}
-            </Text>
-          </View>
-
-          <Text className="text-gray-500 text-xs">
-            Ages: {post.ageFrom}-{post.ageTo}
+        {/* Footer */}
+        <View className="flex-row items-center justify-between border-t border-gray-100 pt-3">
+          <Text className="text-gray-400 text-xs">
+            Looking for ages {post.ageFrom}–{post.ageTo}
           </Text>
+
+          <Ionicons name="chevron-forward" size={15} color="#D1D5DB" />
         </View>
       </View>
     </TouchableOpacity>

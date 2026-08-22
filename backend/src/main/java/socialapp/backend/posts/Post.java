@@ -35,9 +35,10 @@ public class Post {
     )
     private Location location;
 
-    @Column(nullable = false)
+    @Column(length=120, nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany

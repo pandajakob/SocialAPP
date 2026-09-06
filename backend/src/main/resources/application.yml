@@ -33,4 +33,6 @@ security:
   adminEmail: ${ADMIN_EMAIL}
   adminPassword: ${ADMIN_PASSWORD}
   googleMapsApiKey: ${GOOGLE_MAPS_API_KEY}
+  jwtSecretKey: ${JWT_SECRET_KEY}
+
 

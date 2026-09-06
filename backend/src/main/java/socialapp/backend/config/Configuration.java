@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import socialapp.backend.shared.domain_primitives.Email;
-import socialapp.backend.shared.domain_primitives.Password;
 
 import java.util.List;
 
@@ -29,6 +28,16 @@ public class Configuration {
 
     private long tokenValiditySeconds = 3600;
 
+    @NotBlank
+    private String jwtSecretKey;
+
+    public String getJwtSecretKey() {
+        return jwtSecretKey;
+    }
+
+    public void setJwtSecretKey(String jwtSecretKey) {
+        this.jwtSecretKey = jwtSecretKey;
+    }
 
     public long getTokenValiditySeconds() {
         return tokenValiditySeconds;

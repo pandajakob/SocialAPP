@@ -1,14 +1,12 @@
 package socialapp.backend.Location;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.locationtech.jts.geom.Point;
 
 import java.util.UUID;
 
 @Entity
+@Table(name = "locations")
 public class Location {
     @Id
     @GeneratedValue
@@ -17,10 +15,8 @@ public class Location {
     @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
     private Point coordinates;
 
-    @Column(nullable = false)
     private String country;
     private String countryCode;
-    @Column(nullable = false)
     private String city;
     private String postalCode;
     private String formattedAddress;

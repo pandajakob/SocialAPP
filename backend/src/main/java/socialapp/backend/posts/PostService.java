@@ -16,6 +16,8 @@ public interface PostService {
 
     PostResponseDTO createPost(PostCreateDTO postCreateDTO,Authentication authentication);
 
+    List<PostResponseDTO> getFeed(Authentication authentication, LocationDTO locationDTO);
+
     void deletePost(UUID id);
 
     PostResponseDTO getPostById(UUID id);

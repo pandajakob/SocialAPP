@@ -1,6 +1,7 @@
 package socialapp.backend.feed;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import socialapp.backend.Location.Location;
 import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.categories.Category;
@@ -14,6 +15,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class FeedRankingService implements FeedRanker {
     @Override
     public List<Post> rankFeed(User user, List<Post> posts, LocationDTO locationDTO) {

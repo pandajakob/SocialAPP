@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
 
     public PostResponseDTO createPost(PostCreateDTO postCreateDTO,  Authentication authentication) {
         Post post = new Post();
-        Optional<User> fetchedUser = userRepository.findByEmail(new Email(authentication.getName()));
+        Optional<User> fetchedUser = userRepository.findByEmail(authentication.getName());
         User user = unpackUser(fetchedUser);
 
         post.setCategories(postCreateDTO.categories());
@@ -97,7 +97,7 @@ public class PostServiceImpl implements PostService {
 
     private User getUserFromAuth(Authentication authentication) {
         Email email = new Email(authentication.getName());
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email.getValue());
         if (user.isPresent()) {
             return user.get();
         } else   {

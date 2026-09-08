@@ -15,11 +15,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final JwtAuthenticationService jwtAuthenticationService;
 
-    public UserServiceImpl(UserRepository userRepository, JwtAuthenticationService jwtAuthenticationService) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.jwtAuthenticationService = jwtAuthenticationService;
     }
 
     public List<StandardUserResponseDTO> getAllUsers() {
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public StandardUserResponseDTO getUserByEmail(Email email) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email.getValue())
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with email: " + email));
         return convertToDTO(user);
     }
@@ -58,23 +56,20 @@ public class UserServiceImpl implements UserService {
         }
         if (updatedUser.getPhoneNumber() != null) {
             if (!user.getPhoneNumber().equals(updatedUser.getPhoneNumber()) &&
-                userRepository.existsByPhoneNumber(updatedUser.getPhoneNumber())) {
+                userRepository.existsByPhoneNumber(updatedUser.getPhoneNumber().getValue())) {
                 throw new RuntimeException("Phone number already registered: " + updatedUser.getPhoneNumber());
             }
-            user.setPhoneNumber(updatedUser.getPhoneNumber());
+            user.changePhoneNumber(updatedUser.getPhoneNumber());
         }
         if (updatedUser.getProfilePhotoUrl() != null) {
             user.setProfilePhotoUrl(updatedUser.getProfilePhotoUrl());
         }
         if (updatedUser.getEmail() != null) {
             if (!user.getEmail().equals(updatedUser.getEmail()) &&
-                userRepository.existsByEmail(updatedUser.getEmail())) {
+                userRepository.existsByEmail(updatedUser.getEmail().getValue())) {
                 throw new RuntimeException("Email already registered: " + updatedUser.getEmail());
             }
-            user.setEmail(updatedUser.getEmail());
-        }
-        if (updatedUser.getRole() != null) {
-            user.setRole(updatedUser.getRole());
+            user.changeEmail(updatedUser.getEmail());
         }
 
         User savedUser = userRepository.save(user);

@@ -1,16 +1,9 @@
 package socialapp.backend.users;
 
 import jakarta.persistence.*;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import socialapp.backend.categories.Category;
 import socialapp.backend.posts.Post;
-import socialapp.backend.shared.domain_primitives.Email;
-import socialapp.backend.shared.domain_primitives.Password;
-import socialapp.backend.shared.domain_primitives.PhoneNumber;
-import socialapp.backend.shared.domain_primitives.PhotoURL;
-import socialapp.backend.shared.domain_primitives.converters.*;
+import socialapp.backend.shared.domain_primitives.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,20 +34,16 @@ public class User implements UserDetails {
     private List<Category> interests;
 
     @Column(name = "phone_number", nullable = false, unique = true)
-    @Convert(converter = PhoneNumberConverter.class)
-    private PhoneNumber phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "profile_photo_url")
-    @Convert(converter = PhotoUrlConverter.class)
-    private PhotoURL profilePhotoUrl;
+    private String profilePhotoUrl;
 
     @Column(nullable = false, unique = true)
-    @Convert(converter = EmailConverter.class)
-    private Email email;
+    private String email;
 
     @Column(nullable = false)
-    @Convert(converter = PasswordConverter.class)
-    private Password password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -67,55 +56,88 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private List<Post> savedPosts;
 
-
     public enum Role {
         ADMIN,
         USER
     }
 
-    public PhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    protected User() {}
+
+    public User(String firstName, String lastName, Integer age, EncodedPassword password, Email email, PhoneNumber phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password.getValue();
+        this.email = email.getValue();
+        this.phoneNumber = phoneNumber.getValue();
+        this.role = User.Role.USER;
     }
 
-    public List<Category> getInterests() {
-        return interests;
+    public void promoteToAdmin() {
+        this.role = User.Role.ADMIN;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    public void addSavedPost(Post post) {
+        savedPosts.add(post);
     }
 
-    public String getPassword() {
-        return password.getValue();
+    public void addInterest(Category category) {
+        interests.add(category);
     }
 
-    @Override
-    public String getUsername() {
-        return this.email.getValue();
+    public void addInterests(Collection<Category> category) {
+        interests.addAll(category);
+    }
+
+    public void removeInterest(Category category) {
+        interests.remove(category);
+    }
+
+    public void removeSavedPost(Post post) {
+        savedPosts.remove(post);
+    }
+
+    public void changePhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber.getValue();
+    }
+
+    public void changeEmail(Email email) {
+        this.email = email.getValue();
+    }
+
+    public void changePassword(EncodedPassword encodedPassword) {
+        this.password = encodedPassword.getValue();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public String getFirstName() {
         return firstName;
     }
 
-    public Email getEmail() {
-        return email;
+    public String getLastName() {
+        return lastName;
     }
 
     public Integer getAge() {
         return age;
     }
 
-    public PhotoURL getProfilePhotoUrl() {
+    public Email getEmail() {
+        return new Email(email);
+    }
+
+    public EncodedPassword getPassword() {
+        return new EncodedPassword(password);
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return new PhoneNumber(phoneNumber);
+    }
+
+    public String getProfilePhotoUrl() {
         return profilePhotoUrl;
     }
 
@@ -123,12 +145,12 @@ public class User implements UserDetails {
         return role;
     }
 
-    public void setPassword(Password password) {
-        this.password = password;
+    public List<Category> getInterests() {
+        return interests;
     }
 
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public List<Post> getSavedPosts() {
+        return savedPosts;
     }
 
     public void setInterests(List<Category> interests) {
@@ -137,10 +159,6 @@ public class User implements UserDetails {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
     }
 
     public void setAge(Integer age) {
@@ -155,16 +173,8 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public void setProfilePhotoUrl(PhotoURL profilePhotoUrl) {
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
         this.profilePhotoUrl = profilePhotoUrl;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public List<Post> getSavedPosts() {
-        return savedPosts;
     }
 
     public void setSavedPosts(List<Post> savedPosts) {

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import socialapp.backend.config.SecurityConfig;
 import socialapp.backend.security.CustomUserDetailsService;
@@ -24,15 +23,16 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtAuthenticationService jwtAuthenticationService;
     private final AuthenticationManager authenticationManager;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final SecurityConfig securityConfig;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, SecurityConfig securityConfig) {
+    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, SecurityConfig securityConfig, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
         this.securityConfig = securityConfig;
         this.authenticationManager = authenticationManager;
         this.jwtAuthenticationService = jwtAuthenticationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseCookie login(LoginDTO loginDetails) {
@@ -68,18 +68,17 @@ public class AuthService {
     }
 
     public StandardUserResponseDTO register(RegisterDTO registerDTO) {
-        User user = new User();
+        Password password = new Password(registerDTO.password());
 
-        Password password = new Password(bCryptPasswordEncoder.encode(registerDTO.password()));
+        User user = new User(
+                registerDTO.firstName(),
+                registerDTO.lastName(),
+                registerDTO.age(),
+                passwordEncoder.encodePassword(password),
+                new Email(registerDTO.email()),
+                new PhoneNumber(registerDTO.phoneNumber()));
 
-        user.setEmail(new Email(registerDTO.email()));
-        user.setFirstName(registerDTO.firstName());
-        user.setLastName(registerDTO.lastName());
-
-        user.setAge(registerDTO.age());
-        user.setPassword(password);
-        user.setPhoneNumber(new PhoneNumber(registerDTO.phoneNumber()));
-        user.setRole(User.Role.USER);
+        user.promoteToAdmin();
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {

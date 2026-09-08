@@ -5,9 +5,9 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import socialapp.backend.Location.DTO.GoogleGeocodeResponse;
 import socialapp.backend.config.GoogleConfig;
 
-import java.util.List;
 
 @Service
 public class LocationService {
@@ -71,17 +71,3 @@ public class LocationService {
     }
 }
 
-record GoogleGeocodeResponse(
-        List<GoogleResult> results
-) {}
-
-record GoogleResult(
-        String formattedAddress,
-        List<GoogleAddressComponent> addressComponents
-) {}
-
-record GoogleAddressComponent(
-        String longText,
-        String shortText,
-        List<String> types
-) {}

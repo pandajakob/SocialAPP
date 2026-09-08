@@ -1,13 +1,8 @@
 package socialapp.backend.categories;
 
-import org.springframework.http.HttpStatus;
-
 import org.springframework.web.bind.annotation.*;
-import socialapp.backend.categories.exceptions.ErrorResponse;
-import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/categories")
@@ -43,11 +38,4 @@ public class CategoryController {
     List<Category> getAllSubCategories(@PathVariable String name) {
         return categoryService.getAllSubCategoriesByName(name);
     }
-
-    @ExceptionHandler(value = NoSuchCategoryExistsException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoSuchCustomerExistsException(NoSuchCategoryExistsException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-    }
-
 }

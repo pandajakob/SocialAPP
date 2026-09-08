@@ -1,4 +1,4 @@
-package socialapp.backend.authentication.exceptions;
+package socialapp.backend.shared.exceptions;
 
 public class ErrorResponse {
 

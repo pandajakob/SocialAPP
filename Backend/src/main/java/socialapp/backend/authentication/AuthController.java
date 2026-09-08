@@ -1,12 +1,10 @@
 package socialapp.backend.authentication;
 
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import socialapp.backend.authentication.exceptions.*;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 
 import java.util.Map;
@@ -35,55 +33,17 @@ public class AuthController {
                 .body(Map.of("message", "Login successful"));
     }
 
-
     @GetMapping("/logout")
     ResponseEntity<?> logout() {
-        try {
-            ResponseCookie cookie = authService.logout();
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(Map.of("message", "logout successful"));
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
+        ResponseCookie cookie = authService.logout();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("message", "logout successful"));
     }
+
     @PostMapping("/register")
-    ResponseEntity<StandardUserResponseDTO> register(@RequestBody RegisterDTO loginDetails) {
-        return ResponseEntity.ok().body(authService.register(loginDetails));
+    @ResponseStatus(HttpStatus.CREATED)
+    StandardUserResponseDTO register(@RequestBody RegisterDTO loginDetails) {
+        return authService.register(loginDetails);
     }
-
-
-    @ExceptionHandler(value = EmailAlreadyRegisteredException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEmailAlreadyRegisteredException(EmailAlreadyRegisteredException ex) {
-        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
-    }
-
-    @ExceptionHandler(value = PhoneNumberAlreadyRegisteredException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handlePhoneNumberAlreadyRegisteredException(PhoneNumberAlreadyRegisteredException ex) {
-        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
-    }
-
-    @ExceptionHandler(value = UserAlreadyRegisteredException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleUserAlreadyRegisteredException(UserAlreadyRegisteredException ex) {
-        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
-    }
-
-    @ExceptionHandler(value = NoSuchUserExistsException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoSuchUserExistsException(NoSuchUserExistsException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-    }
-
-    @ExceptionHandler(value = RuntimeException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoRuntimeException(RuntimeException ex) {
-        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-    }
-
-
 }

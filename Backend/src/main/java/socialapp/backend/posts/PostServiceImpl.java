@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import socialapp.backend.Location.Location;
 import socialapp.backend.Location.LocationService;
 import socialapp.backend.Location.LocationDTO;
-import socialapp.backend.categories.Category;
-import socialapp.backend.feed.FeedRanker;
 import socialapp.backend.feed.FeedRankingService;
 import socialapp.backend.posts.DTO.*;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
@@ -28,17 +26,19 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final LocationService locationService;
     private final FeedRankingService feedRankingService;
+
     public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationService locationService, FeedRankingService feedRankingService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.locationService = locationService;
         this.feedRankingService = feedRankingService;
-
     }
 
     public PostResponseDTO createPost(PostCreateDTO postCreateDTO,  Authentication authentication) {
         Post post = new Post();
-        User user = userRepository.findByEmail(new Email(authentication.getName())).get();
+        Optional<User> fetchedUser = userRepository.findByEmail(new Email(authentication.getName()));
+        User user = unpackUser(fetchedUser);
+
         post.setCategories(postCreateDTO.categories());
         post.setCreatedBy(user);
         post.setTitle(postCreateDTO.title());
@@ -52,6 +52,13 @@ public class PostServiceImpl implements PostService {
         return convertPostResponseDTO(newPost);
     }
 
+    private User unpackUser(Optional<User> optionalUser) {
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
+    }
     @Override
     public void deletePost(UUID id) {
         if (!postRepository.existsById(id)) {
@@ -67,36 +74,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> getAllPostsWithinMeters(PostsWithinMetersDTO postsWithinMetersDTO) {
-
-        List<Post> posts = postRepository.getAllPostsWithinMeters(
-                postsWithinMetersDTO.location().longitude(),
-                postsWithinMetersDTO.location().latitude(),
-                postsWithinMetersDTO.meters());
-        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
-
-        for (Post post : posts) {
-            postResponseDTOS.add(convertPostResponseDTO(post));
-        }
-        return postResponseDTOS;
-    }
-
-    @Override
     public List<PostResponseDTO> getOwnPosts(Authentication authentication) {
         User user = getUserFromAuth(authentication);
         List<Post> posts = postRepository.findAllByUserId(user.getId());
         return posts.stream().map(this::convertPostResponseDTO).toList();
-    }
-
-
-    public List<PostResponseDTO> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
-
-        for (Post post : posts) {
-            postResponseDTOS.add(convertPostResponseDTO(post));
-        }
-        return postResponseDTOS;
     }
 
     public List<PostResponseDTO> getFeed(Authentication authentication, LocationDTO locationDTO) {
@@ -109,16 +90,6 @@ public class PostServiceImpl implements PostService {
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
 
         for (Post post : feed) {
-            postResponseDTOS.add(convertPostResponseDTO(post));
-        }
-        return postResponseDTOS;
-    }
-
-
-    public List<PostResponseDTO> getNearest(LocationDTO locationDTO) {
-        List<Post> posts = postRepository.findNearest(locationDTO.latitude(),locationDTO.longitude());
-        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
-        for (Post post : posts) {
             postResponseDTOS.add(convertPostResponseDTO(post));
         }
         return postResponseDTOS;

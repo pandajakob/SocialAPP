@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostService {
-    List<PostResponseDTO> getAllPostsWithinMeters(PostsWithinMetersDTO postsWithinMetersDTO);
-
     List<PostResponseDTO> getOwnPosts(Authentication authentication);
 
     PostResponseDTO createPost(PostCreateDTO postCreateDTO,Authentication authentication);
@@ -22,5 +20,4 @@ public interface PostService {
 
     PostResponseDTO getPostById(UUID id);
 
-    List<PostResponseDTO> getNearest(LocationDTO locationDTO);
 }

@@ -45,18 +45,6 @@ public class PostController {
         }
     }
 
-    @PostMapping("/withinMeters")
-    ResponseEntity<List<PostResponseDTO>> getAllPostsWithinMeters(@RequestBody PostsWithinMetersDTO postsWithinMetersDTO) {
-        List<PostResponseDTO> response = postService.getAllPostsWithinMeters(postsWithinMetersDTO);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @PostMapping("/nearest")
-    ResponseEntity<List<PostResponseDTO>> getAllPostsWithinMeters(@RequestBody LocationDTO locationDTO) {
-        List<PostResponseDTO> response = postService.getNearest(locationDTO);
-        return ResponseEntity.ok().body(response);
-    }
-
     @GetMapping("/{id}")
     ResponseEntity<PostResponseDTO> getPostById(@PathVariable UUID id) {
         PostResponseDTO response = postService.getPostById(id);

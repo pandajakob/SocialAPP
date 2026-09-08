@@ -30,8 +30,8 @@ public class PostController {
     }
 
     @GetMapping("/feed")
-    ResponseEntity<List<PostResponseDTO>> getFeed() {
-        List<PostResponseDTO> response = postService.getAllPosts();
+    ResponseEntity<List<PostResponseDTO>> getFeed(Authentication authentication, LocationDTO locationDTO) {
+        List<PostResponseDTO> response = postService.getFeed(authentication, locationDTO);
         return ResponseEntity.ok().body(response);
     }
 

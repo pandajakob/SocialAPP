@@ -10,6 +10,8 @@ import socialapp.backend.Location.Location;
 import socialapp.backend.Location.LocationService;
 import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.categories.Category;
+import socialapp.backend.feed.FeedRanker;
+import socialapp.backend.feed.FeedRankingService;
 import socialapp.backend.posts.DTO.*;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
 import socialapp.backend.shared.domain_primitives.Email;
@@ -22,13 +24,15 @@ import java.util.*;
 @Service
 public class PostServiceImpl implements PostService {
 
-    PostRepository postRepository;
-    UserRepository userRepository;
-    LocationService locationService;
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationService locationService) {
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final LocationService locationService;
+    private final FeedRankingService feedRankingService;
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, LocationService locationService, FeedRankingService feedRankingService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.locationService = locationService;
+        this.feedRankingService = feedRankingService;
 
     }
 
@@ -98,62 +102,19 @@ public class PostServiceImpl implements PostService {
     public List<PostResponseDTO> getFeed(Authentication authentication, LocationDTO locationDTO) {
         User user = getUserFromAuth(authentication);
 
-        List<Post> postWithDistances = postRepository.filterByAgeAndLocation(user.getAge(), locationDTO.longitude(), locationDTO.latitude());
+        List<Post> posts = postRepository.filterByAgeAndLocation(user.getAge(), locationDTO.longitude(), locationDTO.latitude());
 
-        List<RankedPost> rankedPosts = new ArrayList<>();
-
-        postWithDistances.forEach(post -> {
-            if (post == null) {
-                throw new RuntimeException("post is null");
-            }
-            double daysAgoCreated = post.getDate().compareTo(new Date());
-            double distanceKm = getDistanceInKm(locationDTO, post.getLocation());
-            double interestMatches = getCategoryMatches(post.getCategories(), user.getInterests());
-            double distanceScore = Math.min(distanceKm, 20);
-
-            double score = (daysAgoCreated*0.5) + (distanceScore*0.5) - (interestMatches*5);
-
-            rankedPosts.add(new RankedPost(post, score));
-        });
-        rankedPosts.sort(Comparator.comparingDouble(RankedPost::score));
+        List<Post> feed = feedRankingService.rankFeed(user, posts, locationDTO);
 
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
 
-        for (RankedPost post : rankedPosts) {
-            postResponseDTOS.add(convertPostResponseDTO(post.post()));
+        for (Post post : feed) {
+            postResponseDTOS.add(convertPostResponseDTO(post));
         }
         return postResponseDTOS;
     }
 
-    private double getDistanceInKm(LocationDTO userLocation, Location postLocation) {
-        double earthRadiusKm = 6371.0;
 
-        double userLat = Math.toRadians(userLocation.latitude());
-        double userLon = Math.toRadians(userLocation.longitude());
-
-        double postLat = Math.toRadians(postLocation.getCoordinates().getY());
-        double postLon = Math.toRadians(postLocation.getCoordinates().getX());
-
-        double deltaLat = postLat - userLat;
-        double deltaLon = postLon - userLon;
-
-        double a =
-                Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
-                        + Math.cos(userLat) * Math.cos(postLat)
-                        * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-
-        return 2 * earthRadiusKm * Math.asin(Math.sqrt(a));
-    }
-
-    private int getCategoryMatches(List<Category> categories1, List<Category> categories2) {
-        int matches = 0;
-        for (Category category : categories1) {
-                if (categories2.contains(category)) {
-                    matches++;
-                }
-            }
-        return matches;
-    }
     public List<PostResponseDTO> getNearest(LocationDTO locationDTO) {
         List<Post> posts = postRepository.findNearest(locationDTO.latitude(),locationDTO.longitude());
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();

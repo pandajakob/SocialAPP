@@ -8,27 +8,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import socialapp.backend.config.Configuration;
-
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
+
 import java.util.*;
 
 @Service
 public class JwtAuthenticationService {
 
     private final Configuration configuration;
-    private String secretkey = "";
+
 
     public JwtAuthenticationService(Configuration configuration) {
-
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            this.secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
         this.configuration = configuration;
     }
 
@@ -51,7 +41,7 @@ public class JwtAuthenticationService {
     }
 
     public SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
+        byte[] keyBytes = Decoders.BASE64.decode(configuration.getJwtSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

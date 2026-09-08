@@ -6,7 +6,7 @@ CREATE TABLE categories
     CONSTRAINT pk_categories PRIMARY KEY (id)
 );
 
-CREATE TABLE location
+CREATE TABLE locations
 (
     id                UUID NOT NULL,
     coordinates       GEOMETRY(Point, 4326) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE location
     city              VARCHAR(255),
     postal_code       VARCHAR(255),
     formatted_address VARCHAR(255),
-    CONSTRAINT pk_location PRIMARY KEY (id)
+    CONSTRAINT pk_locations PRIMARY KEY (id)
 );
 
 CREATE TABLE post_categories
@@ -30,8 +30,8 @@ CREATE TABLE posts
     user_id     UUID         NOT NULL,
     date        TIMESTAMP WITHOUT TIME ZONE,
     location_id UUID         NOT NULL,
-    title       VARCHAR(255) NOT NULL,
-    description VARCHAR(255),
+    title       VARCHAR(120) NOT NULL,
+    description TEXT,
     age_from    INTEGER      NOT NULL,
     age_to      INTEGER      NOT NULL,
     photo_url   VARCHAR(255),
@@ -71,7 +71,7 @@ ALTER TABLE users
     ADD CONSTRAINT uc_users_phone_number UNIQUE (phone_number);
 
 ALTER TABLE posts
-    ADD CONSTRAINT FK_POSTS_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
+    ADD CONSTRAINT FK_POSTS_ON_LOCATION FOREIGN KEY (location_id) REFERENCES locations (id);
 
 ALTER TABLE posts
     ADD CONSTRAINT FK_POSTS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
@@ -94,7 +94,6 @@ ALTER TABLE user_interests
 ALTER TABLE user_interests
     ADD CONSTRAINT fk_useint_on_user FOREIGN KEY (user_id) REFERENCES users (id);
 
-DROP TABLE spatial_ref_sys CASCADE;
 
 
 BEGIN;
@@ -144,3 +143,5 @@ INSERT INTO categories (name, parent_category_id) VALUES
                                                       ('Networking',       (SELECT id FROM categories WHERE name = 'social')),
                                                       ('Book Clubs',       (SELECT id FROM categories WHERE name = 'social'));
 COMMIT;
+
+

@@ -55,24 +55,56 @@ public class AdminInitializer implements CommandLineRunner {
         }
         User admin = userRepository.findByEmail(email).get();
         if (postRepository.findAllByUserId(admin.getId()).isEmpty()) {
-            addPostForUser(admin, "Bowling");
-            addPostForUser(admin, "Padel Tennis");
-            addPostForUser(admin, "Dungeons and dragons");
+            addPostsForUser(admin, 50);
         }
 
     }
-    private void addPostForUser(User user, String title) {
+    private void addPostsForUser(User user, int amount) {
         List<Category> categories = categoryRepository.findAll();
-        Post post = new Post();
-        post.setTitle(title);
-        post.setDescription("This is a description...");
-        post.setAgeFrom(18);
-        post.setAgeTo(45);
-        post.setCategories(categories.subList(0,2));
 
-        post.setLocation(locationService.createLocation(55.67594, 12.56553));
-        post.setCreatedBy(user);
-        postRepository.save(post);
+        String[] titles = {
+                "Bowling Night",
+                "Padel Tennis",
+                "Dungeons and Dragons",
+                "Coffee Meetup",
+                "Running Group",
+                "Board Game Night",
+                "Football Match",
+                "Study Session",
+                "Movie Night",
+                "Dinner Meetup",
+                "Beach Volleyball",
+                "Gym Session",
+                "City Walk",
+                "Photography Walk",
+                "Coding Meetup"
+        };
 
+        for (int i = 0; i < amount; i++) {
+            Post post = new Post();
+
+            post.setTitle(titles[i % titles.length] + " #" + (i + 1));
+            post.setDescription("Come join us! This is test post #" + (i + 1));
+
+            post.setAgeFrom(18 + (i % 5));
+            post.setAgeTo(30 + (i % 20));
+
+            if (!categories.isEmpty()) {
+                int categoryIndex = i % categories.size();
+                post.setCategories(List.of(categories.get(categoryIndex)));
+            }
+
+            // Spread posts around Copenhagen
+            double latitude = 55.67594 + ((Math.random() - 0.5) * 0.15);
+            double longitude = 12.56553 + ((Math.random() - 0.5) * 0.20);
+
+            post.setLocation(
+                    locationService.createLocation(latitude, longitude)
+            );
+
+            post.setCreatedBy(user);
+
+            postRepository.save(post);
+        }
     }
 }

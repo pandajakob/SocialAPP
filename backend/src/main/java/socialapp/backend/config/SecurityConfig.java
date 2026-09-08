@@ -10,7 +10,7 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "security")
 @Component
-public class Configuration {
+public class SecurityConfig {
 
     @NotBlank
     private String adminEmail;
@@ -22,9 +22,6 @@ public class Configuration {
     private List<String> allowedOrigins;
 
     private String JWTName = "auth";
-
-    @NotBlank
-    private String googleMapsApiKey;
 
     private long tokenValiditySeconds = 3600;
 
@@ -79,11 +76,4 @@ public class Configuration {
         this.allowedOrigins = allowedOrigins;
     }
 
-    public void setGoogleMapsApiKey(String googleMapsApiKey) {
-        this.googleMapsApiKey = googleMapsApiKey;
-    }
-
-    public String getGoogleMapsApiKey() {
-        return googleMapsApiKey;
-    }
 }

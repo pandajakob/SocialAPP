@@ -1,8 +1,5 @@
 package socialapp.backend.config;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -27,20 +24,20 @@ public class AdminInitializer implements CommandLineRunner {
     private final LocationService locationService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
-    private final Configuration configuration;
+    private final SecurityConfig securityConfig;
 
-    public AdminInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, Configuration configuration) {
+    public AdminInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, SecurityConfig securityConfig) {
         this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
         this.locationService = locationService;
-        this.configuration = configuration;
+        this.securityConfig = securityConfig;
         this.userRepository = userRepository;
     }
 
     @Override
     public void run(String... args) {
-        Email email = configuration.getAdminEmail();
-        Password password = new Password(bCryptPasswordEncoder.encode(configuration.getAdminPassword()));
+        Email email = securityConfig.getAdminEmail();
+        Password password = new Password(bCryptPasswordEncoder.encode(securityConfig.getAdminPassword()));
 
         if (!userRepository.existsByEmail(email)) {
             User admin = new User();

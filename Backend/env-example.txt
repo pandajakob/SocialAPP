@@ -16,3 +16,4 @@ export JWT_SECRET_KEY=a-long-random-secret-value
 
 # Other
 export GOOGLE_MAPS_API_KEY=xxxxxx
+export GOOGLE_MAPS_API_BASE_URL=https://geocode.googleapis.com

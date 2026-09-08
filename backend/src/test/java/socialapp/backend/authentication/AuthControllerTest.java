@@ -7,8 +7,6 @@ import org.mockito.Mock;
 import socialapp.backend.authentication.exceptions.EmailAlreadyRegisteredException;
 import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
 import socialapp.backend.authentication.exceptions.PhoneNumberAlreadyRegisteredException;
-import socialapp.backend.users.AdminUserController;
-import socialapp.backend.users.UserServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -3,11 +3,9 @@ package socialapp.backend.Location;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClient.Builder;
-import socialapp.backend.config.Configuration;
+import socialapp.backend.config.GoogleConfig;
 
 import java.util.List;
 
@@ -15,14 +13,13 @@ import java.util.List;
 public class LocationService {
 
     private final RestClient restClient;
+    private final GoogleConfig googleConfig;
 
-    private final Configuration config;
+    public LocationService(GoogleConfig googleConfig) {
+        this.googleConfig = googleConfig;
 
-    public LocationService(Configuration config) {
-        this.config = config;
-        System.out.println("APIKEY: "+config.getGoogleMapsApiKey());
         this.restClient = RestClient.builder()
-                .baseUrl("https://geocode.googleapis.com")
+                .baseUrl(googleConfig.getGoogleMapsApiBaseUrl())
                 .build();
     }
 
@@ -33,7 +30,7 @@ public class LocationService {
                         .path("/v4/geocode/location")
                         .queryParam("location.latitude", latitude)
                         .queryParam("location.longitude", longitude)
-                        .queryParam("key", config.getGoogleMapsApiKey())
+                        .queryParam("key", googleConfig.getGoogleMapsApiKey())
                         .build())
                 .retrieve()
                 .body(GoogleGeocodeResponse.class);

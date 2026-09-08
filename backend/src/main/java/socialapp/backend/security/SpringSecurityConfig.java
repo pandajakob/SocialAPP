@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import socialapp.backend.config.SecurityConfig;
 
 
 import java.util.List;
@@ -27,20 +27,19 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SpringSecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private UserDetailsService userDetailsService;
 
-    private socialapp.backend.config.Configuration configuration;
+    private SecurityConfig securityConfig;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, socialapp.backend.config.Configuration configuration) {
+    public SpringSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, socialapp.backend.config.SecurityConfig securityConfig) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
-        this.configuration = configuration;
+        this.securityConfig = securityConfig;
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -65,7 +64,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
 
-        config.setAllowedOriginPatterns(configuration.getAllowedOrigins());
+        config.setAllowedOriginPatterns(securityConfig.getAllowedOrigins());
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
 

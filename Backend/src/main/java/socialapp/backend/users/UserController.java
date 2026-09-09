@@ -9,9 +9,9 @@ import socialapp.backend.users.DTO.StandardUserResponseDTO;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

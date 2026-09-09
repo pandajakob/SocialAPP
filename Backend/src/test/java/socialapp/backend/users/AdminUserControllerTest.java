@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class AdminUserControllerTest {
 
     @Mock
-    UserServiceImpl userService;
+    UserService userService;
 
     @InjectMocks
     AdminUserController userController;

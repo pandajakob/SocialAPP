@@ -1,2 +1,17 @@
 *.DS_Store
 .vscode
+.memdb/
+.agents/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.github/
+.kiro/
+.mcp.json
+.opencode/
+.pi/
+.warp/
+.windsurf/
+.memtrace
+opencode.json

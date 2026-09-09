@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 import socialapp.backend.Location.Location;
 import socialapp.backend.Location.LocationService;
 import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.authentication.AuthService;
 import socialapp.backend.feed.FeedRankingService;
 import socialapp.backend.posts.DTO.*;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
-import socialapp.backend.shared.domain_primitives.Email;
-import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.users.User;
 import socialapp.backend.users.UserRepository;
 
@@ -26,12 +25,16 @@ public class PostService {
     private final UserRepository userRepository;
     private final LocationService locationService;
     private final FeedRankingService feedRankingService;
+    private final AuthService authService;
+    private final PostMapper postMapper;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, LocationService locationService, FeedRankingService feedRankingService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LocationService locationService, FeedRankingService feedRankingService, AuthService authService, PostMapper postMapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.locationService = locationService;
         this.feedRankingService = feedRankingService;
+        this.authService = authService;
+        this.postMapper = postMapper;
     }
 
     public PostResponseDTO createPost(PostCreateDTO postCreateDTO,  Authentication authentication) {
@@ -49,7 +52,7 @@ public class PostService {
         post.setLocation(locationService.createLocation(postCreateDTO.location().latitude(), postCreateDTO.location().longitude()));
         Post newPost = postRepository.save(post);
 
-        return convertPostResponseDTO(newPost);
+        return postMapper.toDTO(newPost);
     }
 
     private User unpackUser(Optional<User> optionalUser) {
@@ -69,17 +72,17 @@ public class PostService {
 
     public PostResponseDTO getPostById(UUID id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-        return convertPostResponseDTO(post);
+        return postMapper.toDTO(post);
     }
 
     public List<PostResponseDTO> getOwnPosts(Authentication authentication) {
-        User user = getUserFromAuth(authentication);
+        User user = authService.getUserFromAuth(authentication);
         List<Post> posts = postRepository.findAllByUserId(user.getId());
-        return posts.stream().map(this::convertPostResponseDTO).toList();
+        return posts.stream().map(postMapper::toDTO).toList();
     }
 
     public List<PostResponseDTO> getFeed(Authentication authentication, LocationDTO locationDTO) {
-        User user = getUserFromAuth(authentication);
+        User user = authService.getUserFromAuth(authentication);
 
         List<Post> posts = postRepository.filterByAgeAndLocation(user.getAge(), locationDTO.longitude(), locationDTO.latitude());
 
@@ -88,58 +91,10 @@ public class PostService {
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
 
         for (Post post : feed) {
-            postResponseDTOS.add(convertPostResponseDTO(post));
+            postResponseDTOS.add(postMapper.toDTO(post));
         }
         return postResponseDTOS;
     }
 
-    private User getUserFromAuth(Authentication authentication) {
-        Email email = new Email(authentication.getName());
-        Optional<User> user = userRepository.findByEmail(email.getValue());
-        if (user.isPresent()) {
-            return user.get();
-        } else   {
-            throw new UsernameNotFoundException("User not found");
-        }
-    }
-    
-    private PostResponseDTO convertPostResponseDTO(Post post) {
-        Location location = post.getLocation();
-        LocationDTO locationDTO = new LocationDTO(
-                location.getCoordinates().getX(),
-                location.getCoordinates().getY(),
-                location.getCountry(),
-                location.getCity(),
-                location.getFormattedAddress());
-
-        User user = post.getCreatedBy();
-        StandardUserResponseDTO userResponseDTO = new StandardUserResponseDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail().getValue(),
-                user.getAge(),
-                user.getInterests(),
-                user.getPhoneNumber().getValue()
-        );
-        return new PostResponseDTO(
-                post.getId(),
-                post.getDate(),
-                post.getCreatedBy().getFirstName(),
-                post.getCreatedBy().getLastName(),
-                userResponseDTO,
-                post.getTitle(),
-                post.getDescription(),
-                locationDTO,
-                post.getCategories(),
-                post.getAgeFrom(),
-                post.getAgeTo(),
-                post.getPhotoUrl());
-    }
-
-    private Point extractLocationPoint(LocationDTO locationDTO) {
-        GeometryFactory factory = new GeometryFactory();
-        return factory.createPoint(new Coordinate(locationDTO.longitude(), locationDTO.latitude()));
-    }
 
 }

@@ -14,27 +14,29 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public List<StandardUserResponseDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     public StandardUserResponseDTO getUserById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with id: " + id));
-        return convertToDTO(user);
+        return userMapper.toDTO(user);
     }
 
     public StandardUserResponseDTO getUserByEmail(Email email) {
         User user = userRepository.findByEmail(email.getValue())
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with email: " + email));
-        return convertToDTO(user);
+        return userMapper.toDTO(user);
     }
 
     public StandardUserResponseDTO updateUser(UUID id, User updatedUser) {
@@ -72,7 +74,7 @@ public class UserService {
         }
 
         User savedUser = userRepository.save(user);
-        return convertToDTO(savedUser);
+        return userMapper.toDTO(savedUser);
     }
 
     public void deleteUser(UUID id) {
@@ -87,15 +89,5 @@ public class UserService {
         return this.getUserByEmail(email);
     }
 
-    private StandardUserResponseDTO convertToDTO(User user) {
-        return new StandardUserResponseDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail().getValue(),
-                user.getAge(),
-                user.getInterests(),
-                user.getPhoneNumber().getValue()
-        );
-    }
+
 }

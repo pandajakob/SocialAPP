@@ -4,7 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import socialapp.backend.config.SecurityConfig;
 import socialapp.backend.security.CustomUserDetailsService;
@@ -16,6 +18,8 @@ import socialapp.backend.users.DTO.StandardUserResponseDTO;
 import socialapp.backend.users.User;
 import socialapp.backend.users.UserRepository;
 import socialapp.backend.authentication.exceptions.UserAlreadyRegisteredException;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -92,5 +96,15 @@ public class AuthService {
                 user.getAge(),
                 user.getInterests(),
                 user.getPhoneNumber().getValue());
+    }
+
+    public User getUserFromAuth(Authentication authentication) {
+        Email email = new Email(authentication.getName());
+        Optional<User> user = userRepository.findByEmail(email.getValue());
+        if (user.isPresent()) {
+            return user.get();
+        } else   {
+            throw new UsernameNotFoundException("User not found");
+        }
     }
 }

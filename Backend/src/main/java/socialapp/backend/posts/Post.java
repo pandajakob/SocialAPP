@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-
 @Table(name = "posts")
 public class Post {
 

@@ -1,23 +1,56 @@
 package socialapp.backend.categories;
 
+import org.springframework.stereotype.Service;
 import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
 
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public interface CategoryService {
+@Service
+public class CategoryService {
 
-    public List<Category> getAllCategories();
+    private final CategoryRepository categoryRepository;
 
-    public Category getCategoryByName(String name);
+    private Map<Long, Category> categoryMap = new HashMap<>();
 
-    List<Category> getAllMainCategories();
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+        this.loadCategories();
+    }
 
-    Category getCategoryById(Long id);
+    private void loadCategories() {
+        categoryRepository.findAll().forEach(c -> categoryMap.put(c.getId(),c));
+    }
 
-    List<Category> getAllSubCategoriesByName(String name);
+    public List<Category> getAllCategories() {
+        return categoryMap.values().stream().toList();
+    }
 
+    public Category getCategoryByName(String name) {
+        for (Category c : categoryMap.values()) {
+            if (c.getName().equalsIgnoreCase(name)) {
+                return c;
+            }
+        }
+        throw new NoSuchCategoryExistsException("Category with name " + name + " does not exist");
+    }
 
+    public List<Category> getAllMainCategories() {
+        return categoryMap.values().stream().filter(c-> c.getParentCategoryId() == null).toList();
+    }
+
+    public Category getCategoryById(Long id) {
+        Category cat = categoryMap.get(id);
+        if (cat == null) {
+            throw new NoSuchCategoryExistsException("Category with id "+id + " does not exist");
+        }
+        return cat;
+    }
+
+    public List<Category> getAllSubCategoriesByName(String name) {
+        Category category = getCategoryByName(name);
+        return categoryMap.values().stream().filter(c->{
+            Long parentId = c.getParentCategoryId();
+            return parentId != null && parentId == category.getId();
+        }).toList();
+    }
 }

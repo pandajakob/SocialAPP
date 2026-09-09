@@ -8,9 +8,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/admin/posts")
 public class AdminPostController {
-    private PostServiceImpl postService;
+    private PostService postService;
 
-    public AdminPostController(PostServiceImpl postService) {
+    public AdminPostController(PostService postService) {
         this.postService = postService;
     }
 

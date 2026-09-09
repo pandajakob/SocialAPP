@@ -82,7 +82,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
     public StandardUserResponseDTO getUserFromToken(Authentication authentication) {
         Email email = new Email(authentication.getName());
         return this.getUserByEmail(email);

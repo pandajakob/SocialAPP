@@ -13,9 +13,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-    private PostServiceImpl postService;
+    private PostService postService;
 
-    public PostController(PostServiceImpl postService) {
+    public PostController(PostService postService) {
         this.postService = postService;
     }
 

@@ -1,4 +1,4 @@
-package socialapp.backend.Location;
+package socialapp.backend.location;
 
 import jakarta.persistence.*;
 import org.locationtech.jts.geom.Point;

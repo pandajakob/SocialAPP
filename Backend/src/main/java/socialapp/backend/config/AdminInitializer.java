@@ -2,7 +2,7 @@ package socialapp.backend.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import socialapp.backend.Location.LocationService;
+import socialapp.backend.location.LocationService;
 import socialapp.backend.authentication.PasswordEncoder;
 import socialapp.backend.categories.Category;
 import socialapp.backend.categories.CategoryRepository;

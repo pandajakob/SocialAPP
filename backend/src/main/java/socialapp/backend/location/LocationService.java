@@ -1,11 +1,11 @@
-package socialapp.backend.Location;
+package socialapp.backend.location;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import socialapp.backend.Location.DTO.GoogleGeocodeResponse;
+import socialapp.backend.location.DTO.GoogleGeocodeResponse;
 import socialapp.backend.config.GoogleConfig;
 
 

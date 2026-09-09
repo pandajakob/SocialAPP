@@ -3,16 +3,11 @@ package socialapp.backend.chats;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import socialapp.backend.Location.LocationDTO;
 import socialapp.backend.chats.DTO.ChatCreateDTO;
 import socialapp.backend.chats.DTO.ChatResponseDTO;
 import socialapp.backend.chats.message.DTO.MessageRequestDTO;
-import socialapp.backend.chats.message.DTO.MessageResponseDTO;
-import socialapp.backend.posts.DTO.PostResponseDTO;
-import socialapp.backend.posts.PostService;
 
 import java.util.List;
-import java.util.UUID;
 
 
 @RestController

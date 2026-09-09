@@ -1,11 +1,10 @@
 package socialapp.backend.posts;
 
 import org.springframework.stereotype.Component;
-import socialapp.backend.Location.Location;
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.Location;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
-import socialapp.backend.users.User;
 import socialapp.backend.users.UserMapper;
 
 @Component

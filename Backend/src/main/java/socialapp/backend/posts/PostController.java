@@ -3,7 +3,7 @@ package socialapp.backend.posts;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 

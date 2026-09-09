@@ -1,4 +1,4 @@
-package socialapp.backend.Location;
+package socialapp.backend.location;
 
 public record LocationDTO(
     Double longitude,

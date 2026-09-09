@@ -1,13 +1,11 @@
 package socialapp.backend.feed;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import socialapp.backend.Location.Location;
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.Location;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.categories.Category;
 import socialapp.backend.posts.DTO.RankedPost;
 import socialapp.backend.posts.Post;
-import socialapp.backend.posts.PostRepository;
 import socialapp.backend.users.User;
 
 import java.util.ArrayList;

@@ -1,14 +1,10 @@
 package socialapp.backend.posts;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import socialapp.backend.Location.Location;
-import socialapp.backend.Location.LocationService;
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.LocationService;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.authentication.AuthService;
 import socialapp.backend.feed.FeedRankingService;
 import socialapp.backend.posts.DTO.*;

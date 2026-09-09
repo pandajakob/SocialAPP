@@ -1,4 +1,4 @@
-package socialapp.backend.Location.DTO;
+package socialapp.backend.location.DTO;
 
 import java.util.List;
 

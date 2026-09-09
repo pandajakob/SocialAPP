@@ -1,6 +1,6 @@
 package socialapp.backend.posts.DTO;
 
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 

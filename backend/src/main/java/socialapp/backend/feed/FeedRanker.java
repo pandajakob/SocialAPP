@@ -1,7 +1,6 @@
 package socialapp.backend.feed;
 
-import org.springframework.security.core.Authentication;
-import socialapp.backend.Location.LocationDTO;
+import socialapp.backend.location.LocationDTO;
 import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;
 

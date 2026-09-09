@@ -2,7 +2,7 @@ package socialapp.backend.posts;
 
 import jakarta.persistence.*;
 
-import socialapp.backend.Location.Location;
+import socialapp.backend.location.Location;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 

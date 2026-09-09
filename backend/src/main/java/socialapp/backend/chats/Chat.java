@@ -1,8 +1,6 @@
 package socialapp.backend.chats;
 
 import jakarta.persistence.*;
-import socialapp.backend.Location.Location;
-import socialapp.backend.categories.Category;
 import socialapp.backend.chats.message.Message;
 import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;

@@ -9,6 +9,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { UserProvider } from "@/context/UserContext";
 import { PostProvider } from "@/context/PostContext";
 import { CategoryProvider } from "@/context/CategoryContext";
+import { ChatProvider } from "@/context/ChatContext";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -20,6 +21,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <UserProvider>
+        <ChatProvider>
         <PostProvider>
           <CategoryProvider>
           <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -30,12 +32,12 @@ export default function RootLayout() {
                 name="createPost"
                 options={{ presentation: "modal", title: "createPost" }}
               />
-
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>
           </CategoryProvider>
       </PostProvider>
+      </ChatProvider>
     </UserProvider>
     </AuthProvider>
   );

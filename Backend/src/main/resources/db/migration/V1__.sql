@@ -6,6 +6,20 @@ CREATE TABLE categories
     CONSTRAINT pk_categories PRIMARY KEY (id)
 );
 
+CREATE TABLE chats
+(
+    id      UUID NOT NULL,
+    post_id UUID,
+    date    TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_chats PRIMARY KEY (id)
+);
+
+CREATE TABLE chats_participants
+(
+    chat_id         UUID NOT NULL,
+    participants_id UUID NOT NULL
+);
+
 CREATE TABLE locations
 (
     id                UUID NOT NULL,
@@ -16,6 +30,17 @@ CREATE TABLE locations
     postal_code       VARCHAR(255),
     formatted_address VARCHAR(255),
     CONSTRAINT pk_locations PRIMARY KEY (id)
+);
+
+CREATE TABLE messages
+(
+    id        UUID NOT NULL,
+    content   VARCHAR(255),
+    sender_id UUID,
+    chat_id   UUID,
+    date      TIMESTAMP WITHOUT TIME ZONE,
+    state     SMALLINT,
+    CONSTRAINT pk_messages PRIMARY KEY (id)
 );
 
 CREATE TABLE post_categories
@@ -70,11 +95,26 @@ ALTER TABLE users
 ALTER TABLE users
     ADD CONSTRAINT uc_users_phone_number UNIQUE (phone_number);
 
+ALTER TABLE chats
+    ADD CONSTRAINT FK_CHATS_ON_POST FOREIGN KEY (post_id) REFERENCES posts (id);
+
+ALTER TABLE messages
+    ADD CONSTRAINT FK_MESSAGES_ON_CHAT FOREIGN KEY (chat_id) REFERENCES chats (id);
+
+ALTER TABLE messages
+    ADD CONSTRAINT FK_MESSAGES_ON_SENDER FOREIGN KEY (sender_id) REFERENCES users (id);
+
 ALTER TABLE posts
     ADD CONSTRAINT FK_POSTS_ON_LOCATION FOREIGN KEY (location_id) REFERENCES locations (id);
 
 ALTER TABLE posts
     ADD CONSTRAINT FK_POSTS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE chats_participants
+    ADD CONSTRAINT fk_chapar_on_chat FOREIGN KEY (chat_id) REFERENCES chats (id);
+
+ALTER TABLE chats_participants
+    ADD CONSTRAINT fk_chapar_on_user FOREIGN KEY (participants_id) REFERENCES users (id);
 
 ALTER TABLE post_categories
     ADD CONSTRAINT fk_poscat_on_category FOREIGN KEY (category_id) REFERENCES categories (id);
@@ -93,7 +133,6 @@ ALTER TABLE user_interests
 
 ALTER TABLE user_interests
     ADD CONSTRAINT fk_useint_on_user FOREIGN KEY (user_id) REFERENCES users (id);
-
 
 
 BEGIN;

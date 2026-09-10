@@ -2,9 +2,7 @@ package socialapp.backend.chats.message;
 
 
 import jakarta.persistence.*;
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageState;
 import socialapp.backend.chats.Chat;
-import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;
 
 import java.util.Date;
@@ -52,6 +50,10 @@ public class Message {
 
     public String getContent() {
         return content;
+    }
+
+    public MessageState getState() {
+        return state;
     }
 }
 

@@ -12,7 +12,8 @@ public class MessageMapper {
         return new MessageResponseDTO(
                 message.getId(),
                 userMapper.toDTO(message.getSender()),
-                message.getContent()
+                message.getContent(),
+                message.getState()
         );
     }
 }

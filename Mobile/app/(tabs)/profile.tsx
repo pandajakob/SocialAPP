@@ -6,6 +6,7 @@ import { useUser } from "@/context/UserContext";
 import { usePost } from "@/context/PostContext";
 import CategoryFilter from "@/components/CategoryFilter";
 import PostCard from "@/components/PostCard";
+import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 
 export default function ProfileScreen() {
   const { user, loading: userLoading } = useUser();
@@ -45,9 +46,12 @@ export default function ProfileScreen() {
           {user.interests.map((interest, i) => (
             <View
               key={i}
-              className="bg-blue-50 px-4 py-2 rounded-full mr-2 mb-2"
+              className="flex-row items-center bg-white border border-gray-100 px-4 py-2 rounded-full mr-2 mb-2"
             >
-              <Text className="text-blue-600 font-medium">{interest.name}</Text>
+              <Text className="mr-2 text-base">
+                {CATEGORY_EMOJIS[interest.name.toLowerCase()] ?? "📌"}
+              </Text>
+              <Text className="text-sm font-semibold text-gray-700">{interest.name}</Text>
             </View>
           ))}
         </View>

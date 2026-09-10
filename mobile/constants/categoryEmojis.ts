@@ -7,4 +7,10 @@ export const CATEGORY_EMOJIS: Record<string, string> = {
   food: "🍳",
   tech: "💻",
   social: "🥳",
+  "board games": "🎲",
+  running: "🏃‍♀️",
+  volunteering: "🧢",
+  cooking: "🍳",
+  singing: "🎤",
+  cycling: "🚴"
 };

@@ -2,6 +2,7 @@ package socialapp.backend.chats.message;
 
 
 import jakarta.persistence.*;
+import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageState;
 import socialapp.backend.chats.Chat;
 import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;
@@ -26,11 +27,20 @@ public class Message {
 
     private Date date = new Date();
 
+    private MessageState state = MessageState.SENT;
+
     public Message(String content, User sender, Chat chat) {
         this.content = content;
         this.sender = sender;
         this.chat = chat;
     }
+
+    public enum MessageState {
+        SENT,
+        READ
+    }
+
+    protected Message() {}
 
     public UUID getId() {
         return id;

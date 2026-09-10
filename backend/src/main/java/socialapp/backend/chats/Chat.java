@@ -36,6 +36,8 @@ public class Chat {
         this.participants.add(initiator);
     }
 
+    protected Chat() { }
+
     public void addMessage(Message message) {
         this.messages.add(message);
     }

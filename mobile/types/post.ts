@@ -3,7 +3,7 @@ import { Location } from "./location";
 import { User } from "./user";
 
 export interface Post {
-  postId: string;
+  id: string;
   title: string;
   description: string;
   location: Location;

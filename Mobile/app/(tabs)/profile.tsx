@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator, FlatList, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import "../../global.css";
@@ -9,7 +10,7 @@ import PostCard from "@/components/PostCard";
 export default function ProfileScreen() {
   const { user, loading: userLoading } = useUser();
   const { userPosts, loading: postLoading } = usePost();
-  
+
   if (userLoading || postLoading ||!user) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
@@ -23,9 +24,9 @@ export default function ProfileScreen() {
       {/* Header / Avatar Section */}
       <View className="items-center pt-20 pb-8 bg-gray-50 border-b border-gray-100">
         <View className="relative">
-          {user.profilePhoto?.url ? (
+          {user.photoUrl ? (
             <Image
-              source={{ uri: user.profilePhoto.url }}
+              source={{ uri: user.photoUrl }}
               className="w-32 h-32 rounded-full border-4 border-white shadow-sm"
             />
           ) : null}
@@ -46,7 +47,7 @@ export default function ProfileScreen() {
               key={i}
               className="bg-blue-50 px-4 py-2 rounded-full mr-2 mb-2"
             >
-              <Text className="text-blue-600 font-medium">{interest}</Text>
+              <Text className="text-blue-600 font-medium">{interest.name}</Text>
             </View>
           ))}
         </View>
@@ -92,7 +93,7 @@ export default function ProfileScreen() {
             Your Posts
           </Text>
           {userPosts.map((p) => (
-            <PostCard key={p.postId} post={p} />
+            <PostCard key={p.id} post={p} />
           ))}
         </View>
       </View>

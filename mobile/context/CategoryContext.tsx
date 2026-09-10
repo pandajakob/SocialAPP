@@ -1,5 +1,5 @@
+import React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-
 import { API_BASE } from "@/constants/api";
 import { Category } from "@/types/category";
 import { CategoryContextType } from "@/types/CategoryContextType";
@@ -119,7 +119,7 @@ export function CategoryProvider({
             setCategories(allCategories);
           }
         } catch (error) {
-          console.log("Error loading user data:", error);
+          console.log("Error loading categories:", error);
         } finally {
           setLoading(false)
         }};

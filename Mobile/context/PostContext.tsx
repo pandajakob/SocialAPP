@@ -1,11 +1,11 @@
-
+import React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-
 import { useAuth } from "./AuthContext";
-import { UserContextType } from "@/types/UserContextType";
 import { API_BASE } from "@/constants/api";
 import { Post } from "@/types/post";
 import { PostContextType } from "@/types/PostContextType";
+import * as ExpoLocation from "expo-location";
+import { Location } from "@/types/location";
 
 
 export const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -15,6 +15,15 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
   const [feed, setFeed] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const { token } = useAuth();
+
+  const getUserLocation = async () => {
+      const { status } = await ExpoLocation.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        throw new Error("Location permission denied");
+      }
+      return await ExpoLocation.getCurrentPositionAsync({});
+  }
 
   const getUserPosts = async (): Promise<Post[]> => {
     if (!token) {
@@ -53,21 +62,35 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
       throw new Error("No auth token available");
     }
     setLoading(true);
+   
     try {
-      const response = await fetch(`${API_BASE}/api/posts/feed`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `token=${token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to get feed: " + response.status + " " + response.statusText);
-      }
+      let reactUserLocation = await getUserLocation()
+      
+      const location: Location = {
+            latitude: reactUserLocation.coords.latitude,
+            longitude: reactUserLocation.coords.longitude,
+            city: "",
+            country: "",
+            formattedAddress: "",
+          } 
 
-      const data = await response.json();
-      return data as Post[]
+          const response = await fetch(`${API_BASE}/api/posts/feed`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Cookie: `token=${token}`,
+              },
+              body: JSON.stringify(location)
+          
+          });
+      
+          if (!response.ok) {
+            throw new Error("Failed to get feed: " + response.status + " " + response.statusText);
+          }
+
+          const data = await response.json();
+          return data as Post[]
+      
 
     } catch (error: any) {
       throw new Error(error?.message ?? "Unknown user fetch error");
@@ -132,12 +155,12 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
         const fetchedFeed = await getFeed();
 
         if (isMounted) {
-          setUserPosts(fetchedUserPosts)
+          setUserPosts(fetchedUserPosts);
 
           setFeed(fetchedFeed);
         }
       } catch (error) {
-        console.log("Error loading user data:", error);
+        console.log("Error loading posts:", error);
       }
     };
     

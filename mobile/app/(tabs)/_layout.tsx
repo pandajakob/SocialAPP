@@ -1,8 +1,5 @@
 import React from "react";
-import { NativeTabs, Icon, Label, VectorIcon } from 'expo-router/unstable-native-tabs';
-import { Ionicons } from "@expo/vector-icons";
-
-import { HapticTab } from "@/components/haptic-tab";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -11,31 +8,30 @@ export default function TabLayout() {
   const tint = Colors[colorScheme ?? "light"].tint;
 
   return (
-    <NativeTabs
-      tintColor={tint}>
+    <NativeTabs tintColor={tint}>
       <NativeTabs.Trigger name="index">
-        <Label>Explore</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="search" />} />
+        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="magnifyingglass" md="search" />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="map">
-        <Label>Map</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="map" />} />
+        <NativeTabs.Trigger.Label>Map</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="map.fill" md="map" />
       </NativeTabs.Trigger>
-      
+
       <NativeTabs.Trigger name="createPostTabRedirect">
-        <Label>New post</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="add-circle" />} />
+        <NativeTabs.Trigger.Label>New post</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="plus.circle.fill" md="add_circle" />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="chats">
-        <Label>Chats</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="chatbubbles" />} />
+        <NativeTabs.Trigger.Label>Chats</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="bubble.left.and.bubble.right.fill" md="chat" />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="profile">
-        <Label>Profile</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="person" />} />
+        <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="person.fill" md="person" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );

@@ -29,7 +29,7 @@ export default function MapScreen() {
 
           return (
             <Marker
-              key={post.postId}
+              key={post.id}
               coordinate={{
                 latitude: post.location.latitude,
                 longitude: post.location.longitude,
@@ -38,7 +38,7 @@ export default function MapScreen() {
               title={post.title}
               description={post.description}
               onCalloutPress={() => {
-                router.push(`/post/${post.postId}`);
+                router.push(`/post/${post.id}`);
               }}
             />
           );

@@ -28,8 +28,8 @@ const { feed, loading } = usePost();
       {feed ?
       <FlatList
         data={feed}
-        renderItem={({ item }) => <PostCard  key={item.postId} post={item} />} // Pass data to the child
-        keyExtractor={(item) => item.postId}
+        renderItem={({ item }) => <PostCard  key={item.id} post={item} />} // Pass data to the child
+        keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 100 }}
       /> : 
 

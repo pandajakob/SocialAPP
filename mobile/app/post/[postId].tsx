@@ -16,7 +16,7 @@ export default function PostScreen() {
     );
   }
 
-  const post = feed.find((post) => post.postId === postId);
+  const post = feed.find((post) => post.id === postId);
 
   if (!post) {
     return (

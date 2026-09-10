@@ -3,7 +3,7 @@ import { Chat } from '../types/chat';
 
 export const MOCK_POSTS: Post[] = [
   {
-    postId: 1,
+    id: 1,
     title: "Saturday Basketball",
     description: "Looking for 4 more players for a 5v5 game.",
     location: "Central Park Courts",
@@ -20,7 +20,7 @@ export const MOCK_POSTS: Post[] = [
     photoUrl: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400"
   },
   {
-    postId: 2,
+    id: 2,
     title: "Board Game Meetup",
     description: "Playing Catan and heavy strategy games.",
     location: "Bastard Café",

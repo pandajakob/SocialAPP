@@ -15,7 +15,7 @@ export default function PostCard({ post }: PostCardProps) {
   const hasMoreCategories = post.categories.length > 3;
 
   const openPost = () => {
-    router.push(`/post/${post.postId}`);
+    router.push(`/post/${post.id}`);
   };
 
   return (

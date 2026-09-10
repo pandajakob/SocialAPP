@@ -32,6 +32,10 @@ export default function RootLayout() {
                 name="createPost"
                 options={{ presentation: "modal", title: "createPost" }}
               />
+              <Stack.Screen
+                name="chat/chat"
+                options={{ headerShown: false }}
+              />
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>

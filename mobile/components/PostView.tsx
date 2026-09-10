@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 import { Post } from "@/types/post";
 import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
@@ -152,6 +153,20 @@ export default function PostView({ post }: PostViewProps) {
             </View>
           </View>
         </View>
+
+        {/* Chat CTA */}
+        <TouchableOpacity
+          className="mt-6 bg-gray-900 py-4 rounded-2xl flex-row items-center justify-center"
+          activeOpacity={0.85}
+          onPress={() =>
+            router.push({ pathname: "/chat/chat", params: { postId: post.id } })
+          }
+        >
+          <Ionicons name="chatbubble-outline" size={18} color="#fff" />
+          <Text className="text-white font-bold text-base ml-2">
+            Message {post.user.firstName}
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

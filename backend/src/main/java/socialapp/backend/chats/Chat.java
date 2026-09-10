@@ -30,7 +30,7 @@ public class Chat {
 
     public Chat(Post post, User initiator, User recipient) {
         this.post = post;
-
+        this.messages = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.participants.add(recipient);
         this.participants.add(initiator);

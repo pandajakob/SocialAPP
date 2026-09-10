@@ -22,27 +22,35 @@ export default function RootLayout() {
     <AuthProvider>
       <UserProvider>
         <ChatProvider>
-        <PostProvider>
-          <CategoryProvider>
-          <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-            <Stack>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="createPost"
-                options={{ presentation: "modal", title: "createPost" }}
-              />
-              <Stack.Screen
-                name="chat/chat"
-                options={{ headerShown: false }}
-              />
-            </Stack>
-            <StatusBar style="auto" />
-          </ThemeProvider>
-          </CategoryProvider>
-      </PostProvider>
-      </ChatProvider>
-    </UserProvider>
+          <PostProvider>
+            <CategoryProvider>
+              <ThemeProvider
+                value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+              >
+                <Stack>
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="createPost"
+                    options={{ presentation: "modal", title: "createPost" }}
+                  />
+                  <Stack.Screen
+                    name="chat/chat"
+                    options={{ headerShown: false }}
+                  />
+                </Stack>
+                <StatusBar style="auto" />
+              </ThemeProvider>
+            </CategoryProvider>
+          </PostProvider>
+        </ChatProvider>
+      </UserProvider>
     </AuthProvider>
   );
 }

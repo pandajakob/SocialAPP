@@ -11,7 +11,7 @@ public interface ChatRepository extends JpaRepository<Chat, UUID> {
     @Query(value = """
     SELECT *
     FROM chats c
-    WHERE user_id = :userId
+    WHERE id = :userId
     """, nativeQuery = true)
     List<Chat> findAllByUserId(UUID userId);
 

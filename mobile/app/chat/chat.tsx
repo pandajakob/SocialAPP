@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,21 +7,59 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { usePost } from "@/context/PostContext";
+import { useChat } from "@/context/ChatContext";
+import { useUser } from "@/context/UserContext";
 import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
+import { Chat } from "@/types/chat";
 
 export default function ChatScreen() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
   const { feed, userPosts } = usePost();
+  const { createChat, sendMessage } = useChat();
+  const { user } = useUser();
   const router = useRouter();
+
   const [message, setMessage] = useState("");
+  const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+  const [sending, setSending] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
 
   const post =
     feed.find((p) => p.id === postId) ??
     userPosts.find((p) => p.id === postId);
+
+  const messages = currentChat?.messages ?? [];
+  const canSend = message.trim().length > 0 && !sending;
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollRef.current?.scrollToEnd({ animated: true });
+    }
+  }, [messages.length]);
+
+  const handleSend = async () => {
+    const content = message.trim();
+    if (!content || !postId) return;
+
+    setMessage("");
+    setSending(true);
+
+    try {
+      const updatedChat = currentChat
+        ? await sendMessage(currentChat.id, content)
+        : await createChat(postId, content);
+      setCurrentChat(updatedChat);
+    } catch (error) {
+      console.log("Error sending message:", error);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -77,19 +115,58 @@ export default function ChatScreen() {
         </View>
       )}
 
-      {/* Messages area — empty state */}
+      {/* Messages */}
       <ScrollView
-        className="flex-1 px-5"
+        ref={scrollRef}
+        className="flex-1 px-5 pt-4"
         contentContainerStyle={{
           flexGrow: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: messages.length === 0 ? "center" : "flex-end",
+          paddingBottom: 8,
         }}
       >
-        <Ionicons name="chatbubble-ellipses-outline" size={44} color="#D1D5DB" />
-        <Text className="text-gray-400 text-sm mt-3 text-center">
-          No messages yet.{"\n"}Send the first one!
-        </Text>
+        {messages.length === 0 ? (
+          <View className="items-center">
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={44}
+              color="#D1D5DB"
+            />
+            <Text className="text-gray-400 text-sm mt-3 text-center">
+              No messages yet.{"\n"}Send the first one!
+            </Text>
+          </View>
+        ) : (
+          messages.map((msg) => {
+            const isMe = msg.sender.id === user?.id;
+            return (
+              <View
+                key={msg.id}
+                style={{ alignSelf: isMe ? "flex-end" : "flex-start", maxWidth: "80%" }}
+                className="mb-3"
+              >
+                {!isMe && (
+                  <Text className="text-xs text-gray-400 mb-1 ml-1">
+                    {msg.sender.firstName}
+                  </Text>
+                )}
+                <View
+                  className={`px-4 py-3 ${
+                    isMe
+                      ? "bg-gray-900 rounded-2xl rounded-tr-sm"
+                      : "bg-gray-100 rounded-2xl rounded-tl-sm"
+                  }`}
+                >
+                  <Text
+                    className={`text-sm ${isMe ? "text-white" : "text-gray-900"}`}
+                  >
+                    {msg.content}
+                  </Text>
+                </View>
+              </View>
+            );
+          })
+        )}
       </ScrollView>
 
       {/* Input bar */}
@@ -103,10 +180,17 @@ export default function ChatScreen() {
           multiline
         />
         <TouchableOpacity
-          className="w-11 h-11 rounded-full bg-gray-900 items-center justify-center opacity-40"
-          disabled
+          className={`w-11 h-11 rounded-full bg-gray-900 items-center justify-center ${
+            canSend ? "" : "opacity-30"
+          }`}
+          onPress={handleSend}
+          disabled={!canSend}
         >
-          <Ionicons name="arrow-up" size={18} color="#fff" />
+          {sending ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Ionicons name="arrow-up" size={18} color="#fff" />
+          )}
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

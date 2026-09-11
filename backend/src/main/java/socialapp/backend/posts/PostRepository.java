@@ -22,6 +22,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     JOIN locations l ON p.location_id = l.id
     WHERE p.age_to >= :age
       AND p.age_from <= :age
+      and p.user_id != :userId
     ORDER BY ST_Distance(
         l.coordinates,
         ST_SetSRID(
@@ -29,6 +30,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
         )::geography
     )
     """, nativeQuery = true)
-    List<Post> filterByAgeAndLocation(int age, double longitude, double latitude);
+    List<Post> filterByAgeAndLocation(UUID userId, int age, double longitude, double latitude);
 
 }

@@ -80,7 +80,7 @@ public class PostService {
     public List<PostResponseDTO> getFeed(Authentication authentication, LocationDTO locationDTO) {
         User user = authService.getUserFromAuth(authentication);
 
-        List<Post> posts = postRepository.filterByAgeAndLocation(user.getAge(), locationDTO.longitude(), locationDTO.latitude());
+        List<Post> posts = postRepository.filterByAgeAndLocation(user.getId(), user.getAge(), locationDTO.longitude(), locationDTO.latitude());
 
         List<Post> feed = feedRankingService.rankFeed(user, posts, locationDTO);
 

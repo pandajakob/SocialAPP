@@ -153,7 +153,7 @@ export default function ChatScreen() {
           messages.map((msg, index) => {
             const isMe = msg.sender.id === user?.id;
             const isLast = index === messages.length - 1;
-            const msgDate = new Date(msg.date);
+            const msgDate = new Date(msg.createdAt);
             const isToday =
               new Date().toDateString() === msgDate.toDateString();
             const time = isToday

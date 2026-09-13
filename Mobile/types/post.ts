@@ -7,7 +7,7 @@ export interface Post {
   title: string;
   description: string;
   location: Location;
-  date: string;
+  createdAt: string;
   ageFrom: number;
   ageTo: number;
   user: User

@@ -8,7 +8,7 @@ export interface Message {
   sender: User;
   content: string;
   state: MessageState;
-  date: string;
+  createdAt: string;
 }
 
 export interface Chat {
@@ -16,5 +16,5 @@ export interface Chat {
   post: Post;
   messages: Message[];
   participants: User[];
-  date: string;
+  createdAt: string;
 }

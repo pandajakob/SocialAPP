@@ -7,7 +7,7 @@ export const MOCK_POSTS: Post[] = [
     title: "Saturday Basketball",
     description: "Looking for 4 more players for a 5v5 game.",
     location: "Central Park Courts",
-    date: "2026-03-12",
+    createdAt: "2026-03-12",
     ageFrom: 18,
     ageTo: 35,
     categories: [
@@ -24,7 +24,7 @@ export const MOCK_POSTS: Post[] = [
     title: "Board Game Meetup",
     description: "Playing Catan and heavy strategy games.",
     location: "Bastard Café",
-    date: "2026-03-15",
+    createdAt: "2026-03-15",
     ageFrom: 20,
     ageTo: 99,
     categories: [

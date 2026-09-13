@@ -141,7 +141,7 @@ export default function PostView({ post }: PostViewProps) {
 
             <View className="ml-3">
               <Text className="text-gray-900 font-medium">
-                {new Date(post.date).toLocaleDateString()}
+                {new Date(post.createdAt).toLocaleDateString()}
               </Text>
               <Text className="text-gray-400 text-xs mt-0.5">
                 Posted date

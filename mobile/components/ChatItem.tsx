@@ -54,7 +54,7 @@ export default function ChatItem({ chat, onPress }: ChatItemProps) {
           </Text>
           {lastMessage && (
             <Text className="text-gray-400 text-xs">
-              {formatDate(chat.date)}
+              {formatDate(chat.createdAt)}
             </Text>
           )}
         </View>

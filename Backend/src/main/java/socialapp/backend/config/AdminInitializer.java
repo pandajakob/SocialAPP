@@ -1,6 +1,7 @@
 package socialapp.backend.config;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import socialapp.backend.location.LocationService;
 import socialapp.backend.authentication.PasswordEncoder;
@@ -18,6 +19,7 @@ import socialapp.backend.users.UserRepository;
 import java.util.List;
 
 @Component
+@Order(2)
 public class AdminInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;

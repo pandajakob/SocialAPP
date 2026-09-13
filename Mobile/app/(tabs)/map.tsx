@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { router } from "expo-router";
 import { usePost } from "@/context/PostContext";

@@ -31,6 +31,7 @@ export default function ChatScreen() {
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
 
+  
   const post =
     feed.find((p) => p.id === (postId ?? currentChat?.post.id)) ??
     userPosts.find((p) => p.id === (postId ?? currentChat?.post.id));
@@ -92,8 +93,17 @@ export default function ChatScreen() {
 
       {/* Post context card */}
       {post && (
-        <View className="mx-5 mt-4 bg-gray-50 rounded-2xl border border-gray-100 p-4 flex-row items-center">
-          <View className="w-9 h-9 rounded-full bg-white border border-gray-100 items-center justify-center mr-3">
+        <TouchableOpacity className="mx-5 mt-4 bg-gray-50 rounded-2xl border border-gray-100 p-4 flex-row items-center"
+            onPress={()=> {
+            console.log("POSTID: ",post.id);
+            console.log(
+              postId,
+              chatId,
+              currentChat,
+              chats,
+            );
+            router.push(`/post/${post.id}`)}}>
+            <View className="w-9 h-9 rounded-full bg-white border border-gray-100 items-center justify-center mr-3">
             {post.categories[0] ? (
               <Text className="text-base">
                 {CATEGORY_EMOJIS[post.categories[0].name.toLowerCase()] ??
@@ -115,7 +125,7 @@ export default function ChatScreen() {
               {post.title}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
 
       {/* Messages */}

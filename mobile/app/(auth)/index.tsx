@@ -18,17 +18,14 @@ export default function AuthScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    
 
   const { login, loading, isAuthenticated } = useAuth();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     if (isAuthenticated) {
-            router.dismiss();
+      router.dismiss();
     }
-  }, [isAuthenticated])
-
+  }, [isAuthenticated]);
 
   if (loading) {
     return (
@@ -38,16 +35,13 @@ export default function AuthScreen() {
     );
   }
 
-
-
-  
   const handleLogin = async () => {
     console.log("Attempting login with:", { email, password });
 
     if (!email || !password) {
-        console.log(email, password)
-        Alert.alert("Error", "Please fill in all fields");
-        return;
+      console.log(email, password);
+      Alert.alert("Error", "Please fill in all fields");
+      return;
     }
 
     const success = await login(email, password);
@@ -105,16 +99,17 @@ export default function AuthScreen() {
             <TouchableOpacity
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
             >
-            <Ionicons
+              <Ionicons
                 name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
                 size={20}
                 color="#9CA3AF"
-            />
+              />
             </TouchableOpacity>
           </View>
           <TouchableOpacity className="self-end mt-2">
-            {//<Text className="text-xs font-semibold">Forgot Password?</Text>
-}
+            {
+              //<Text className="text-xs font-semibold">Forgot Password?</Text>
+            }
           </TouchableOpacity>
         </View>
       </View>

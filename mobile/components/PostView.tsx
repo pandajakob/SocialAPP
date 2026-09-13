@@ -23,11 +23,7 @@ export default function PostView({ post }: PostViewProps) {
           className="w-full h-72"
           resizeMode="cover"
         />
-      ) : (
-        <View className="w-full h-72 bg-gray-200 items-center justify-center">
-          <Ionicons name="image-outline" size={48} color="#9CA3AF" />
-        </View>
-      )}
+      ) : <View> </View>}
 
       <View className="px-5 pt-5 pb-8">
         {/* Author */}

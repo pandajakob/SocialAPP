@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { ScrollView, TouchableOpacity, Text, View } from "react-native";
 import { useCategory } from "@/context/CategoryContext";
-
 import LoadingView from "./LoadingView";
-import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
+
 
 export default function CategoryFilter() {
   const { mainCategories, loading } = useCategory();
@@ -43,7 +42,7 @@ export default function CategoryFilter() {
               }`}
             >
               <Text className="mr-2 text-base">
-                {CATEGORY_EMOJIS[category.name.toLowerCase()] ?? "📌"}
+                {category.emoji}
               </Text>
 
               <Text

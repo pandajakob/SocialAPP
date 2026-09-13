@@ -14,7 +14,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { usePost } from "@/context/PostContext";
 import { useChat } from "@/context/ChatContext";
 import { useUser } from "@/context/UserContext";
-import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 import { Chat } from "@/types/chat";
 
 export default function ChatScreen() {
@@ -85,8 +84,7 @@ export default function ChatScreen() {
             <View className="w-9 h-9 rounded-full bg-white border border-gray-100 items-center justify-center mr-3">
             {post.categories[0] ? (
               <Text className="text-base">
-                {CATEGORY_EMOJIS[post.categories[0].name.toLowerCase()] ??
-                  "📌"}
+                {post.categories[0].emoji}
               </Text>
             ) : (
               <Ionicons name="document-outline" size={18} color="#6B7280" />

@@ -1,9 +1,9 @@
+import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 import { Post } from "../types/post";
-import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 
 interface PostCardProps {
   post: Post;
@@ -62,7 +62,7 @@ export default function PostCard({ post }: PostCardProps) {
                 className="flex-row items-center bg-gray-50 px-2.5 py-2 rounded-full ml-1.5"
               >
                 <Text className="text-sm">
-                  {CATEGORY_EMOJIS[category.name.toLowerCase()] ?? "📌"}
+                  {category.emoji}
                 </Text>
 
                 <Text

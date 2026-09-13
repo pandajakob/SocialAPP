@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 import { Post } from "@/types/post";
-import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
+
 
 interface PostViewProps {
   post: Post;
@@ -63,7 +63,7 @@ export default function PostView({ post }: PostViewProps) {
               className="flex-row items-center bg-gray-100 px-3 py-1.5 rounded-full mr-2 mb-2"
             >
               <Text className="text-sm mr-1.5">
-                {CATEGORY_EMOJIS[category.name.toLowerCase()] ?? "📌"}
+                {category.emoji}
               </Text>
 
               <Text className="text-gray-700 text-xs font-semibold">

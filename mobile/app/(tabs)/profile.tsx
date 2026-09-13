@@ -4,9 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import "../../global.css";
 import { useUser } from "@/context/UserContext";
 import { usePost } from "@/context/PostContext";
-import CategoryFilter from "@/components/CategoryFilter";
 import PostCard from "@/components/PostCard";
-import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 import LoadingView from "@/components/LoadingView";
 
 export default function ProfileScreen() {
@@ -46,7 +44,7 @@ export default function ProfileScreen() {
               className="flex-row items-center bg-white border border-gray-100 px-4 py-2 rounded-full mr-2 mb-2"
             >
               <Text className="mr-2 text-base">
-                {CATEGORY_EMOJIS[interest.name.toLowerCase()] ?? "📌"}
+                {interest.emoji}
               </Text>
               <Text className="text-sm font-semibold text-gray-700">{interest.name}</Text>
             </View>

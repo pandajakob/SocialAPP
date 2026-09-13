@@ -1,4 +1,5 @@
-import { View, Text, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import React from "react";
+import { View, Text, FlatList, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PostCard from '../../components/PostCard';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -16,7 +17,12 @@ const { feed, loading } = usePost();
 
   return (
     <View className="flex-1 bg-gray-50 px-4 pt-14">
-      <Text className="text-3xl font-bold mb-4">Explore</Text>
+      <View className="flex-row justify-between items-center mb-4">
+        <Text className="text-2xl font-bold tracking-tight text-black">
+          Explore
+        </Text>
+
+      </View>
 
       {/* Search Header */}
       <View className="flex-row items-center bg-white rounded-2xl px-4 py-3 mb-6 border border-gray-200">

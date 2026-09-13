@@ -24,7 +24,7 @@ export default function TabLayout() {
         <NativeTabs.Trigger.Icon sf="plus.circle.fill" md="add_circle" />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="chats">
+      <NativeTabs.Trigger name="chatsScreen">
         <NativeTabs.Trigger.Label>Chats</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="bubble.left.and.bubble.right.fill" md="chat" />
       </NativeTabs.Trigger>

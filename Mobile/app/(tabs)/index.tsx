@@ -21,7 +21,6 @@ const { feed, loading } = usePost();
         <Text className="text-2xl font-bold tracking-tight text-black">
           Explore
         </Text>
-
       </View>
 
       {/* Search Header */}

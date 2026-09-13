@@ -6,7 +6,6 @@ import socialapp.backend.chats.Chat;
 import socialapp.backend.users.User;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity

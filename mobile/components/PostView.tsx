@@ -155,7 +155,7 @@ export default function PostView({ post }: PostViewProps) {
           className="mt-6 bg-gray-900 py-4 rounded-2xl flex-row items-center justify-center"
           activeOpacity={0.85}
           onPress={() =>
-            router.push({ pathname: "/chat/chat", params: { postId: post.id } })
+            router.push({ pathname: "/chat/chatScreen", params: { postId: post.id } })
           }
         >
           <Ionicons name="chatbubble-outline" size={18} color="#fff" />

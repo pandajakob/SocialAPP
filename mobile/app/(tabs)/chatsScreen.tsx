@@ -15,7 +15,7 @@ export default function ChatsScreen() {
   }
 
   const handleChatPress = (id: string) => {
-    router.navigate({ pathname: "/chat/chat", params: { chatId: id } });
+    router.navigate({ pathname: "/chat/chatScreen", params: { chatId: id } });
   };
 
   return (

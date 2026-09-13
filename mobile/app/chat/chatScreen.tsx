@@ -70,27 +70,6 @@ export default function ChatScreen() {
       className="flex-1 bg-white"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {/* Header */}
-      <View className="pt-14 pb-4 px-5 flex-row items-center border-b border-gray-100">
-        <TouchableOpacity onPress={() => router.back()} className="mr-3">
-          <Ionicons name="chevron-back" size={26} color="#111827" />
-        </TouchableOpacity>
-
-        <View className="flex-1">
-          <Text
-            className="text-base font-bold text-gray-900"
-            numberOfLines={1}
-          >
-            {post ? `${post.user.firstName} ${post.user.lastName}` : "Chat"}
-          </Text>
-          {post && (
-            <Text className="text-xs text-gray-400 mt-0.5" numberOfLines={1}>
-              {post.title}
-            </Text>
-          )}
-        </View>
-      </View>
-
       {/* Post context card */}
       {post && (
         <TouchableOpacity className="mx-5 mt-4 bg-gray-50 rounded-2xl border border-gray-100 p-4 flex-row items-center"
@@ -132,11 +111,14 @@ export default function ChatScreen() {
       <ScrollView
         ref={scrollRef}
         className="flex-1 px-5 pt-4"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: messages.length === 0 ? "center" : "flex-end",
           paddingBottom: 8,
         }}
+        
       >
         {messages.length === 0 ? (
           <View className="items-center">

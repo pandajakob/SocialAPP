@@ -34,6 +34,7 @@ public class ChatController {
     @PostMapping("/message")
     ResponseEntity<ChatResponseDTO> sendMessage(@RequestBody MessageRequestDTO messageRequestDTO, Authentication authentication) {
         ChatResponseDTO chat = chatService.sendMessage(messageRequestDTO, authentication);
+        System.out.println("TEST: " + chat.createdAt().toString());
         return ResponseEntity.ok().body(chat);
     }
 

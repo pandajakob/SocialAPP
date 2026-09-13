@@ -27,6 +27,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
           Cookie: `token=${token}`,
         },
       });
+      
+      
 
       if (!response.ok) {
         throw new Error(

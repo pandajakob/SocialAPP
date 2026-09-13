@@ -15,7 +15,7 @@ export default function ChatsScreen() {
   }
 
   const handleChatPress = (id: string) => {
-    router.navigate(`/chat/chat`);
+    router.navigate({ pathname: "/chat/chat", params: { chatId: id } });
   };
 
   return (
@@ -40,7 +40,7 @@ export default function ChatsScreen() {
           data={chats}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <ChatItem chat={item} onPress={handleChatPress} />
+            <ChatItem chat={item} onPress={(item)=>{handleChatPress(item);}} />
           )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}

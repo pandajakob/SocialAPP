@@ -5,6 +5,7 @@ export POSTGRES_PASSWORD=jakob
 export DB_HOST_PORT=5432
 export DATABASE_URL=postgresql://localhost:5432/devdb
 
+# Admin Details
 export ADMIN_EMAIL=admin@admin.com
 export ADMIN_PASSWORD=admin@admin.com
 

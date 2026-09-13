@@ -7,17 +7,14 @@ import { usePost } from "@/context/PostContext";
 import CategoryFilter from "@/components/CategoryFilter";
 import PostCard from "@/components/PostCard";
 import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
+import LoadingView from "@/components/LoadingView";
 
 export default function ProfileScreen() {
   const { user, loading: userLoading } = useUser();
   const { userPosts, loading: postLoading } = usePost();
 
   if (userLoading || postLoading ||!user) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#000000" />
-      </View>
-    );
+    return (LoadingView());
   }
 
   return (

@@ -60,7 +60,6 @@ public class ChatService {
     public List<ChatResponseDTO> getAllChatsForUser(Authentication authentication) {
         User sender = authService.getUserFromAuth(authentication);
         List<Chat> chats = chatRepository.findAllByUserId(sender.getId());
-
         return chats.stream().map(chatMapper::toDTO).toList();
     }
 

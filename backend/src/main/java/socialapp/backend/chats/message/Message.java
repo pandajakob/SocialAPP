@@ -55,5 +55,9 @@ public class Message {
     public MessageState getState() {
         return state;
     }
+
+    public Date getDate() {
+        return date;
+    }
 }
 

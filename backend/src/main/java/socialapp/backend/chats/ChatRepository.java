@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
-    @Query(value = """
-    SELECT *
-    FROM chats c
-    WHERE id = :userId
-    """, nativeQuery = true)
+    @Query("""
+    SELECT c
+    FROM Chat c
+    JOIN c.participants p
+    WHERE p.id = :userId
+    """)
     List<Chat> findAllByUserId(UUID userId);
-
 }

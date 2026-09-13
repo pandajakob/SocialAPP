@@ -18,20 +18,22 @@ import { CATEGORY_EMOJIS } from "@/constants/categoryEmojis";
 import { Chat } from "@/types/chat";
 
 export default function ChatScreen() {
-  const { postId } = useLocalSearchParams<{ postId: string }>();
+  const { postId, chatId } = useLocalSearchParams<{ postId?: string; chatId?: string }>();
   const { feed, userPosts } = usePost();
-  const { createChat, sendMessage } = useChat();
+  const { chats, createChat, sendMessage } = useChat();
   const { user } = useUser();
   const router = useRouter();
 
   const [message, setMessage] = useState("");
-  const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+  const [currentChat, setCurrentChat] = useState<Chat | null>(
+    () => chats.find((c) => c.id === chatId) ?? null
+  );
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
 
   const post =
-    feed.find((p) => p.id === postId) ??
-    userPosts.find((p) => p.id === postId);
+    feed.find((p) => p.id === (postId ?? currentChat?.post.id)) ??
+    userPosts.find((p) => p.id === (postId ?? currentChat?.post.id));
 
   const messages = currentChat?.messages ?? [];
   const canSend = message.trim().length > 0 && !sending;
@@ -44,7 +46,8 @@ export default function ChatScreen() {
 
   const handleSend = async () => {
     const content = message.trim();
-    if (!content || !postId) return;
+    const resolvedPostId = postId ?? currentChat?.post.id;
+    if (!content || !resolvedPostId) return;
 
     setMessage("");
     setSending(true);
@@ -52,7 +55,7 @@ export default function ChatScreen() {
     try {
       const updatedChat = currentChat
         ? await sendMessage(currentChat.id, content)
-        : await createChat(postId, content);
+        : await createChat(resolvedPostId, content);
       setCurrentChat(updatedChat);
     } catch (error) {
       console.log("Error sending message:", error);
@@ -137,8 +140,17 @@ export default function ChatScreen() {
             </Text>
           </View>
         ) : (
-          messages.map((msg) => {
+          messages.map((msg, index) => {
             const isMe = msg.sender.id === user?.id;
+            const isLast = index === messages.length - 1;
+            const msgDate = new Date(msg.date);
+            const isToday =
+              new Date().toDateString() === msgDate.toDateString();
+            const time = isToday
+              ? msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+              : msgDate.toLocaleDateString([], { month: "short", day: "numeric" }) +
+                " " +
+                msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
             return (
               <View
                 key={msg.id}
@@ -163,6 +175,13 @@ export default function ChatScreen() {
                     {msg.content}
                   </Text>
                 </View>
+                {isLast && (
+                  <Text
+                    className={`text-xs text-gray-400 mt-1 ${isMe ? "text-right mr-1" : "ml-1"}`}
+                  >
+                    {time}
+                  </Text>
+                )}
               </View>
             );
           })

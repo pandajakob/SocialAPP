@@ -13,7 +13,8 @@ public class MessageMapper {
                 message.getId(),
                 userMapper.toDTO(message.getSender()),
                 message.getContent(),
-                message.getState()
+                message.getState(),
+                message.getDate()
         );
     }
 }

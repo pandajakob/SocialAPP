@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import socialapp.backend.chats.Chat;
 import socialapp.backend.users.User;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class Message {
     @ManyToOne
     private Chat chat;
 
-    private Date date = new Date();
+    private Instant createdAt = Instant.now();
 
     private MessageState state = MessageState.SENT;
 
@@ -56,8 +57,8 @@ public class Message {
         return state;
     }
 
-    public Date getDate() {
-        return date;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 }
 

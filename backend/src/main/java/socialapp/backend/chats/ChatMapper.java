@@ -27,7 +27,7 @@ public class ChatMapper {
                 postMapper.toDTO(chat.getPost()),
                 chat.getMessages().stream().map(messageMapper::toDTO).toList(),
                 chat.getParticipants().stream().map(userMapper::toDTO).toList(),
-                chat.getDate()
+                chat.getCreatedAt()
         );
     }
 }

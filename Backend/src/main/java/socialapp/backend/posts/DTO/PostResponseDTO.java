@@ -4,13 +4,14 @@ import socialapp.backend.location.LocationDTO;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.DTO.StandardUserResponseDTO;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public record PostResponseDTO(
         UUID id,
-        Date date,
+        Instant date,
         String userFirstName,
         String userLastName,
         StandardUserResponseDTO user,

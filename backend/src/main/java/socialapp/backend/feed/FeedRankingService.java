@@ -8,6 +8,7 @@ import socialapp.backend.posts.DTO.RankedPost;
 import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class FeedRankingService implements FeedRanker {
             if (post == null) {
                 throw new RuntimeException("post is null");
             }
-            double daysAgoCreated = post.getDate().compareTo(new Date());
+            double daysAgoCreated = post.getCreatedAt().compareTo(Instant.now());
             double distanceKm = getDistanceInKm(locationDTO, post.getLocation());
             double interestMatches = getCategoryMatches(post.getCategories(), user.getInterests());
             double distanceScore = Math.min(distanceKm, 20);

@@ -6,7 +6,7 @@ import socialapp.backend.location.Location;
 import socialapp.backend.categories.Category;
 import socialapp.backend.users.User;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +25,9 @@ public class Post {
     )
     private User createdBy;
 
-    private Date date = new Date();
+    private final Instant createdAt = Instant.now();
+
+    private final Instant updatedAt = Instant.now();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(
@@ -64,10 +66,6 @@ public class Post {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public void setAgeFrom(int ageFrom) {
@@ -110,8 +108,8 @@ public class Post {
         return description;
     }
 
-    public Date getDate() {
-        return date;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public int getAgeFrom() {
@@ -122,6 +120,7 @@ public class Post {
         return ageTo;
     }
 
+    public Instant getUpdatedAt() { return updatedAt; }
 
     public String getPhotoUrl() {
         return photoUrl;

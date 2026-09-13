@@ -5,6 +5,7 @@ import socialapp.backend.chats.message.Message;
 import socialapp.backend.posts.Post;
 import socialapp.backend.users.User;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Chat {
     @ManyToMany
     private List<User> participants;
 
-    private Date date = new Date();
+    private final Instant createdAt = Instant.now();
 
     public Chat(Post post, User initiator, User recipient) {
         this.post = post;
@@ -45,8 +46,8 @@ public class Chat {
         return id;
     }
 
-    public Date getDate() {
-        return date;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public List<User> getParticipants() {

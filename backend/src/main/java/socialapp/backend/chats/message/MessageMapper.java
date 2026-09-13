@@ -14,7 +14,7 @@ public class MessageMapper {
                 userMapper.toDTO(message.getSender()),
                 message.getContent(),
                 message.getState(),
-                message.getDate()
+                message.getCreatedAt()
         );
     }
 }

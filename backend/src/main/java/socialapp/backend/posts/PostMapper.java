@@ -28,7 +28,7 @@ public class PostMapper {
 
         return new PostResponseDTO(
                 post.getId(),
-                post.getDate(),
+                post.getCreatedAt(),
                 post.getCreatedBy().getFirstName(),
                 post.getCreatedBy().getLastName(),
                 userResponseDTO,

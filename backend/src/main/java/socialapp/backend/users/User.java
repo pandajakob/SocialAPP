@@ -5,6 +5,7 @@ import socialapp.backend.categories.Category;
 import socialapp.backend.posts.Post;
 import socialapp.backend.shared.domain_primitives.*;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    private final Instant createdAt = Instant.now();
+
+    private final Instant updatedAt = Instant.now();
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

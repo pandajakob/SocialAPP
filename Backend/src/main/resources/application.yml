@@ -37,3 +37,9 @@ security:
 google:
   googleMapsApiKey: ${GOOGLE_MAPS_API_KEY}
   googleMapsApiBaseUrl: ${GOOGLE_MAPS_API_BASE_URL}
+
+storage:
+  endpoint: ${STORAGE_ENDPOINT}
+  bucket: ${STORAGE_BUCKET_NAME}
+  access-key: ${STORAGE_ACCESS_KEY}
+  secret-key: ${STORAGE_SECRET_KEY}

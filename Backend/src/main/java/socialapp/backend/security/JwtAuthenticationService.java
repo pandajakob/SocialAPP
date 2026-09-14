@@ -7,7 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import socialapp.backend.config.SecurityConfig;
+
 import javax.crypto.SecretKey;
 
 import java.util.*;
@@ -15,11 +15,11 @@ import java.util.*;
 @Service
 public class JwtAuthenticationService {
 
-    private final SecurityConfig securityConfig;
+    private final SecurityProperties securityProperties;
 
 
-    public JwtAuthenticationService(SecurityConfig securityConfig) {
-        this.securityConfig = securityConfig;
+    public JwtAuthenticationService(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -33,7 +33,7 @@ public class JwtAuthenticationService {
                 .add(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + securityConfig.getTokenValiditySeconds()*1000))
+                .expiration(new Date(System.currentTimeMillis() + securityProperties.getTokenValiditySeconds()*1000))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -41,7 +41,7 @@ public class JwtAuthenticationService {
     }
 
     public SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(securityConfig.getJwtSecretKey());
+        byte[] keyBytes = Decoders.BASE64.decode(securityProperties.getJwtSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import socialapp.backend.config.SecurityConfig;
+import socialapp.backend.security.SecurityProperties;
 import socialapp.backend.security.CustomUserDetailsService;
 import socialapp.backend.security.JwtAuthenticationService;
 import socialapp.backend.shared.domain_primitives.Email;
@@ -27,13 +27,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtAuthenticationService jwtAuthenticationService;
     private final AuthenticationManager authenticationManager;
-    private final SecurityConfig securityConfig;
+    private final SecurityProperties securityProperties;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, SecurityConfig securityConfig, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, SecurityProperties securityProperties, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
-        this.securityConfig = securityConfig;
+        this.securityProperties = securityProperties;
         this.authenticationManager = authenticationManager;
         this.jwtAuthenticationService = jwtAuthenticationService;
         this.passwordEncoder = passwordEncoder;
@@ -49,22 +49,22 @@ public class AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDetails.email());
         String token = jwtAuthenticationService.generateToken(userDetails);
-        ResponseCookie cookie = ResponseCookie.from(securityConfig.getJWTName(), token)
+        ResponseCookie cookie = ResponseCookie.from(securityProperties.getJWTName(), token)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(securityConfig.getTokenValiditySeconds())
+                .maxAge(securityProperties.getTokenValiditySeconds())
                 .sameSite("None")
                 .build();
         return cookie;
     }
 
     public ResponseCookie logout() {
-        ResponseCookie cookie = ResponseCookie.from(securityConfig.getJWTName(), "")
+        ResponseCookie cookie = ResponseCookie.from(securityProperties.getJWTName(), "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(securityConfig.getTokenValiditySeconds())
+                .maxAge(securityProperties.getTokenValiditySeconds())
                 .sameSite("None")
                 .build();
         return cookie;

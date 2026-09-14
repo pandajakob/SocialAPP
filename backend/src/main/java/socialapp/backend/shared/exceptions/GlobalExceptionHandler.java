@@ -12,6 +12,8 @@ import socialapp.backend.authentication.exceptions.NoSuchUserExistsException;
 import socialapp.backend.authentication.exceptions.PhoneNumberAlreadyRegisteredException;
 import socialapp.backend.authentication.exceptions.UserAlreadyRegisteredException;
 import socialapp.backend.categories.exceptions.NoSuchCategoryExistsException;
+import socialapp.backend.location.googleMaps.exceptions.GoogleApiCallException;
+import socialapp.backend.location.googleMaps.exceptions.GoogleLocationNotFoundException;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
 
 @RestControllerAdvice
@@ -22,6 +24,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchUserExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchUserExistsException(NoSuchUserExistsException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(GoogleLocationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse googleLocationNotFoundException(GoogleLocationNotFoundException ex) {
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
@@ -78,4 +86,12 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleUnexpectedException(Exception ex) {
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred");
     }
+
+    // --- 503 Service Unavailable Error ---
+    @ExceptionHandler(GoogleApiCallException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponse googleApiCallException(GoogleApiCallException ex) {
+        return new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.value(), "An unexpected error occurred");
+    }
+
 }

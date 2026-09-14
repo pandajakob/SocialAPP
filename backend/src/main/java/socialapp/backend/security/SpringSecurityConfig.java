@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import socialapp.backend.config.SecurityConfig;
 
 
 import java.util.List;
@@ -33,12 +32,12 @@ public class SpringSecurityConfig {
 
     private UserDetailsService userDetailsService;
 
-    private SecurityConfig securityConfig;
+    private SecurityProperties securityProperties;
 
-    public SpringSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, socialapp.backend.config.SecurityConfig securityConfig) {
+    public SpringSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, SecurityProperties securityProperties) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
-        this.securityConfig = securityConfig;
+        this.securityProperties = securityProperties;
     }
 
     @Bean
@@ -64,7 +63,7 @@ public class SpringSecurityConfig {
         config.setAllowCredentials(true);
 
 
-        config.setAllowedOriginPatterns(securityConfig.getAllowedOrigins());
+        config.setAllowedOriginPatterns(securityProperties.getAllowedOrigins());
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
 

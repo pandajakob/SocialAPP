@@ -13,20 +13,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import socialapp.backend.config.SecurityConfig;
+
 import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtAuthenticationService jwtAuthenticationService;
-    private final SecurityConfig securityConfig;
+    private final SecurityProperties securityProperties;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtAuthenticationService jwtAuthenticationService, UserDetailsService userDetailsService, SecurityConfig securityConfig) {
+    public JwtAuthenticationFilter(JwtAuthenticationService jwtAuthenticationService, UserDetailsService userDetailsService, SecurityProperties securityProperties) {
         this.jwtAuthenticationService = jwtAuthenticationService;
         this.userDetailsService = userDetailsService;
-        this.securityConfig = securityConfig;
+        this.securityProperties = securityProperties;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (securityConfig.getJWTName().equals(cookie.getName())) {
+                if (securityProperties.getJWTName().equals(cookie.getName())) {
                     token = cookie.getValue();
                     break;
                 }

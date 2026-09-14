@@ -1,0 +1,17 @@
+{
+  "job_type": "s3_lifecycle",
+  "successful_runs": [
+    {
+      "run_id": "exec-1789393864465647261-175adc0052e20b79",
+      "job_id": "s3_lifecycle-scheduled-1789393864459033177-0",
+      "job_type": "s3_lifecycle",
+      "worker_id": "w-512042-68c0",
+      "outcome": "success",
+      "message": "s3 lifecycle daily replay completed",
+      "duration_ms": 38,
+      "completed_at": "2026-09-14T13:51:04.497146719Z"
+    }
+  ],
+  "error_runs": null,
+  "last_updated_time": "2026-09-14T13:51:04.499752261Z"
+}

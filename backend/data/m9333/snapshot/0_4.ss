@@ -1,2 +1,0 @@
-25c58745
-{"lastIndex":4,"lastTerm":0,"peers":[{"name":"172.18.0.3:9333.19333","connectionString":"172.18.0.3:19333"}],"state":"eyJtYXhWb2x1bWVJZCI6MCwidG9wb2xvZ3lJZCI6ImQ2NGZiODQ5LTY3OTYtNDM1Yy05OWRhLWUxYzhmNDQwYjI3NiJ9","path":"/data/m9333/snapshot/0_4.ss"}

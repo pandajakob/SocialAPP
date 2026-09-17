@@ -1,7 +1,8 @@
+.agents/
 *.DS_Store
 .vscode
 .memdb/
-.agents/
+B.agents/
 .claude/
 .codex/
 .cursor/
@@ -15,3 +16,5 @@
 .windsurf/
 .memtrace
 opencode.json
+backend/data
+backend/data/

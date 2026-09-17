@@ -1,9 +1,0 @@
-      56
-	raft:join"G{"name":"172.18.0.3:9333.19333","connectionString":"172.18.0.3:19333"}
-       c
-raft:nop      33
-MaxVolumeId""{"maxVolumeId":0,"topologyId":""}
-      57
-MaxVolumeId"F{"maxVolumeId":0,"topologyId":"d64fb849-6796-435c-99da-e1c8f440b276"}
-      57
-MaxVolumeId"F{"maxVolumeId":1,"topologyId":"d64fb849-6796-435c-99da-e1c8f440b276"}

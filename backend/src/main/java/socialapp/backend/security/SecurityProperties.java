@@ -1,0 +1,79 @@
+package socialapp.backend.security;
+
+
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import socialapp.backend.shared.domain_primitives.Email;
+
+import java.util.List;
+
+@ConfigurationProperties(prefix = "security")
+@Component
+public class SecurityProperties {
+
+    @NotBlank
+    private String adminEmail;
+
+    @NotBlank
+    private String adminPassword;
+
+    @NotBlank
+    private List<String> allowedOrigins;
+
+    private String JWTName = "auth";
+
+    private long tokenValiditySeconds = 3600;
+
+    @NotBlank
+    private String jwtSecretKey;
+
+    public String getJwtSecretKey() {
+        return jwtSecretKey;
+    }
+
+    public void setJwtSecretKey(String jwtSecretKey) {
+        this.jwtSecretKey = jwtSecretKey;
+    }
+
+    public long getTokenValiditySeconds() {
+        return tokenValiditySeconds;
+    }
+
+    public void setTokenValiditySeconds(long tokenValiditySeconds) {
+        this.tokenValiditySeconds = tokenValiditySeconds;
+    }
+
+    public void setJWTName(String JWTName) {
+        this.JWTName = JWTName;
+    }
+
+    public String getJWTName() {
+        return JWTName;
+    }
+
+    public Email getAdminEmail() {
+        return new Email(adminEmail);
+    }
+
+    public List<String> getAllowedOrigins() {
+        return allowedOrigins;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
+    public void setAllowedOrigins(List<String> allowedOrigins) {
+        this.allowedOrigins = allowedOrigins;
+    }
+
+}

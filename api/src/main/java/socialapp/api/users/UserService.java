@@ -1,0 +1,93 @@
+package socialapp.api.users;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import socialapp.api.users.DTO.StandardUserResponseDTO;
+import socialapp.api.shared.domain_primitives.Email;
+import socialapp.api.authentication.exceptions.NoSuchUserExistsException;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
+
+    public List<StandardUserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public StandardUserResponseDTO getUserById(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchUserExistsException("User not found with id: " + id));
+        return userMapper.toDTO(user);
+    }
+
+    public StandardUserResponseDTO getUserByEmail(Email email) {
+        User user = userRepository.findByEmail(email.getValue())
+                .orElseThrow(() -> new NoSuchUserExistsException("User not found with email: " + email));
+        return userMapper.toDTO(user);
+    }
+
+    public StandardUserResponseDTO updateUser(UUID id, User updatedUser) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        if (updatedUser.getFirstName() != null) {
+            user.setFirstName(updatedUser.getFirstName());
+        }
+        if (updatedUser.getLastName() != null) {
+            user.setLastName(updatedUser.getLastName());
+        }
+        if (updatedUser.getAge() != null) {
+            user.setAge(updatedUser.getAge());
+        }
+        if (updatedUser.getInterests() != null) {
+            user.setInterests(updatedUser.getInterests());
+        }
+        if (updatedUser.getPhoneNumber() != null) {
+            if (!user.getPhoneNumber().equals(updatedUser.getPhoneNumber()) &&
+                userRepository.existsByPhoneNumber(updatedUser.getPhoneNumber().getValue())) {
+                throw new RuntimeException("Phone number already registered: " + updatedUser.getPhoneNumber());
+            }
+            user.changePhoneNumber(updatedUser.getPhoneNumber());
+        }
+        if (updatedUser.getProfilePhotoUrl() != null) {
+            user.setProfilePhotoUrl(updatedUser.getProfilePhotoUrl());
+        }
+        if (updatedUser.getEmail() != null) {
+            if (!user.getEmail().equals(updatedUser.getEmail()) &&
+                userRepository.existsByEmail(updatedUser.getEmail().getValue())) {
+                throw new RuntimeException("Email already registered: " + updatedUser.getEmail());
+            }
+            user.changeEmail(updatedUser.getEmail());
+        }
+
+        User savedUser = userRepository.save(user);
+        return userMapper.toDTO(savedUser);
+    }
+
+    public void deleteUser(UUID id) {
+        if (!userRepository.existsById(id)) {
+            throw new NoSuchUserExistsException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public StandardUserResponseDTO getUserFromToken(Authentication authentication) {
+        Email email = new Email(authentication.getName());
+        return this.getUserByEmail(email);
+    }
+
+
+}

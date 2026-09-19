@@ -15,27 +15,32 @@ env:
   ADMIN_PASSWORD: admin@adm
   JWT_NAME: token
   ALLOWED_ORIGINS: localhost:3000
-  TOKEN_VALIDITY: SECONDS:3600
+  TOKEN_VALIDITY_SECONDS: 3600
   JWT_SECRET_KEY: a-long-random-secret
   GOOGLE_MAPS_API_KEY: xxx
   GOOGLE_MAPS_API_BASE_URL: https://geocode.googleapis.com
+  DEV_MODE: false
 on:
   push:
     branches: ['development']
     paths:
-      - 'javaAPI/**'
+      - 'api/**'
 jobs:
-  run-javaAPI-components:
+  run-api-components:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: javaAPI
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-compose-action@v2
       - name: run-postgres-and-seaweed
         run: docker compose up -d
       - run: chmod +x mvnw
-      - name: run-javaAPI
-        run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
-      
+      - name: run-api
+        run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false" &
+      - name: Check API
+        run: curl --fail http://localhost:8080/actuator/health
+      - name: Stop containers
+        if: always()
+        run: docker compose down

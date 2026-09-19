@@ -1,0 +1,29 @@
+# Database connection
+export POSTGRES_DB=devdb
+export POSTGRES_USER=jakob
+export POSTGRES_PASSWORD=jakob
+export DB_HOST_PORT=5432
+export DATABASE_URL=postgresql://localhost:5432/devdb
+
+# Seaweed details
+export STORAGE_ENDPOINT=localhost:8333
+export STORAGE_BUCKET_NAME=social-app
+export STORAGE_ACCESS_KEY=xxx
+export STORAGE_SECRET_KEY=xxx
+
+# Admin Details
+export ADMIN_EMAIL=admin@admin.com
+export ADMIN_PASSWORD=admin@admin.com
+
+# Security Config
+export JWT_NAME=token
+export ALLOWED_ORIGINS=localhost:3000
+export TOKEN_VALIDITY_SECONDS=3600
+export JWT_SECRET_KEY=a-long-random-secret-value
+
+# google
+export GOOGLE_MAPS_API_KEY=xxx
+export GOOGLE_MAPS_API_BASE_URL=https://geocode.googleapis.com
+
+# App
+DEV_MODE=true

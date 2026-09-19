@@ -62,12 +62,10 @@ public class AdminInitializer implements CommandLineRunner {
         }
 
         if (appProperties.isDevMode()) {
-            return;
-        }
-
-        User admin = userRepository.findByEmail(email.getValue()).get();
-        if (postRepository.findAllByUserId(admin.getId()).isEmpty()) {
-            addPostsForUser(admin, 50);
+            User admin = userRepository.findByEmail(email.getValue()).get();
+            if (postRepository.findAllByUserId(admin.getId()).isEmpty()) {
+                addPostsForUser(admin, 50);
+            }
         }
 
     }

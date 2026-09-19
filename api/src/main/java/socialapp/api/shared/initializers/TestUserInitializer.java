@@ -42,7 +42,7 @@ public class TestUserInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (appProperties.isDevMode())  {
+        if (!appProperties.isDevMode())  {
             return;
         }
         Email email = new Email("test@test.com");

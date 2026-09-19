@@ -12,6 +12,7 @@ import socialapp.backend.location.googleMaps.exceptions.GoogleLocationNotFoundEx
 
 @Service
 public class GoogleLocationService {
+  
     private final RestClient restClient;
     private final GoogleProperties googleProperties;
 

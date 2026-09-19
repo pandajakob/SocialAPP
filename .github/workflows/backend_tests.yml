@@ -1,4 +1,4 @@
-name: javaAPI tests
+name: api tests
 
 run-name: Java test, compile and run
 
@@ -6,14 +6,14 @@ on:
   push:
     branches: ['development']
     paths:
-      - 'javaAPI/**'
+      - 'api/**'
 
 jobs:
   test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: javaAPI
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
       - run: chmod +x mvnw
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: javaAPI
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
       - run: chmod +x mvnw
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: javaAPI
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
       - run: chmod +x mvnw

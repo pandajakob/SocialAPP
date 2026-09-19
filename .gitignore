@@ -15,5 +15,5 @@ B.agents/
 .windsurf/
 .memtrace
 opencode.json
-javaAPI/data
-javaAPI/data/
+api/data
+api/data/

@@ -1,0 +1,26 @@
+name: Backend tests
+run-name: Java test, compile and run
+
+
+on: 
+  push:
+    branches: [ 'development' ]
+    paths: ['backend/**']
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps: 
+        - run: cd backend
+        - run: ./mvnw/ test
+  compile:
+    runs-on: ubuntu-latest
+    steps: 
+        - run: cd backend
+        - run: ./mvnw/ clean compile -DskipTests 
+  install:
+    runs-on: ubuntu-latest
+    steps: 
+        - run: cd backend
+        - run: ./mvnw/ clean install -DskipTests 
+
+      

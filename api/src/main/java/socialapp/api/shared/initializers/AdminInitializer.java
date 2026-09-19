@@ -10,6 +10,7 @@ import socialapp.api.categories.CategoryRepository;
 import socialapp.api.posts.Post;
 import socialapp.api.posts.PostRepository;
 import socialapp.api.security.SecurityProperties;
+import socialapp.api.shared.AppProperties;
 import socialapp.api.shared.domain_primitives.Email;
 import socialapp.api.shared.domain_primitives.EncodedPassword;
 import socialapp.api.shared.domain_primitives.Password;
@@ -29,14 +30,16 @@ public class AdminInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     private final SecurityProperties securityProperties;
+    private final AppProperties appProperties;
 
-    public AdminInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, PasswordEncoder passwordEncoder, SecurityProperties securityProperties) {
+    public AdminInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, PasswordEncoder passwordEncoder, SecurityProperties securityProperties, AppProperties appProperties) {
         this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
         this.locationService = locationService;
         this.passwordEncoder = passwordEncoder;
         this.securityProperties = securityProperties;
         this.userRepository = userRepository;
+        this.appProperties = appProperties;
     }
 
     @Override
@@ -57,6 +60,11 @@ public class AdminInitializer implements CommandLineRunner {
             user.promoteToAdmin();
             userRepository.save(user);
         }
+
+        if (appProperties.isDevMode()) {
+            return;
+        }
+
         User admin = userRepository.findByEmail(email.getValue()).get();
         if (postRepository.findAllByUserId(admin.getId()).isEmpty()) {
             addPostsForUser(admin, 50);

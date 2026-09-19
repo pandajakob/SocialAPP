@@ -9,6 +9,7 @@ import socialapp.api.location.LocationService;
 import socialapp.api.posts.Post;
 import socialapp.api.posts.PostRepository;
 import socialapp.api.security.SecurityProperties;
+import socialapp.api.shared.AppProperties;
 import socialapp.api.shared.domain_primitives.Email;
 import socialapp.api.shared.domain_primitives.EncodedPassword;
 import socialapp.api.shared.domain_primitives.Password;
@@ -27,18 +28,23 @@ public class TestUserInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     private final SecurityProperties securityProperties;
+    private final AppProperties appProperties;
 
-    public TestUserInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, PasswordEncoder passwordEncoder, SecurityProperties securityProperties) {
+    public TestUserInitializer(CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository, LocationService locationService, PasswordEncoder passwordEncoder, SecurityProperties securityProperties, AppProperties appProperties) {
         this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
         this.locationService = locationService;
         this.passwordEncoder = passwordEncoder;
         this.securityProperties = securityProperties;
         this.userRepository = userRepository;
+        this.appProperties = appProperties;
     }
 
     @Override
     public void run(String... args) {
+        if (appProperties.isDevMode())  {
+            return;
+        }
         Email email = new Email("test@test.com");
         Password password = new Password("test@test.com");
         EncodedPassword encryptedPassword = passwordEncoder.encodePassword(password);

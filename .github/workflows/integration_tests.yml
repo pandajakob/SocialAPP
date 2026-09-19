@@ -1,0 +1,33 @@
+name: integration tests
+
+run-name: Java test, compile and run
+env:
+  POSTGRES_DB: test 
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+  DB_HOST_PORT: 5432
+  DATABASE_URL: postgresql://localhost:5432/test
+  STORAGE_ENDPOINT: localhost:8333
+  STORAGE_BUCKET_NAME: test
+  STORAGE_ACCESS_KEY: test
+  STORAGE_SECRET_KEY: test
+on:
+  push:
+    branches: ['development']
+    paths:
+      - 'backend/**'
+jobs:
+  run-backend-components:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-compose-action@v2
+      - name: run-postgres-and-seaweed
+        run: docker compose up -d
+      - run: chmod +x mvnw
+      - name: run-backend
+        run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
+      

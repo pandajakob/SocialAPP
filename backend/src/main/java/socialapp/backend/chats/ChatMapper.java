@@ -8,12 +8,9 @@ import socialapp.backend.users.UserMapper;
 
 @Component
 public class ChatMapper {
-
-
     private final PostMapper postMapper;
     private final MessageMapper messageMapper;
     private final UserMapper userMapper;
-
 
     public ChatMapper(PostMapper postMapper, MessageMapper messageMapper, UserMapper userMapper) {
         this.postMapper = postMapper;

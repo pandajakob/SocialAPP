@@ -17,7 +17,6 @@ public class JwtAuthenticationService {
 
     private final SecurityProperties securityProperties;
 
-
     public JwtAuthenticationService(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }

@@ -170,5 +170,4 @@ class PostControllerTest {
         assertThrows(PostNotFoundException.class,
                 () -> postController.getPostById(postId));
     }
-    
 }

@@ -38,9 +38,7 @@ jobs:
         run: docker compose up -d
       - run: chmod +x mvnw
       - name: run-api
-        run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
-      - name: Wait for API
-        run: sleep 10
+        run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false" &
       - name: Check API
         run: curl --fail http://localhost:8080/actuator/health
       - name: Stop containers

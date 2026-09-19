@@ -12,11 +12,9 @@ import socialapp.backend.location.LocationDTO;
 import socialapp.backend.posts.DTO.PostCreateDTO;
 import socialapp.backend.posts.DTO.PostResponseDTO;
 import socialapp.backend.posts.exceptions.PostNotFoundException;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

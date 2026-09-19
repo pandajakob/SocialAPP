@@ -1,0 +1,50 @@
+name: Backend tests
+
+run-name: Java test, compile and run
+
+on:
+  push:
+    branches: ['development']
+    paths:
+      - 'backend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - run: chmod +x mvnw
+      - run: ./mvnw test
+
+  compile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - run: chmod +x mvnw
+      - run: ./mvnw clean compile -DskipTests
+
+  install:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - run: chmod +x mvnw
+      - run: ./mvnw clean install -DskipTests
+
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+    - uses: actions/checkout@v4
+    - run: chmod +x mvnw
+    - run: ./mvnw spring-boot:run -DskipTests

@@ -8,8 +8,6 @@ import socialapp.backend.users.UserMapper;
 
 @Component
 public class ChatMapper {
-
-
     private final PostMapper postMapper;
     private final MessageMapper messageMapper;
     private final UserMapper userMapper;

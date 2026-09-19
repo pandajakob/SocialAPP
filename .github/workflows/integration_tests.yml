@@ -1,0 +1,29 @@
+name: integration tests
+
+run-name: Java test, compile and run
+
+on:
+  push:
+    branches: ['development']
+    paths:
+      - 'backend/**'
+jobs:
+  run-postgres-db:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: docker/setup-compose-action@v2
+      - run: docker compose up -d
+  run-backend:
+    runs-on: ubuntu-latest
+    needs: run-postgres-db
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+    - uses: actions/checkout@v4
+    - run: chmod +x mvnw
+    - run: ./mvnw spring-boot:run -DskipTests
+      

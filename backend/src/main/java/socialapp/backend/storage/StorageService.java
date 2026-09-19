@@ -12,11 +12,11 @@ import java.time.Duration;
 @Service
 public class StorageService {
 
-    S3Client s3Client;
+    private S3Client s3Client;
+
     public StorageService(S3Client s3Client) {
         this.s3Client = s3Client;
     }
-
 
     public String createPresignedGetUrl(String bucketName, String keyName) {
         try (S3Presigner presigner = S3Presigner.create()) {

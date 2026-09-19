@@ -15,7 +15,7 @@ env:
   ADMIN_PASSWORD: admin@adm
   JWT_NAME: token
   ALLOWED_ORIGINS: localhost:3000
-  TOKEN_VALIDITY: SECONDS:3600
+  TOKEN_VALIDITY_SECONDS: 3600
   JWT_SECRET_KEY: a-long-random-secret
   GOOGLE_MAPS_API_KEY: xxx
   GOOGLE_MAPS_API_BASE_URL: https://geocode.googleapis.com
@@ -39,7 +39,10 @@ jobs:
       - run: chmod +x mvnw
       - name: run-api
         run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
-      - run: sleep 10
-      - run: curl --fail http://localhost:8080/api/swagger-ui/index.html
-        
-      
+      - name: Wait for API
+        run: sleep 10
+      - name: Check API
+        run: curl --fail http://localhost:8080/actuator/health
+      - name: Stop containers
+        if: always()
+        run: docker compose down

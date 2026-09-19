@@ -11,6 +11,14 @@ env:
   STORAGE_BUCKET_NAME: test
   STORAGE_ACCESS_KEY: test
   STORAGE_SECRET_KEY: test
+  ADMIN_EMAIL: admin@admin.com
+  ADMIN_PASSWORD: admin@adm
+  JWT_NAME: token
+  ALLOWED_ORIGINS: localhost:3000
+  TOKEN_VALIDITY: SECONDS:3600
+  JWT_SECRET_KEY: a-long-random-secret
+  GOOGLE_MAPS_API_KEY: xxx
+  GOOGLE_MAPS_API_BASE_URL: https://geocode.googleapis.com
 on:
   push:
     branches: ['development']

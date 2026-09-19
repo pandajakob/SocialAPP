@@ -1,9 +1,8 @@
 # Backend 
 
 ## Requirements
->Java 24.0.2
->Docker version 28.0.4
->jdk 17
+>=Java 24.0.2
+>=jdk 17
 
 ## start database:
 - docker compose up -d

@@ -1,14 +1,23 @@
 name: integration tests
 
 run-name: Java test, compile and run
-
+env:
+  POSTGRES_DB: test 
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+  DB_HOST_PORT: 5432
+  DATABASE_URL: postgresql://localhost:5432/test
+  STORAGE_ENDPOINT: localhost:8333
+  STORAGE_BUCKET_NAME: test
+  STORAGE_ACCESS_KEY: test
+  STORAGE_SECRET_KEY: test
 on:
   push:
     branches: ['development']
     paths:
       - 'backend/**'
 jobs:
-  run-postgres-db:
+  run-database-and-storage:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,12 +28,12 @@ jobs:
       - run: docker compose up -d
   run-backend:
     runs-on: ubuntu-latest
-    needs: run-postgres-db
+    needs: run-database-and-storage
     defaults:
       run:
         working-directory: backend
     steps:
     - uses: actions/checkout@v4
     - run: chmod +x mvnw
-    - run: ./mvnw spring-boot:run -DskipTests
+    - run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
       

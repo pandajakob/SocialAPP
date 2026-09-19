@@ -23,7 +23,7 @@ on:
   push:
     branches: ['development']
     paths:
-      - 'backend/**'
+      - 'javaAPI/**'
 jobs:
   run-backend-components:
     runs-on: ubuntu-latest

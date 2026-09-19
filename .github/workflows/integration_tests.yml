@@ -25,7 +25,7 @@ on:
     paths:
       - 'javaAPI/**'
 jobs:
-  run-backend-components:
+  run-javaAPI-components:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,6 +36,6 @@ jobs:
       - name: run-postgres-and-seaweed
         run: docker compose up -d
       - run: chmod +x mvnw
-      - name: run-backend
+      - name: run-javaAPI
         run: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=false"
       

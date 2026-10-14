@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { View, Text, FlatList, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import PostCard from '../../components/PostCard';
+import AnimatedPostCard from '@/components/AnimatedPostCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import { usePost } from '@/context/PostContext';
 import LoadingView from '@/components/LoadingView';
@@ -12,6 +13,15 @@ export default function ExploreScreen() {
 
 const { feed, loading } = usePost();
 const { filteredPosts, resolving } = useFilteredFeed(feed ?? []);
+const seenIds = useRef(new Set<string>());
+
+// Forget posts that left the list so they animate in again when they return
+useEffect(() => {
+  const currentIds = new Set(filteredPosts.map((post) => post.id));
+  seenIds.current.forEach((id) => {
+    if (!currentIds.has(id)) seenIds.current.delete(id);
+  });
+}, [filteredPosts]);
 
   if (loading || !feed) {
     return LoadingView()
@@ -35,17 +45,21 @@ const { filteredPosts, resolving } = useFilteredFeed(feed ?? []);
       {feed ?
       <FlatList
         data={filteredPosts}
-        renderItem={({ item }) => <PostCard  key={item.id} post={item} />} // Pass data to the child
+        renderItem={({ item }) => (
+          <AnimatedPostCard post={item} seenIds={seenIds.current} />
+        )}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 100 }}
         ListEmptyComponent={
-          resolving ? (
-            <ActivityIndicator className="mt-8" />
-          ) : (
-            <Text className="text-center text-gray-500 mt-8">
-              No posts in the selected categories
-            </Text>
-          )
+          <Animated.View entering={FadeIn.duration(250)}>
+            {resolving ? (
+              <ActivityIndicator className="mt-8" />
+            ) : (
+              <Text className="text-center text-gray-500 mt-8">
+                No posts in the selected categories
+              </Text>
+            )}
+          </Animated.View>
         }
       /> : 
 

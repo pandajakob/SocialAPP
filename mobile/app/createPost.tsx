@@ -25,7 +25,6 @@ export default function CreatePostScreen() {
   const [description, setDescription] = useState("");
   const [ageFrom, setAgeFrom] = useState("");
   const [ageTo, setAgeTo] = useState("");
-  const [photoURL, setPhotoURL] = useState("");
 
   const [selectedLocation, setSelectedLocation] = useState<{
     latitude: number;
@@ -120,7 +119,7 @@ export default function CreatePostScreen() {
         ),
         ageFrom: Number(ageFrom),
         ageTo: Number(ageTo),
-        photoURL: photoURL.trim(),
+        photoURL: "",
       };
 
       await createPost(post);
@@ -281,26 +280,20 @@ export default function CreatePostScreen() {
           </MapView>
 
           <View className="p-4">
-            <View className="flex-row items-center">
-              <Ionicons
-                name="location"
-                size={18}
-                color={selectedLocation ? "#000" : "#9CA3AF"}
-              />
+            {!selectedLocation && (
+              <View className="flex-row items-center mb-4">
+                <Ionicons name="location" size={18} color="#9CA3AF" />
 
-              <Text className="text-gray-600 ml-2 flex-1">
-                {selectedLocation
-                  ? `${selectedLocation.latitude.toFixed(
-                      5
-                    )}, ${selectedLocation.longitude.toFixed(5)}`
-                  : "Tap the map to choose a location"}
-              </Text>
-            </View>
+                <Text className="text-gray-600 ml-2 flex-1">
+                  Tap the map to choose a location
+                </Text>
+              </View>
+            )}
 
             <Pressable
               onPress={getCurrentLocation}
               disabled={gettingLocation}
-              className="flex-row items-center mt-4"
+              className="flex-row items-center"
             >
               {gettingLocation ? (
                 <ActivityIndicator size="small" color="#000" />
@@ -315,23 +308,6 @@ export default function CreatePostScreen() {
               </Text>
             </Pressable>
           </View>
-        </View>
-
-        {/* Photo URL */}
-        <Text className="text-sm font-semibold text-gray-700 mb-2">
-          Photo URL
-        </Text>
-
-        <View className="bg-white rounded-2xl px-4 py-3 mb-6 border border-gray-200">
-          <TextInput
-            value={photoURL}
-            onChangeText={setPhotoURL}
-            placeholder="https://..."
-            placeholderTextColor="#9CA3AF"
-            autoCapitalize="none"
-            keyboardType="url"
-            className="text-base"
-          />
         </View>
 
         {/* Create button */}

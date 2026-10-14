@@ -10,23 +10,18 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    private Map<Long, Category> categoryMap = new HashMap<>();
 
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.loadCategories();
     }
 
-    private void loadCategories() {
-        categoryRepository.findAll().forEach(c -> categoryMap.put(c.getId(),c));
-    }
 
     public List<Category> getAllCategories() {
-        return categoryMap.values().stream().toList();
+        return categoryRepository.findAll();
     }
 
     public Category getCategoryByName(String name) {
-        for (Category c : categoryMap.values()) {
+        for (Category c : categoryRepository.findAll()) {
             if (c.getName().equalsIgnoreCase(name)) {
                 return c;
             }
@@ -35,20 +30,31 @@ public class CategoryService {
     }
 
     public List<Category> getAllMainCategories() {
-        return categoryMap.values().stream().filter(c-> c.getParentCategoryId() == null).toList();
+        return categoryRepository.findAll().stream().filter(c-> c.getParentCategoryId() == null).toList();
     }
 
     public Category getCategoryById(Long id) {
-        Category cat = categoryMap.get(id);
-        if (cat == null) {
-            throw new NoSuchCategoryExistsException("Category with id "+id + " does not exist");
+        return categoryRepository.findById(id).orElseThrow(
+                () -> new NoSuchCategoryExistsException("Category with id "+id + " does not exist"));
+    }
+
+    public Category getUltimateParentCategory(Long id) {
+        Category current = getCategoryById(id);
+        Set<Long> visited = new HashSet<>();
+        visited.add(current.getId());
+        while (current.getParentCategoryId() != null) {
+            Long parentId = current.getParentCategoryId();
+            if (!visited.add(parentId)) {
+                throw new IllegalStateException("Circular category hierarchy detected at id " + parentId);
+            }
+            current = getCategoryById(parentId);
         }
-        return cat;
+        return current;
     }
 
     public List<Category> getAllSubCategoriesByName(String name) {
         Category category = getCategoryByName(name);
-        return categoryMap.values().stream().filter(c->{
+        return categoryRepository.findAll().stream().filter(c->{
             Long parentId = c.getParentCategoryId();
             return parentId != null && parentId == category.getId();
         }).toList();

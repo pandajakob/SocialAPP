@@ -1,6 +1,7 @@
 package socialapp.api.shared.initializers;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import socialapp.api.authentication.PasswordEncoder;
 import socialapp.api.categories.Category;
@@ -20,6 +21,7 @@ import socialapp.api.users.UserRepository;
 import java.util.List;
 
 @Component
+@Order(2)
 public class TestUserInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;

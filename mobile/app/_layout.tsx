@@ -38,7 +38,7 @@ export default function RootLayout() {
                   />
                   <Stack.Screen
                     name="createPost"
-                    options={{ presentation: "modal", title: "createPost" }}
+                    options={{ presentation: "modal", title: "New post" }}
                   />
                   <Stack.Screen
                     name="chat/chat"

@@ -17,6 +17,7 @@ export function CategoryProvider({
   const [categories, setCategories] = useState<Category[]>([]);
   const [mainCategories, setMainCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const { token } = useAuth();
   
   const getAllCategories = async (): Promise<Category[]> => {
@@ -86,6 +87,37 @@ export function CategoryProvider({
     return response.json();
   };
 
+  const getUltimateParentCategory = async (id: number): Promise<Category> => {
+    const response = await fetch(
+      `${API_BASE}/api/categories/${id}/ultimate-parent`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `token=${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to get ultimate parent category: ${response.status} ${response.statusText}`
+      );
+    }
+
+    return response.json();
+  };
+
+  const toggleCategory = (categoryId: number) => {
+    setSelectedCategoryIds((current) =>
+      current.includes(categoryId)
+        ? current.filter((id) => id !== categoryId)
+        : [...current, categoryId]
+    );
+  };
+
+  const clearSelectedCategories = () => setSelectedCategoryIds([]);
+
   const getSubCategories = async (name: string): Promise<Category[]> => {
     const response = await fetch(
       `${API_BASE}/api/categories/sub/${encodeURIComponent(name)}`
@@ -138,6 +170,10 @@ export function CategoryProvider({
         getCategoryById,
         getCategoryByName,
         getSubCategories,
+        getUltimateParentCategory,
+        selectedCategoryIds,
+        toggleCategory,
+        clearSelectedCategories,
       }}
     >
       {children}

@@ -1,20 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, TouchableOpacity, Text, View } from "react-native";
 import { useCategory } from "@/context/CategoryContext";
 import LoadingView from "./LoadingView";
 
 
 export default function CategoryFilter() {
-  const { mainCategories, loading } = useCategory();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
-  const toggleCategory = (categoryId: string) => {
-    setSelectedCategories((current) =>
-      current.includes(categoryId)
-        ? current.filter((id) => id !== categoryId)
-        : [...current, categoryId]
-    );
-  };
+  const { mainCategories, loading, selectedCategoryIds, toggleCategory } =
+    useCategory();
 
   if (loading) {
     return LoadingView();
@@ -28,12 +20,12 @@ export default function CategoryFilter() {
         contentContainerStyle={{ paddingHorizontal: 4 }}
       >
         {mainCategories.map((category) => {
-          const isSelected = selectedCategories.includes(category.id.toString());
+          const isSelected = selectedCategoryIds.includes(category.id);
 
           return (
             <TouchableOpacity
               key={category.id}
-              onPress={() => toggleCategory(category.id.toString())}
+              onPress={() => toggleCategory(category.id)}
               activeOpacity={0.8}
               className={`flex-row items-center px-4 py-2 rounded-full mr-3 ${
                 isSelected

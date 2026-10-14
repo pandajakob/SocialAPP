@@ -29,6 +29,11 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
+    @GetMapping("/{id}/ultimate-parent")
+    Category getUltimateParentCategory(@PathVariable Long id) {
+        return categoryService.getUltimateParentCategory(id);
+    }
+
     @GetMapping("/main")
     List<Category> getAllMainCategories() {
         return categoryService.getAllMainCategories();

@@ -7,4 +7,8 @@ export type CategoryContextType = {
   getCategoryById: (id: number) => Promise<Category>;
   getCategoryByName: (name: string) => Promise<Category>;
   getSubCategories: (name: string) => Promise<Category[]>;
+  getUltimateParentCategory: (id: number) => Promise<Category>;
+  selectedCategoryIds: number[];
+  toggleCategory: (categoryId: number) => void;
+  clearSelectedCategories: () => void;
 };

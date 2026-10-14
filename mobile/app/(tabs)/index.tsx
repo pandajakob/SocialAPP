@@ -5,11 +5,13 @@ import PostCard from '../../components/PostCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import { usePost } from '@/context/PostContext';
 import LoadingView from '@/components/LoadingView';
+import { useFilteredFeed } from '@/hooks/use-filtered-feed';
 
 
 export default function ExploreScreen() {
 
 const { feed, loading } = usePost();
+const { filteredPosts, resolving } = useFilteredFeed(feed ?? []);
 
   if (loading || !feed) {
     return LoadingView()
@@ -32,10 +34,19 @@ const { feed, loading } = usePost();
 
       {feed ?
       <FlatList
-        data={feed}
+        data={filteredPosts}
         renderItem={({ item }) => <PostCard  key={item.id} post={item} />} // Pass data to the child
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 100 }}
+        ListEmptyComponent={
+          resolving ? (
+            <ActivityIndicator className="mt-8" />
+          ) : (
+            <Text className="text-center text-gray-500 mt-8">
+              No posts in the selected categories
+            </Text>
+          )
+        }
       /> : 
 
       <Text className="text-3xl font-bold mb-4">Error loading feed</Text>
